@@ -1,0 +1,2184 @@
+{
+  "real": {
+    "yes_count": 86,
+    "total_count": 160,
+    "accuracy": 0.5375,
+    "image_count": 8,
+    "question_count": 20,
+    "question_stats": [
+      {
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "yes_count": 5,
+        "total_count": 8,
+        "accuracy": 0.625
+      },
+      {
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "yes_count": 6,
+        "total_count": 8,
+        "accuracy": 0.75
+      },
+      {
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "yes_count": 2,
+        "total_count": 8,
+        "accuracy": 0.25
+      },
+      {
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "yes_count": 5,
+        "total_count": 8,
+        "accuracy": 0.625
+      },
+      {
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "yes_count": 3,
+        "total_count": 8,
+        "accuracy": 0.375
+      },
+      {
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "yes_count": 2,
+        "total_count": 8,
+        "accuracy": 0.25
+      },
+      {
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "yes_count": 3,
+        "total_count": 8,
+        "accuracy": 0.375
+      },
+      {
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "yes_count": 6,
+        "total_count": 8,
+        "accuracy": 0.75
+      },
+      {
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "yes_count": 5,
+        "total_count": 8,
+        "accuracy": 0.625
+      },
+      {
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "yes_count": 5,
+        "total_count": 8,
+        "accuracy": 0.625
+      },
+      {
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "yes_count": 7,
+        "total_count": 8,
+        "accuracy": 0.875
+      },
+      {
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "yes_count": 5,
+        "total_count": 8,
+        "accuracy": 0.625
+      },
+      {
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      }
+    ],
+    "responses": [
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Answer generated for demonstration purposes. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. This sentence illustrates the intended narrative output. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is real. Placeholder response pending model integration. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: real."
+      }
+    ]
+  },
+  "fake": {
+    "yes_count": 78,
+    "total_count": 160,
+    "accuracy": 0.4875,
+    "image_count": 8,
+    "question_count": 20,
+    "question_stats": [
+      {
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "yes_count": 6,
+        "total_count": 8,
+        "accuracy": 0.75
+      },
+      {
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "yes_count": 5,
+        "total_count": 8,
+        "accuracy": 0.625
+      },
+      {
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "yes_count": 3,
+        "total_count": 8,
+        "accuracy": 0.375
+      },
+      {
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "yes_count": 2,
+        "total_count": 8,
+        "accuracy": 0.25
+      },
+      {
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "yes_count": 7,
+        "total_count": 8,
+        "accuracy": 0.875
+      },
+      {
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "yes_count": 3,
+        "total_count": 8,
+        "accuracy": 0.375
+      },
+      {
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "yes_count": 3,
+        "total_count": 8,
+        "accuracy": 0.375
+      },
+      {
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "yes_count": 3,
+        "total_count": 8,
+        "accuracy": 0.375
+      },
+      {
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "yes_count": 2,
+        "total_count": 8,
+        "accuracy": 0.25
+      },
+      {
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "yes_count": 2,
+        "total_count": 8,
+        "accuracy": 0.25
+      },
+      {
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "yes_count": 3,
+        "total_count": 8,
+        "accuracy": 0.375
+      },
+      {
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "yes_count": 6,
+        "total_count": 8,
+        "accuracy": 0.75
+      },
+      {
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "yes_count": 3,
+        "total_count": 8,
+        "accuracy": 0.375
+      },
+      {
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "yes_count": 4,
+        "total_count": 8,
+        "accuracy": 0.5
+      },
+      {
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "yes_count": 6,
+        "total_count": 8,
+        "accuracy": 0.75
+      }
+    ],
+    "responses": [
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/000.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/015.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/030.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/045.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/060.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/075.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/090.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are the eyes unnaturally shaped or asymmetrical? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Do the pupils or irises appear misaligned with the gaze direction? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is there inconsistent blinking or unusually long gaps between blinks? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Does the mouth movement look out of sync with the expression? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Does the mouth movement look out of sync with the expression? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are the teeth or inner mouth textures unnaturally smooth or blurred? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Is the skin texture inconsistent across regions (overly smooth vs. detailed)? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Do facial boundaries (jawline, hairline, ears) show warping or blending artifacts? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are there flickering artifacts around the cheeks or forehead? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Are there flickering artifacts around the cheeks or forehead? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the lighting or shadow direction on the face inconsistent with the background? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Are specular highlights on the skin or eyes unnatural or misplaced? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Do the eyebrows or eyelashes look pasted, incomplete, or misaligned? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is the hair boundary (especially flyaway hairs) blurred or abruptly cut? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Do reflections in glasses or eyes look unrealistic or inconsistent? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Is there color banding or compression-like artifacts concentrated on the face? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the nose region (bridge, nostrils) appear distorted or unstable across the frame? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No.",
+        "answer": "real",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is the neck or chin boundary mismatched with the face (tone, texture, alignment)? Answer Yes or No. Answer: real."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are ear shapes, earrings, or contours inconsistent or deformed? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. This sentence illustrates the intended narrative output. Question: Is facial symmetry unusually perfect or irregular compared to natural faces? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Does the background near the face warp or ripple unnaturally? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Placeholder response pending model integration. Question: Does the background near the face warp or ripple unnaturally? Answer Yes or No. Answer: fake."
+      },
+      {
+        "image_path": "Celeb-DF-v3-process/Celeb-real/id0_0000/105.png",
+        "question": "Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No.",
+        "answer": "fake",
+        "narrative": "This image is fake. Answer generated for demonstration purposes. Question: Are skin tones across face and neck inconsistent in hue or saturation? Answer Yes or No. Answer: fake."
+      }
+    ]
+  }
+}

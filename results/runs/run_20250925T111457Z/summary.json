@@ -1,0 +1,20 @@
+{
+  "run_id": "run_20250925T111457Z",
+  "timestamp": "2025-09-25T11:14:57",
+  "seed": 370393664,
+  "top_k": 3,
+  "balanced_accuracy": 0.5125,
+  "datasets": {
+    "real_accuracy": 0.5375,
+    "fake_accuracy": 0.4875
+  },
+  "artefacts": {
+    "dataset_metrics": "/Users/yize/Documents/chenyize/python_project/X2DFD/results/runs/run_20250925T111457Z/dataset_metrics.json",
+    "per_question_balanced": "/Users/yize/Documents/chenyize/python_project/X2DFD/results/runs/run_20250925T111457Z/per_question_balanced.json",
+    "question_ranking_all": "/Users/yize/Documents/chenyize/python_project/X2DFD/results/runs/run_20250925T111457Z/question_ranking_all.json",
+    "question_ranking_top_k": "/Users/yize/Documents/chenyize/python_project/X2DFD/results/runs/run_20250925T111457Z/question_ranking_top3.json",
+    "concatenated_questions": "/Users/yize/Documents/chenyize/python_project/X2DFD/results/runs/run_20250925T111457Z/concatenated_questions_top3.txt",
+    "responses_real": "/Users/yize/Documents/chenyize/python_project/X2DFD/results/runs/run_20250925T111457Z/responses_real.json",
+    "responses_fake": "/Users/yize/Documents/chenyize/python_project/X2DFD/results/runs/run_20250925T111457Z/responses_fake.json"
+  }
+}
