@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import random
 from collections import defaultdict
 from dataclasses import dataclass
 from typing import Callable, Dict, Iterable, List, Sequence
 
-AnswerFn = Callable[[random.Random, str, str], str]
+AnswerFn = Callable[[str, str], str]
 
 
 @dataclass
@@ -37,7 +36,6 @@ class EvaluationResult:
 
 
 def evaluate_dataset(
-    rng: random.Random,
     image_paths: Sequence[str],
     questions: Sequence[str],
     answer_fn: AnswerFn,
@@ -52,7 +50,7 @@ def evaluate_dataset(
 
     for image_path in image_paths:
         for question in questions:
-            answer = answer_fn(rng, image_path, question)
+            answer = answer_fn(image_path, question)
             responses.append(QAResponse(image_path=image_path, question=question, answer=answer))
 
             if answer.lower() == "fake":

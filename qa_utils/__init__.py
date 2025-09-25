@@ -12,7 +12,7 @@ from .evaluation import (
     evaluation_result_to_dict,
 )
 from .inference import (
-    infer_answer,
+    single_image_infer,
     describe_image_answer,
 )
 from .persistence import (
@@ -34,7 +34,7 @@ __all__ = [
     "build_question_ranking",
     "concat_questions",
     "evaluation_result_to_dict",
-    "infer_answer",
+    "single_image_infer",
     "describe_image_answer",
     "RunPaths",
     "prepare_run_paths",

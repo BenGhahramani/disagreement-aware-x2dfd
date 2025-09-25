@@ -17,12 +17,12 @@ from qa_utils import (
     describe_image_answer,
     evaluate_dataset,
     evaluation_result_to_dict,
-    infer_answer,
     load_image_paths,
     load_questions,
     prepare_run_paths,
     write_json,
     write_text,
+    single_image_infer,
 )
 
 BASE_DIR = Path(__file__).resolve().parent
@@ -86,8 +86,8 @@ def main() -> None:
     seed = system_rng.randrange(2**32)
     rng = random.Random(seed)
 
-    fake_result = evaluate_dataset(rng, fake_images, questions, infer_answer)
-    real_result = evaluate_dataset(rng, real_images, questions, infer_answer)
+    fake_result = evaluate_dataset(fake_images, questions, single_image_infer)
+    real_result = evaluate_dataset(real_images, questions, single_image_infer)
 
     balanced_acc = compute_balanced_accuracy(real_result.accuracy, fake_result.accuracy)
     top_k = args.top_k
