@@ -13,8 +13,8 @@ annotations:
   # Base LLaVA model for generating explanations (and as the LoRA base)
   model_path: "weights/base/llava-v1.5-7b"
   # Training dataset JSONs (located under paths.data_dir)
-  real_files: [Real_test.json]
-  fake_files: [Deepfakes_test.json, Faceswap_test.json]
+  real_files: [Real.json]
+  fake_files: [Deepfakes.json, Face2Face.json, FaceSwap.json, NeuralTextures.json]
 
 # Traditional detector used to compute blending scores for templated questions
 weak_supply:
