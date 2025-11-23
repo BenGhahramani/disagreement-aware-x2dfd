@@ -32,7 +32,7 @@ weak_supply:
 model:
   base: "weights/base/llava-v1.5-7b"
   # Optional: path to an existing LoRA adapter (testing); overridden by training output if training runs
-  adapter: "weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]"
+  adapter: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[x2dfd]"
 
 # Inference settings for quick/LoRA testing
 infer:
