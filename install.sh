@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# One-click environment setup for X2DFD
-# Usage: bash install.sh [ENV_NAME]
+# One-click environment setup for X2DFD (creates 'X2DFD' conda env)
+# Usage: bash install.sh
 
 set -euo pipefail
 
-ENV_NAME=${1:-X2DFD}
+ENV_NAME="X2DFD"
 
 echo "==> Checking for conda..."
 if ! command -v conda >/dev/null 2>&1; then
@@ -65,8 +65,15 @@ python -m pip install \
   tqdm==4.67.1 \
   einops==0.7.0
 
-# LLaVA (pip) — aligns with current environment
-python -m pip install llava==1.2.2.post1 || echo "[WARN] LLaVA install failed; ensure it is available on PYTHONPATH."
+# LLaVA from network (prefer PyPI, fallback to GitHub)
+echo "==> Installing LLaVA (prefer PyPI, fallback to GitHub)"
+if ! python -m pip install llava==1.2.2.post1; then
+  echo "[WARN] PyPI install failed; trying GitHub source..."
+  if ! python -m pip install "git+https://github.com/haotian-liu/LLaVA.git#egg=llava"; then
+    echo "[ERROR] Failed to install LLaVA from both PyPI and GitHub." >&2
+    exit 2
+  fi
+fi
 
 # Training tooling (optional)
 python -m pip install deepspeed==0.12.6 || echo "[WARN] deepspeed install failed; training with deepspeed will be unavailable."
