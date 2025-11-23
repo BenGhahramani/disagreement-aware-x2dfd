@@ -1,7 +1,7 @@
 # Unified configuration for the end-to-end pipeline (base QA -> LoRA train -> LoRA test)
 
 paths:
-  # Root folder for training dataset JSONs (train.sh 使用此处)
+  # Root folder for training dataset JSONs (used by train.sh)
   data_dir: "/data/250010183/workspace/X2DFD/datasets/raw/data/train"
   # Root folder for all pipeline outputs (annotations, merged data, ckpts)
   results_dir: "train/outputs"
@@ -12,7 +12,7 @@ annotations:
   prompt_file: "datasets/prompts/prompt.json"
   # Base LLaVA model for generating explanations (and as the LoRA base)
   model_path: "weights/base/llava-v1.5-7b"
-  # Training dataset JSONs（位于 paths.data_dir 下）
+  # Training dataset JSONs (located under paths.data_dir)
   real_files: [Real_test.json]
   fake_files: [Deepfakes_test.json, Faceswap_test.json]
 
@@ -36,7 +36,7 @@ model:
 
 # Inference settings for quick/LoRA testing
 infer:
-  # Test JSONs（test.sh 同样指向 test 目录）
+  # Test JSONs (test.sh also points to the test directory)
   inputs:
     - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Real.json"
     - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Deepfakes_tiny.json"

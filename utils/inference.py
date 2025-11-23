@@ -478,9 +478,9 @@ if __name__ == "__main__":
             "id": "1",
             "image": "datasets/raw/images/example.png",
             "conversations": [
-                {"from": "human", "value": "<image>\n请描述这张图像中的内容"},
+                {"from": "human", "value": "<image>\nPlease describe the content of this image."},
                 {"from": "gpt", "value": ""}
             ]
         }]
         out = infer_conversation_items(sample)
-        print("模型输出：", out[0].get("conversations", [])[-1].get("value", ""))
+        print("Model output:", out[0].get("conversations", [])[-1].get("value", ""))

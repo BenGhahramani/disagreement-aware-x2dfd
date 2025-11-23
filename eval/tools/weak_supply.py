@@ -22,7 +22,7 @@ Examples:
     --shuffle \
     --output_path results/weak_supply/intermediate_scores.json
 
-Or run with config (no --real/--fake needed; defaults to config_small.yaml):
+Or run with config (no --real/--fake needed; defaults to eval/configs/config.yaml):
   python weak_supply.py
   python weak_supply.py --config config.yaml
 """
@@ -169,7 +169,7 @@ def main(args):
 
     # If no explicit inputs provided, fall back to config
     if not real_images and not fake_images:
-        cfg_path = args.config or 'config_small.yaml'
+        cfg_path = args.config or 'eval/configs/config.yaml'
         print(f"No --real/--fake specified. Loading inputs from {cfg_path} ...")
         real_args, fake_args, cfg_root_prefix, cfg_limit, ann_in, ann_out = _load_from_config(cfg_path)
         # If args.image_root_prefix not provided, use config one

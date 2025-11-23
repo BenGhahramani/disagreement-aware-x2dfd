@@ -11,21 +11,21 @@ import os
 from tqdm import tqdm
 
 class BlendingDetector:
-    """封装 Blending 检测模型的加载和推理过程。
+    """Encapsulates loading and inference for the Blending detector.
 
-    支持批量推理以提高 GPU 利用率（默认 batch_size=64）。
+    Supports batched inference to improve GPU utilization (default batch_size=64).
     """
 
     def __init__(self, model_name, weights_path, img_size, num_class, device):
         """
-        初始化 BlendingDetector。
+        Initialize the BlendingDetector.
 
         Args:
-            model_name (str): timm 库中的模型名称。
-            weights_path (str): 模型权重文件的绝对路径。
-            img_size (int): 输入图像的尺寸。
-            num_class (int): 分类任务的类别数。
-            device (str): PyTorch 设备。
+            model_name (str): Model name in timm.
+            weights_path (str): Absolute path to weights file.
+            img_size (int): Input image size.
+            num_class (int): Number of classes for classification.
+            device (str): PyTorch device.
         """
         self.device = device
         self.img_size = img_size
@@ -47,11 +47,11 @@ class BlendingDetector:
         print("--- BlendingDetector Initialized Successfully ---")
 
     def _load_network(self, model_name, save_filename, num_class):
-        """加载网络并处理可能的 DataParallel 'module.' 前缀。"""
+        """Load network and handle potential DataParallel 'module.' prefixes."""
         model = timm.create_model(model_name, pretrained=False, num_classes=num_class)
         state_dict = torch.load(save_filename, map_location='cpu')
         
-        # 处理在 DataParallel 或 DDP 中训练的模型
+        # Handle models trained under DataParallel or DDP
         if next(iter(state_dict)).startswith('module.'):
             state_dict = {k[len('module.'):]: v for k, v in state_dict.items()}
             
@@ -59,23 +59,23 @@ class BlendingDetector:
         return model
 
     def _load_image(self, image_path):
-        """使用 OpenCV 加载图像并转换为 RGB。"""
+        """Load image with OpenCV and convert to RGB."""
         image = cv2.imread(image_path, cv2.IMREAD_COLOR)
         if image is None: return None
         return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
     def infer(self, image_paths, batch_size: int = 64, num_workers: int = 4, pin_memory: bool = True):
         """
-        对一批图像进行推理（按 batch 批量前向），返回 'fake' 的分数。
+        Run batched inference on a list of images and return 'fake' scores.
 
         Args:
-            image_paths (List[str]): 图像路径列表。
-            batch_size (int): 批大小，默认 64。
-            num_workers (int): DataLoader 工作进程数，默认 4。
-            pin_memory (bool): 是否使用 pinned memory 以加速 H2D，默认 True。
+            image_paths (List[str]): List of image paths.
+            batch_size (int): Batch size (default 64).
+            num_workers (int): Dataloader worker count (default 4).
+            pin_memory (bool): Use pinned memory to speed up H2D (default True).
 
         Returns:
-            dict: 格式为 {image_path: {"score": value}} 的字典。
+            dict: Mapping {image_path: {"score": value}}.
         """
         all_results = {}
 
@@ -124,7 +124,7 @@ class BlendingDetector:
 
         with torch.no_grad():
             for batch_cpu, ok_paths, failed_paths in tqdm(loader, desc=f"Blending Detector Inference (bs={batch_size})"):
-                # 记录读取失败
+                # Log failed reads
                 for p in failed_paths:
                     print(f"\nWarning: Failed to load image {p}, skipping.")
                     all_results[p] = {"error": "Failed to load image"}

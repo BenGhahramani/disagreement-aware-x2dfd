@@ -26,7 +26,7 @@ model:
 
 # Quick inference settings
 infer:
-  # Input JSON files to process（指向 test 目录）
+  # Input JSON files to process (pointing to test directory)
   inputs:
     - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Real.json"
     - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Deepfakes_tiny.json"

@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 """
-根据图片的real/fake标签生成不同的prompt解释
+Generate prompt-based explanations conditioned on real/fake labels.
 
-改进：
-- 路径前缀仅来自输入 JSON 顶层 Description；不再使用 config.paths.image_root_prefix
-- 参数集中由 config.yaml 提供（仅保留 --config）
+Notes:
+- The path prefix is taken only from the input JSON top-level Description;
+  config.paths.image_root_prefix is not used.
+- Parameters are provided by config.yaml; only --config is accepted in CLI.
 """
 
 import json
@@ -25,12 +26,12 @@ from utils.annotation_utils import (
 )
 
 def load_prompt_template(prompt_file: str) -> str:
-    """加载prompt模板"""
+    """Load a prompt template JSON with a 'prompt' field."""
     with open(prompt_file, 'r', encoding='utf-8') as f:
         prompt_data = json.load(f)
     return prompt_data['prompt']
 
-# generate_explanation 这个函数其实在本脚本中没有被用到，可以删除
+## NOTE: generate_explanation was not used in this script and has been removed.
 
 def process_json_file(
     input_file: str,
@@ -44,26 +45,26 @@ def process_json_file(
     progress_key: Optional[str] = None,
     template_output_file: Optional[str] = None,
 ):
-    """先构造模板，再批量推理填充并保存。
+    """Build a conversation template, run batch inference, and write outputs.
 
-    读取兼容两种输入：
-    - 对话风格列表：[{'id','image','conversations': [...]}]
-    - Dataset 风格字典：{"Description": "/abs/or/root", "images": [{"image_path": "rel/or/abs"}, ...]}
+    Accepts two input schemas:
+    - Conversation list: [{'id','image','conversations': [...]}]
+    - Dataset dict: {"Description": "/abs/root", "images": [{"image_path": "rel/or/abs"}, ...]}
 
-    行为调整：
-    - 若为 Dataset 风格，仅使用 JSON 的 Description 作为根路径前缀；不再回退到 image_root_prefix。
-    - 对话风格输入要求 image 已为绝对路径；否则报错提示改用 Dataset 风格并提供 Description。
-    - 将所有条目的 image 统一转为绝对路径并写入模板与输出（结果 JSON 的 image 字段为绝对路径）。
+    Behavior:
+    - For dataset schema, only use JSON Description as the root prefix.
+    - For conversation schema, 'image' must already be absolute; otherwise raise.
+    - Normalize all 'image' paths to absolute in the template and final outputs.
     """
     
     with open(input_file, 'r', encoding='utf-8') as f:
         data = json.load(f)
     
-    # 构造模板
+    # Build template items
     template_items = []
-    # 小工具：严格绝对化
-    # - Dataset 风格：使用 JSON 顶层 Description 作为 root；若缺失且出现相对路径则报错
-    # - 对话风格：必须已是绝对路径
+    # Helper: strict path absolutization
+    # - Dataset schema: require JSON Description when relative paths exist
+    # - Conversation schema: require absolute paths
     def _abs_path_dataset(p: Optional[str], root_hint: Optional[str]) -> Optional[str]:
         if not p:
             return None
@@ -79,7 +80,7 @@ def process_json_file(
             has_gpt = any(isinstance(t, dict) and t.get('from') == 'gpt' for t in conv)
             if not has_gpt:
                 conv = list(conv) + [{"from": "gpt", "value": ""}]
-            # 对话风格必须提供绝对路径
+            # Conversation schema requires absolute image path
             img_val = it.get('image')
             if not isinstance(img_val, str) or not img_val:
                 raise ValueError("Conversation item missing 'image' path")
@@ -92,7 +93,7 @@ def process_json_file(
                 "conversations": conv,
             })
     elif isinstance(data, dict) and 'images' in data:
-        # 仅使用 JSON 内的 Description；不再回退到 image_root_prefix
+        # Only use JSON-level Description; no fallback to config prefix
         local_root = None
         try:
             desc = data.get('Description') or data.get('description')
@@ -100,7 +101,7 @@ def process_json_file(
                 local_root = desc.strip()
         except Exception:
             local_root = None
-        # 不允许缺少 Description 后仍出现相对路径（在下方绝对化时会抛错）
+        # Do not allow relative paths without Description (error below if seen)
 
         items = data['images'][: max_items or len(data['images'])]
         for idx, it in enumerate(items, start=1):
@@ -110,7 +111,7 @@ def process_json_file(
             label = label_override or ('real' if 'real' in os.path.basename(input_file).lower() else 'fake')
             personalized_prompt = prompt_template.replace('{label}', label)
             full_prompt = f"<image>\n{personalized_prompt}"
-            # 结果中写入绝对路径（必须基于 JSON Description 绝对化或已绝对）
+            # Write absolute image path to the result
             img_abs = _abs_path_dataset(image_path, local_root)
             template_items.append({
                 "id": str(idx),
@@ -121,7 +122,7 @@ def process_json_file(
                 ],
             })
     else:
-        print(f"未知的JSON格式: {type(data)}")
+        print(f"Unknown JSON format: {type(data)}")
         return []
 
     if template_output_file:
@@ -131,7 +132,7 @@ def process_json_file(
     total = len(template_items)
     updated = infer_conversation_items(
         template_items,
-        image_root_prefix=None,  # 强制使用绝对路径，不再拼接前缀
+        image_root_prefix=None,  # Force absolute paths; no prefix concatenation
         model_path=model_path or "",
         max_new_tokens=512,
     )
@@ -142,8 +143,8 @@ def process_json_file(
     with open(output_file, 'w', encoding='utf-8') as f:
         json.dump(updated, f, ensure_ascii=False, indent=2)
 
-    print(f"处理完成！共处理 {len(updated)} 个条目")
-    print(f"输出文件: {output_file}")
+    print(f"Done. Processed {len(updated)} items")
+    print(f"Output file: {output_file}")
 
     return updated
 
@@ -171,7 +172,7 @@ def augment_dataset_gpt_only(
     except Exception:
         return (0, 0)
 
-    # Collect absolute paths in order（要求已为绝对路径）
+    # Collect absolute paths in order (expect absolute)
     rel_paths = [it.get('image') for it in data if isinstance(it, dict)]
     abs_paths = []
     for p in rel_paths:
@@ -257,19 +258,19 @@ def augment_dataset_gpt_only(
     return (updated, missing)
 
 
-# 已废弃：路径前缀从 JSON 顶层 Description 提供；不再从配置读取
+## Deprecated: global prefixing was removed; paths come from JSON Description
 
 def main():
-    parser = argparse.ArgumentParser(description="为图像生成深伪检测解释（基于LLaVA）")
-    parser.add_argument("--config", type=Path, default=Path("config.yaml"), help="配置文件路径")
+    parser = argparse.ArgumentParser(description="Generate deepfake detection explanations (LLaVA-based)")
+    parser.add_argument("--config", type=Path, default=Path("config.yaml"), help="Path to configuration YAML")
     args = parser.parse_args()
 
-    # 从配置加载参数
+    # Load parameters from config
     try:
         with open(args.config, 'r', encoding='utf-8') as f:
             cfg = yaml.safe_load(f) or {}
     except Exception as e:
-        print(f"❌ 读取配置失败: {e}")
+        print(f"❌ Failed to read config: {e}")
         return
 
     annotations_cfg = (cfg.get('annotations') or {})
@@ -277,26 +278,26 @@ def main():
     model_path = annotations_cfg.get('model_path')
     max_items = annotations_cfg.get('max_items')
     label_override = annotations_cfg.get('label')
-    # 支持 annotations 中独立的 real_files/fake_files（优先级最高）
+    # Prefer annotations.real_files / annotations.fake_files when present
     ann_real_files = list(annotations_cfg.get('real_files') or [])
     ann_fake_files = list(annotations_cfg.get('fake_files') or [])
-    # 兼容旧配置：inputs 为简单列表（无标签）
+    # Backward-compatible: plain inputs without labels
     inputs_plain = list(annotations_cfg.get('inputs') or [])
-    # 已废弃：不再使用配置中的 image_root_prefix 进行路径拼接
+    # Deprecated: image_root_prefix is no longer used for concatenation
 
-    # 构建注释输入清单，并携带标签：[(path, label)]
+    # Build labeled inputs list: [(path, label)]
     data_dir = (cfg.get('paths') or {}).get('data_dir') or 'data'
     use_qa_file_lists = bool(annotations_cfg.get('use_qa_file_lists', False))
     inputs_labeled: list[tuple[str, str]] = []
 
     if ann_real_files or ann_fake_files:
-        # 优先使用 annotations.real_files / annotations.fake_files
+        # Prefer annotations.real_files / annotations.fake_files
         for f in ann_fake_files:
             inputs_labeled.append((str(Path(data_dir) / f), 'fake'))
         for f in ann_real_files:
             inputs_labeled.append((str(Path(data_dir) / f), 'real'))
     elif use_qa_file_lists or not inputs_plain:
-        # 回退到顶层 files.real_files / files.fake_files（QA列表）
+        # Fallback to top-level files.real_files / files.fake_files
         files_cfg = (cfg.get('files') or {})
         real_files = list(files_cfg.get('real_files') or [])
         fake_files = list(files_cfg.get('fake_files') or [])
@@ -312,10 +313,10 @@ def main():
         for f in real_files:
             inputs_labeled.append((str(Path(data_dir) / f), 'real'))
     else:
-        # 最后回退：使用无标签 inputs，通过文件名推断
+        # Final fallback: use unlabeled inputs and infer label from filename
         inputs_labeled = [(str(Path(p)), 'auto') for p in inputs_plain]
 
-    # 结果根目录统一：使用 utils.paths.OUTPUT_ROOT 或配置中的 paths.results_dir（相对路径基于 PROJECT_ROOT）
+    # Unified results root: use utils.paths.OUTPUT_ROOT or paths.results_dir (relative to PROJECT_ROOT)
     ensure_core_dirs()
     results_dir_cfg = (cfg.get('paths', {}).get('results_dir') if isinstance(cfg.get('paths'), dict) else None) or str(OUTPUT_ROOT)
     results_root = Path(results_dir_cfg)
@@ -331,25 +332,25 @@ def main():
     templates_dir = run_dir / 'templates'
     templates_dir.mkdir(parents=True, exist_ok=True)
 
-    # 进度追踪文件：results/annotations/progress.json
+    # Progress tracking file：results/annotations/progress.json
     progress_path = annotations_root / 'progress.json'
     tracker = ProgressTracker(progress_path)
     tracker.start()
 
-    # 加载prompt模板
+    # Load prompt template
     prompt_template = load_prompt_template(str(prompt_file))
-    print(f"加载的prompt模板: {prompt_template[:100]}...")
+    print(f"Loaded prompt template: {prompt_template[:100]}...")
 
-    # 处理每个文件
+    # Process each input file
     merged_outputs = []
     for input_file, label_hint in inputs_labeled:
-        # 优先使用全局 label_override；否则按配置/提示确定
+        # Prefer global label_override; otherwise derive from config/hints
         label = label_override
         if not label:
             if label_hint in ('real', 'fake'):
                 label = label_hint
             else:
-                # 从文件名推断
+                # Infer from filename
                 lower = os.path.basename(input_file).lower()
                 label = "real" if "real" in lower else "fake"
 
@@ -359,7 +360,7 @@ def main():
             output_file = str(datasets_dir / f"{name_without_ext}_annotations.json")
             template_file = str(templates_dir / f"{name_without_ext}_template.json")
 
-            print(f"\n处理文件: {input_file} (标签: {label})")
+            print(f"\nProcessing file: {input_file} (label: {label})")
             processed = process_json_file(
                 input_file,
                 output_file,
@@ -372,7 +373,7 @@ def main():
                 progress_key=name_without_ext,
                 template_output_file=template_file,
             )
-            # 对该数据集结果进行弱增强（生成新文件；仅改 GPT，HUMAN 不变）
+            # Apply weak-supply augmentation (new file; modify GPT only, keep HUMAN)
             weak_cfg = (cfg.get('weak_supply') or {})
             out_suffix = weak_cfg.get('output_suffix') or '_scored'
             scored_file = str(datasets_dir / f"{name_without_ext}_annotations{out_suffix}.json")
@@ -386,15 +387,15 @@ def main():
             if updated_cnt or missing_cnt:
                 print(f"[WeakSupply][per-dataset] Updated: {updated_cnt}, Missing: {missing_cnt} -> {os.path.basename(scored_file)}")
 
-            # 读取增强后的新文件用于后续合并视图
+            # Read augmented file for subsequent merged view
             try:
                 with open(scored_file, 'r', encoding='utf-8') as f:
                     processed = json.load(f)
             except Exception:
                 pass
-            # 构建合并视图：
-            # - human: 使用增强后的文本（含分数问题行）
-            # - gpt: 前缀 "This image is real/fake." + 原回答（可能含附加句）
+            # Build merged view:
+            # - human: use augmented prompt (with score line)
+            # - gpt: prefix "This image is real/fake." + original answer (may include extra note)
             if processed:
                 for it in processed:
                     try:
@@ -411,10 +412,10 @@ def main():
                         original_answer = ""
                         human_value = None
                     if not human_value:
-                        # 回退：若意外缺失human，退回到简化二分类问题
+                        # Fallback: if HUMAN turn is missing, use simplified binary question
                         human_value = f"<image>\n{build_binary_question()}"
                     merged_item = {
-                        "id": it.get("id", "0"),  # 将在最终写出前重排
+                        "id": it.get("id", "0"),  # will be reindexed before final write
                         "image": it.get("image"),
                         "conversations": [
                             {"from": "human", "value": human_value},
@@ -423,9 +424,9 @@ def main():
                     }
                     merged_outputs.append(merged_item)
         else:
-            print(f"文件不存在: {input_file}")
+            print(f"File not found: {input_file}")
 
-    # 随机重排合并结果，然后全局重排 id（1..N）
+    # Shuffle merged results and reassign ids (1..N)
     if merged_outputs:
         random.shuffle(merged_outputs)
     for new_id, item in enumerate(merged_outputs, start=1):
@@ -435,15 +436,15 @@ def main():
     with open(merged_path, 'w', encoding='utf-8') as f:
         json.dump(merged_outputs, f, ensure_ascii=False, indent=2)
 
-    # 生成信息记录
+    # Generate run info
     info = {
         'timestamp': datetime.utcnow().isoformat(timespec='seconds'),
         'run_id': run_id,
         'model_path': model_path,
         'prompt_template': prompt_template,
-        # 说明：路径前缀由各输入 JSON 的 Description 提供，不再记录全局前缀
+        # Note: path prefixes come from each input JSON Description; no global prefix recorded
         'max_items_per_dataset': max_items,
-        # 记录本次运行的输入文件（若未显式配置，则记录解析后的实际文件路径）
+        # Record inputs used (resolved paths if not explicitly configured)
         'inputs': (inputs_plain or [p for p, _ in inputs_labeled]),
         'artefacts': {
             'run_dir': str(run_dir),
@@ -454,12 +455,12 @@ def main():
     with open(run_dir / 'generation_info.json', 'w', encoding='utf-8') as f:
         json.dump(info, f, ensure_ascii=False, indent=2)
 
-    # 更新 latest 指针
+    # Update latest pointer
     latest = annotations_root / 'latest_run.json'
     with open(latest, 'w', encoding='utf-8') as f:
         json.dump(info, f, ensure_ascii=False, indent=2)
 
-    # 停止进度追踪
+    # Stop progress tracking
     tracker.stop()
 
 if __name__ == "__main__":

@@ -140,7 +140,7 @@ def _build_conversations_with_scores(
         question = template.format(alias=provider_kwargs.get("alias", "Blending"), score=_format_score(sc))
         items.append({
             "id": str(idx),
-            # 规范：结果中的 image 字段写入绝对路径
+            # Normalize: write absolute image path in outputs
             "image": abs_p,
             "conversations": [
                 {"from": "human", "value": question},
@@ -228,7 +228,7 @@ def main() -> None:
     # Determine settings from config (optional)
     cfg_infer = (cfg.get("infer") or {}) if isinstance(cfg, dict) else {}
     cfg_inputs = list(cfg_infer.get("inputs") or [])
-    # 规范输出目录结构：<results_dir>/infer/runs/<run_id>/datasets
+    # Canonical output layout: <results_dir>/infer/runs/<run_id>/datasets
     paths_cfg = (cfg.get("paths") or {}) if isinstance(cfg, dict) else {}
     results_dir_cfg = paths_cfg.get("results_dir") or str(OUTPUT_ROOT)
     results_root = results_dir_cfg if os.path.isabs(results_dir_cfg) else os.path.join(PROJECT_ROOT, results_dir_cfg)
@@ -255,11 +255,11 @@ def main() -> None:
     def _derive_out(json_path: str) -> str:
         base = os.path.splitext(os.path.basename(json_path))[0]
         if args.output:
-            # 显式指定输出：尊重用户传入
+            # Explicit output: respect user-provided path
             out_p = args.output
             os.makedirs(os.path.dirname(out_p) or ".", exist_ok=True)
             return out_p
-        # 规范输出：写入本次 run 的 datasets 目录
+        # Default output: write into this run's datasets directory
         return os.path.join(datasets_dir, f"{base}_result.json")
 
     # Single input via CLI
@@ -284,7 +284,7 @@ def main() -> None:
         )
         outputs_collected.append(out_path)
         inputs_used.append(json_abs)
-        # 写出本次运行元信息与 latest 指针
+        # Write run metadata and latest pointer
         info = {
             "timestamp": datetime.utcnow().isoformat(timespec="seconds"),
             "run_id": run_id,
@@ -307,7 +307,7 @@ def main() -> None:
         }
         with open(os.path.join(run_dir, "infer_info.json"), "w", encoding="utf-8") as f:
             json.dump(info, f, ensure_ascii=False, indent=2)
-        # latest 指针
+        # latest pointer
         latest = os.path.join(infer_root, "latest_run.json")
         os.makedirs(os.path.dirname(latest), exist_ok=True)
         with open(latest, "w", encoding="utf-8") as f:
@@ -349,7 +349,7 @@ def main() -> None:
         inputs_used.append(jpath)
         print(f"Saved conversation-style results: {out_done}")
 
-    # 写出本次运行元信息与 latest 指针（多输入）
+    # Write run metadata and latest pointer (multi-input)
     info = {
         "timestamp": datetime.utcnow().isoformat(timespec="seconds"),
         "run_id": run_id,

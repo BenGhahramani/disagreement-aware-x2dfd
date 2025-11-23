@@ -1,76 +1,75 @@
 # QA Accuracy Evaluation Configuration
-# 配置文件用于设置QA准确性评估的各种参数
 
-# 路径配置
+# Path settings
 paths:
-  # 数据目录（相对于仓库根）
+  # Data directory (relative to repo root)
   data_dir: "datasets/raw/data"
-  # 结果输出目录（相对于仓库根）
+  # Results output directory (relative to repo root)
   results_dir: "eval/outputs"
 
-# 文件配置
+# File settings
 files:
-  # 问题文件路径（相对于data_dir）
+  # Path to question file (relative to data_dir)
   question_file: "question.json"
-  # Real数据集文件列表（相对于data_dir，如果为空则自动查找real*.json）
+  # Real dataset file list (relative to data_dir; auto-detect real*.json if empty)
   real_files: [Real_small.json]
-  # Fake数据集文件列表（相对于data_dir，如果为空则自动查找fake*.json）
+  # Fake dataset file list (relative to data_dir; auto-detect fake*.json if empty)
   fake_files: [Deepfakes_small.json, Face2Face_small.json, FaceSwap_small.json, NeuralTextures_small.json]
   # fake_files: [Deepfakes.json]
-# 运行参数
+# Run parameters
 run_params:
-  # 保留的top-k问题数量
+  # Keep top-k questions
   top_k: 40
-  # 是否使用进度条（需要tqdm库）
+  # Show progress bar (requires tqdm)
   use_progress_bar: true
-  # 随机种子（如果为null则使用系统随机种子）
+  # Random seed (null to use system RNG)
   seed: null
 
-# 输出配置
+# Output configuration
 output:
-  # 是否保存详细的响应记录
+  # Save detailed response records
   save_response_records: true
-  # 是否保存每个问题的平衡准确率
+  # Save per-question balanced accuracy
   save_per_question_balanced: true
-  # 是否保存完整的问题排名
+  # Save full question ranking
   save_full_ranking: true
 
-# 注释生成配置（图像解释）
+# Annotation generation (image explanations)
 annotations:
-  # Prompt 模板文件
+  # Prompt template file
   prompt_file: "datasets/prompts/prompt.json"
-  # LLaVA 模型路径
+  # LLaVA model path
   model_path: "weights/base/llava-v1.5-7b"
-  # 每个数据集最多处理的条目数（null 表示不限制）
+  # Max items per dataset (null means no limit)
   max_items: null
-  # 覆盖使用的标签（real/fake），null 表示按文件名自动推断
+  # Override label (real/fake); null to infer from filename
   label: null
-  # 与 QA 配置对齐：从 files.real_files + files.fake_files 自动生成 inputs（可关闭）
+  # Align with QA lists: derive inputs from files.real_files + files.fake_files (can be disabled)
   use_qa_file_lists: false
-  # 注释流程独立的文件列表（与 QA 的 small 相对）
+  # Independent annotation file lists (full datasets)
   real_files: [Real.json]
   fake_files: [Deepfakes.json, Face2Face.json, FaceSwap.json, NeuralTextures.json]
 
-# 传统模型弱增强（weak supply）配置
+# Traditional detector (weak supply)
 weak_supply:
-  # 模型名称（timm），与外部 detector 对齐
+  # Detector model name (timm)
   model_name: "swinv2_base_window16_256"
-  # 权重路径（相对仓库根）
+  # Weights path (relative to repo root)
   weights_path: "weights/blending_models/best_gf.pth"
-  # 输出文件名后缀（自动在合并文件名后追加该后缀与 .json）
+  # Output filename suffix (appended to merged filename)
   output_suffix: "_scored"
-  # 阈值：用于描述伪迹程度（低/中/高）
+  # Thresholds used for messaging
   thresholds:
     lo: 0.3
     hi: 0.7
-  # 在文案中展示的模型别名
+  # Alias shown in messaging
   alias: "Blending"
-  # 批量推理参数（用于提升GPU利用率，可按显存调节）
+  # Batched inference settings
   batch_size: 128
   num_workers: 8
   pin_memory: true
 
-# LLaVA/LoRA inference配置
+# LLaVA/LoRA inference
 model:
   base: "weights/base/llava-v1.5-7b"
   adapter: "weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]"
@@ -79,7 +78,7 @@ model:
   num_beams: 1
   max_new_tokens: 256
 
-# 推理输入（供训练流水线测试阶段或独立使用）
+# Inference inputs (for pipeline test stage or standalone usage)
 infer:
   inputs:
     - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Real.json"

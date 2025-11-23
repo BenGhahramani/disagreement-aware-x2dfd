@@ -599,9 +599,9 @@ def main() -> None:
     if not fake_paths:
         raise RuntimeError("No fake dataset files found.")
 
-    # 支持两种输入：
-    # 1) 数据集JSON: {"images": [{"image_path": "..."}]}
-    # 2) 对话JSON:   [{"id":..., "image":..., "conversations": [...]}]
+    # Support two input schemas:
+    # 1) Dataset JSON: {"images": [{"image_path": "..."}]}
+    # 2) Conversation JSON: [{"id":..., "image":..., "conversations": [...]}]
     real_datasets = []
     fake_datasets = []
     for p in real_paths:
