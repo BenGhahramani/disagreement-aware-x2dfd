@@ -1,0 +1,33 @@
+# Byte-compiled / cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual env / tooling
+.env
+.venv/
+venv/
+.idea/
+.vscode/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large outputs and datasets
+eval/outputs/
+train/outputs/
+datasets/raw/images/
+
+# Weights and checkpoints (recommend Git LFS or local)
+weights/
+*.bin
+*.h5
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+
+# Logs
+*.log
+

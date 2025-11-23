@@ -1,0 +1,3 @@
+{
+  "prompt": "You are an expert deepfake detector. Carefully examine the given face image and focus on trace-based clues: eyes (unnatural reflections, missing eyelashes, blurred details), facial geometry/layout (misplaced or asymmetric features such as lips, nose, jawline), skin texture & tone (overly smooth or uneven, inconsistent color patches), lighting & shadows (strange highlights or missing/inconsistent shadows), and edges & contours (overly sharp or smooth boundaries, unnatural blending with neck or background). After checking, explain why these traces suggest the image is {label}."
+}

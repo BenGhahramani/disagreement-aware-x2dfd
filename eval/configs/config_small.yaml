@@ -1,0 +1,78 @@
+# QA Accuracy Evaluation Configuration
+# 配置文件用于设置QA准确性评估的各种参数
+
+# 路径配置
+paths:
+  # 数据目录（相对于脚本目录）
+  data_dir: "data"
+  # 结果输出目录（相对于脚本目录）
+  results_dir: "results"
+  # 图片根目录前缀（说明：quick_infer 已不再使用该前缀；
+  # 仅保留给其他工具。quick_infer 需要在输入 JSON 顶层提供 Description 作为前缀，
+  # 或保证图像路径已为绝对路径。）
+  image_root_prefix: "datasets/raw/images"
+
+# 文件配置
+files:
+  # 问题文件路径（相对于data_dir）
+  question_file: "question.json"
+  # Real数据集文件列表（相对于data_dir，如果为空则自动查找real*.json）
+  real_files: [Real.json]
+  # Fake数据集文件列表（相对于data_dir，如果为空则自动查找fake*.json）
+  fake_files: [Deepfakes.json, Face2Face.json, FaceSwap.json, NeuralTextures.json]
+  # fake_files: [Deepfakes.json]
+# 运行参数
+run_params:
+  # 保留的top-k问题数量
+  top_k: 40
+  # 是否使用进度条（需要tqdm库）
+  use_progress_bar: true
+  # 随机种子（如果为null则使用系统随机种子）
+  seed: null
+
+# 输出配置
+output:
+  # 是否保存详细的响应记录
+  save_response_records: true
+  # 是否保存每个问题的平衡准确率
+  save_per_question_balanced: true
+  # 是否保存完整的问题排名
+  save_full_ranking: true
+
+# 注释生成配置（图像解释）
+annotations:
+  # Prompt 模板文件
+  prompt_file: "Prompt/prompt.json"
+  # LLaVA 模型路径
+  model_path: "weights/base/llava-v1.5-7b"
+  # 每个数据集最多处理的条目数（null 表示不限制）
+  max_items: 2
+  # 覆盖使用的标签（real/fake），null 表示按文件名自动推断
+  label: null
+  # 与 QA 配置对齐：从 files.real_files + files.fake_files 自动生成 inputs
+  use_qa_file_lists: true
+  # 在合并后是否自动执行弱监督打分增强（由注释流程决定）
+  enable_after_merge: true
+  # 如需手工指定，请注释上面一行并启用下方 inputs：
+  # inputs:
+  #   - "data/Face2Face.json"
+  #   - "data/FaceSwap.json"
+  #   - "data/Real.json"
+
+# 传统模型弱增强（weak supply）配置
+weak_supply:
+  # 模型名称（timm），与外部 detector 对齐
+  model_name: "swinv2_base_window16_256"
+  # 权重路径（相对仓库根）
+  weights_path: "weights/blending_models/best_gf.pth"
+  # 输出文件名后缀（自动在合并文件名后追加该后缀与 .json）
+  output_suffix: "_scored"
+  # 当独立运行weak_supply对合并JSON进行增强时，可直接指定输入与输出路径
+  annotations_input: null
+  annotations_output: null
+  # 阈值：用于描述伪迹程度（低/中/高）
+  thresholds:
+    lo: 0.3
+    hi: 0.7
+  # 在文案中展示的模型别名
+  alias: "Blending"

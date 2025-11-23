@@ -1,0 +1,1 @@
+python utils/score_and_augment.py --annotations results/annotations/runs/<run_id>/all_annotations_merged.json --image-root-prefix datasets/raw/images --weights weights/blending_models/best_gf.pth --output results/annotations/runs/<run_id>/all_annotations_merged_scored.json --alias Blending --hi 0.7 --lo 0.3

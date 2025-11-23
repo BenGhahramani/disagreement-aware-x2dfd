@@ -1,2 +1,0 @@
-timestamp,run_id,seed,top_k,real_accuracy,fake_accuracy,balanced_accuracy
-2025-09-25T11:14:57,run_20250925T111457Z,370393664,3,0.537500,0.487500,0.512500

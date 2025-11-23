@@ -1,0 +1,40 @@
+# Quick inference test configuration
+
+paths:
+  # Where to store inference runs (relative to repo root)
+  results_dir: "eval/outputs"
+
+weak_supply:
+  # Traditional detector used to compute a per-image score for templated questions
+  model_name: "swinv2_base_window16_256"
+  # Path relative to repo root (or absolute) for blending model weights
+  weights_path: "weights/blending_models/best_gf.pth"
+  # Name shown in the question template
+  alias: "Blending"
+  # Optional provider parameters
+  img_size: 256
+  num_class: 2
+  # Batched inference tuning
+  batch_size: 128
+  num_workers: 8
+  pin_memory: true
+
+# Model paths for quick inference (LoRA)
+model:
+  base: "weights/base/llava-v1.5-7b"
+  adapter: "weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]"
+
+# Quick inference settings
+infer:
+  # Input JSON files to process（指向 test 目录）
+  inputs:
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Deepfakes_tiny.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Faceswap_tiny.json"
+  # Question template; {alias} and {score} filled automatically
+  question_template: "<image>\nIs this image real or fake? And by observation of {alias} expert, the blending score is {score}."
+  # Optional generation tweaks
+  temperature: 0.2
+  top_p: 1.0
+  num_beams: 1
+  max_new_tokens: 4

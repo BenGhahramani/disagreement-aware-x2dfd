@@ -1,8 +1,0 @@
-{
-  "question_file": "/Users/yize/Documents/chenyize/python_project/X2DFD/data/question.json",
-  "real_file": "/Users/yize/Documents/chenyize/python_project/X2DFD/data/real.json",
-  "fake_file": "/Users/yize/Documents/chenyize/python_project/X2DFD/data/fake.json",
-  "seed": 370393664,
-  "top_k": 3,
-  "run_id": "run_20250925T111457Z"
-}
