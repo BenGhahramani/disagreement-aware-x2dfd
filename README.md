@@ -1,15 +1,19 @@
 <div align="center">
-<h2> <img src="figs/fig_teaser.png" alt="X2-DFD Logo" width="50" height="50" align="absmiddle"> X2-DFD: A Framework for eXplainable and eXtendable Deepfake Detection</h2>
+  <h2>
+    <img src="figs/fig_teaser.png" alt="Image Alt Text" width="50" height="50" align="absmiddle">
+    X2-DFD: A framework for eXplainable and eXtendable Deepfake Detection
+  </h2>
 </div>
 
 <div align="center">
 
-Yize Chen<sup>1*</sup>, Zhiyuan Yan<sup>3*</sup>, Guangliang Cheng<sup>4</sup>, Kangran Zhao<sup>1</sup>, Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
+Yize Chen<sup>1*</sup>, Zhiyuan Yan<sup>3*</sup>, Guangliang Cheng<sup>4</sup>, Kangran Zhao<sup>1</sup>,<br>
+Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 <br>
-<sup>1</sup> The Chinese University of Hong Kong, Shenzhen, Guangdong, 518172, P.R. China<br>
+<sup>1</sup> The Chinese University of Hong Kong, Shenzhen, Guangdong, 518172, P.R. China &nbsp;&nbsp;·&nbsp;&nbsp;
 <sup>3</sup> School of Electronic and Computer Engineering, Peking University, P.R. China<br>
-<sup>4</sup> Department of Computer Science, University of Liverpool, Liverpool, L69 7ZX, UK<br>
+<sup>4</sup> Department of Computer Science, University of Liverpool, Liverpool, L69 7ZX, UK &nbsp;&nbsp;·&nbsp;&nbsp;
 <sup>5</sup> Department of Computer Science and Engineering, University at Buffalo, State University of New York, Buffalo, NY, USA
 
 <br>
@@ -20,10 +24,11 @@ Yize Chen<sup>1*</sup>, Zhiyuan Yan<sup>3*</sup>, Guangliang Cheng<sup>4</sup>, 
 <div align="center">
 
 [![NeurIPS 2025](https://img.shields.io/badge/NeurIPS%202025-Poster-34d058)](https://neurips.cc/)
-[![arXiv](https://img.shields.io/badge/ArXiv-2410.06126-AD1C18.svg?logo=arXiv)](https://arxiv.org/abs/2410.06126)
+[![arXiv](https://img.shields.io/badge/Arxiv-2410.06126-AD1C18.svg?logo=arXiv)](https://arxiv.org/abs/2410.06126)
+[![Visitor](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fchenyize111%2FX2DFD&count_bg=%23C25AE6&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Visitor&edge_flat=false)](https://hits.seeyoufarm.com)
 [![GitHub issues](https://img.shields.io/github/issues/chenyize111/X2DFD?color=critical&label=Issues)](https://github.com/chenyize111/X2DFD/issues)
 [![GitHub Stars](https://img.shields.io/github/stars/chenyize111/X2DFD?style=social)](https://github.com/chenyize111/X2DFD/stargazers)
-[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-to%20appear-lightgrey)](#dataset)
+[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-info-lightgrey)](#dataset)
 [![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-checkpoints%20soon-9cf)](#model)
 [![License](https://img.shields.io/badge/License-MIT-yellow)](#license)
 
@@ -43,7 +48,6 @@ With the rapid advancement of AIGC, synthetic faces are increasingly pervasive. 
 <div align="center">
 <img src="figs/fig_framework_overview.png" alt="X2-DFD framework: experts + LLaVA reasoning pipeline" width="90%"/>
 </div>
-
 
 ## <img id="contrib_icon" width="3%" src="https://cdn-icons-png.flaticon.com/256/2435/2435606.png"> Contributions
 
@@ -76,7 +80,7 @@ python demo.py --image /abs/img.png \
   --adapter-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]
 ```
 
-## 📌 Usage
+## 🚀 Usage
 
 ### 1) Evaluation (one-liner)
 - One-liner (LoRA inference + ROC AUC):
@@ -185,19 +189,6 @@ A `CITATION.cff` file is also provided for GitHub's "Cite this repository" widge
 
 ---
 
-## 🔐 Security & Data
-- Do NOT commit datasets or weights; keep them locally under `datasets/` and `weights/`.
-- Before releasing, remove any private or restricted samples.
-
----
-
-## 🤝 Contributing
-- We follow Conventional Commits: `feat|fix|docs|refactor|test|chore` with scoped modules, e.g., `feat(diffusion): batched detector infer`.
-- PRs should include: clear description, reproduction commands, AUC before/after (paths to `eval/outputs`), related issues, and focused diffs.
-
----
-
-<a id="license"></a>
 
 <a id="license"></a>
 
