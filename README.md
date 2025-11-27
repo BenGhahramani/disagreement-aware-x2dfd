@@ -33,6 +33,15 @@ Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 </div>
 
+## Contents
+- [Install](#install)
+- [LLaVA Weights](#llava-weights)
+- [Demo](#demo)
+- [Model Zoo](#model-zoo)
+- [Dataset](#dataset)
+- [Train](#train)
+- [Evaluation](#evaluation)
+
 ## 📰 News
 - [2025.11.27]: 🎉 X2-DFD was accepted to NeurIPS 2025 (Poster)!
 - [2025.11.27]: 🚀 Public release of the X2-DFD codebase and docs.
@@ -43,7 +52,7 @@ Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 X2‑DFD is an eXplainable and eXtendable deepfake detection framework built on MLLMs. It outputs both a binary verdict (real/fake) and concise, human‑readable explanations. At its core, X2‑DFD focuses on two principles:
 
 - **Prompt‑guided explainability.** We design prompts that steer the model to attend to the features it is naturally good at, and use the generated rationales to construct an explainable dataset.
-- **Extensibility via Specific Feature Detectors (SFDs).** We keep the system plug‑and‑play by supplementing hard, low‑level artifact cues (e.g., blending/lighting) with dedicated detectors, further enhancing the model’s capability.
+- **Extensibility via Specific Feature Detectors (SFDs).** We keep the system plug‑and‑play by supplementing hard, low‑level artifact cues (e.g., blending/diffusion trace) with dedicated detectors, further enhancing the model’s capability.
 
 A lightweight **LoRA** adapter is fine‑tuned on the constructed data for deployment. We also provide a **registry pattern** for experts/providers (see `src/EXPERTS_GUIDE.md`), and standardized JSON schemas/path rules for reproducible evaluation across datasets.
 
@@ -57,6 +66,8 @@ A lightweight **LoRA** adapter is fine‑tuned on the constructed data for deplo
 - **Enhancing explainability by reinforcing strong features.** We design **SFS** to strengthen the MLLM’s well‑learned features and fine‑tune it to generate clear, artifact‑aware rationales, improving both detectability and explainability.
 - **Supplementing weaknesses with Specific Feature Detectors.** Through **WFS**, we incorporate **SFDs** to complement the model’s limitations, yielding a robust and **plug‑and‑play** system that supports future MLLMs and detectors.
 
+<a id="install"></a>
+
 ## 🛠️ Installation
 
 1) Environment (Conda, Python 3.10 recommended)
@@ -65,10 +76,14 @@ bash install.sh
 conda activate X2DFD
 ```
 
+<a id="llava-weights"></a>
+
 2) **Weights**
 - **Base model:** LLaVA-1.5-7B (Hugging Face) → `weights/base/llava-v1.5-7b`
   - Or set env var: `X2DFD_BASE_MODEL=/abs/path/to/llava-v1.5-7b`
 - **Vision tower:** CLIP ViT-L/14-336 → `weights/base/clip-vit-large-patch14-336`
+
+<a id="demo"></a>
 
 3) Single-Image Demo
 ```bash
@@ -113,6 +128,8 @@ We provide two ready-to-use expert settings:
 
 ## 🚀 Usage
 
+<a id="evaluation"></a>
+
 ### 1) **Evaluation (one-liner)**
 - One-liner (LoRA inference + ROC AUC):
 ```bash
@@ -132,6 +149,8 @@ Question template (example, includes expert score):
 <image>
 Is this image real or fake? And the {alias} score is {score}.
 ```
+
+<a id="train"></a>
 
 ### 3) **Training (staged)**
 End-to-end (annotation → weak merge → LoRA train → LoRA test):
@@ -187,6 +206,12 @@ Tiny sanity JSONs are provided under `datasets/raw/data/test/Tiny_Test/`.
 For large-scale evaluation, set `X2DFD_DATASETS` and use `eval/configs/infer_config.example.yaml`.
 
 ---
+
+<a id="model-zoo"></a>
+
+## 🧩 Model Zoo
+- X2‑DFD LoRA (Blending‑only): [Coming soon](#coming-soon). See “Optional Expert Variants” for how to run with `--experts blending`.
+- X2‑DFD LoRA (Blending + Diffusion): [Coming soon](#coming-soon). Default configs use both experts; or pass `--experts blending,diffusion_detector`.
 
 <a id="model"></a>
 
