@@ -41,12 +41,13 @@ Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 ## <img id="overview_icon" width="3%" src="https://cdn-icons-png.flaticon.com/256/599/599205.png"> X2-DFD Overview
 
-X2-DFD is a framework for explainable and extendable deepfake detection. It couples artifact-aware expert signals with a vision-language model to produce both a binary verdict (real/fake) and concise, human-readable explanations.
+X2-DFD is an eXplainable and eXtendable deepfake detection framework that leverages multimodal large language models (MLLMs). It produces both binary decisions (real/fake) and concise, human-readable artifact explanations. The design follows a three‑stage pipeline closely aligned with the paper:
 
-- **Experts as weak signals.** The framework integrates “experts” (e.g., blending- and diffusion-based detectors). Their scores are rendered into the question to ground the model’s reasoning on concrete artifacts.
-- **Explainable annotation + LoRA.** A base LLaVA model generates rationale-style annotations, and a lightweight **LoRA** adapter is fine-tuned for the detection task.
-- **Registry pattern.** Plug in new experts/providers and fusion strategies without touching the core pipeline (see `src/EXPERTS_GUIDE.md`).
-- **Standardized I/O.** JSON schemas and strict path rules ensure reproducible data handling and evaluation across datasets.
+- **Stage 1 — Model Feature Assessment (MFA).** We systematically evaluate the detectability of forgery‑related features for the MLLM and obtain a prioritized ranking of features by their intrinsic importance to the model.
+- **Stage 2 — Explainable Dataset Construction (EDC).** This stage has two modules: (i) **Strong Feature Strengthening (SFS)**, which reinforces the model’s well‑learned features to improve detection and explanation; and (ii) **Weak Feature Supplementing (WFS)**, which integrates **Specific Feature Detectors (SFDs)** (e.g., low‑level artifact analyzers such as blending/lighting) to compensate for MLLM limitations.
+- **Stage 3 — Fine‑tuning & Inference.** We fine‑tune a lightweight **LoRA** adapter on the constructed dataset and deploy it for final detection with explanations.
+
+In addition, we provide a **registry pattern** for experts/providers, so new detectors and fusion strategies can be plugged in without touching the core. Standardized JSON schemas and strict path rules ensure reproducible data handling and evaluation across datasets.
 
 <div align="center">
 <img src="figs/fig_framework_overview.png" alt="X2-DFD framework: experts + LLaVA reasoning pipeline" width="90%"/>
@@ -54,9 +55,9 @@ X2-DFD is a framework for explainable and extendable deepfake detection. It coup
 
 ## <img id="contrib_icon" width="3%" src="https://cdn-icons-png.flaticon.com/256/2435/2435606.png"> Contributions
 
-- **Unified framework.** Combines artifact experts with a multimodal LLM, delivering accurate real/fake decisions and natural-language explanations.
-- **Plug-and-play pipeline.** Expert/provider registry and staged pipeline (explainable annotation → weak-signal merge → LoRA training) streamline extension and reuse.
-- **Consistent evaluation.** Dataset-style JSONs, absolute-path outputs, and one-line ROC AUC computation.
+- **Systematic assessment of MLLMs’ intrinsic capabilities for deepfake detection.** We provide an in‑depth feature‑wise analysis revealing that pretrained MLLMs tend to discriminate **semantic** cues well (e.g., skin/contours) but are weaker on **signal‑level** artifacts (e.g., blending/lighting), motivating targeted strengthening.
+- **Enhancing explainability by reinforcing strong features.** We design **SFS** to strengthen the MLLM’s well‑learned features and fine‑tune it to generate clear, artifact‑aware rationales, improving both detectability and explainability.
+- **Supplementing weaknesses with Specific Feature Detectors.** Through **WFS**, we incorporate **SFDs** to complement the model’s limitations, yielding a robust and **plug‑and‑play** system that supports future MLLMs and detectors.
 
 ## 🛠️ Installation
 
