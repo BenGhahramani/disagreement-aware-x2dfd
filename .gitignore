@@ -2,6 +2,10 @@
 __pycache__/
 *.py[cod]
 *.pyo
+.ipynb_checkpoints/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
 
 # Virtual env / tooling
 .env
@@ -34,3 +38,19 @@ weights/
 
 # Logs
 *.log
+
+# Trainers/trackers (optional)
+wandb/
+lightning_logs/
+runs/
+mlruns/
+
+# Build / packaging
+build/
+dist/
+*.egg-info/
+
+# Local caches (optional under repo)
+.cache/
+hf_cache/
+transformers_cache/

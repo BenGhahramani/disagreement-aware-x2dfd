@@ -1,43 +1,57 @@
-# X2-DFD: eXplainable & eXtendable Deepfake Detection
+<div align="center">
+<h2> <img src="figs/fig_teaser.png" alt="X2-DFD Logo" width="50" height="50" align="absmiddle"> X2-DFD: A Framework for eXplainable and eXtendable Deepfake Detection</h2>
+</div>
 
-<p align="left">
-  <a href="https://neurips.cc/" target="_blank"><img alt="NeurIPS 2025 Poster" src="https://img.shields.io/badge/NeurIPS%202025-Poster-34d058"></a>
-  <a href="#citation"><img alt="Cite Us" src="https://img.shields.io/badge/Cite-welcome-brightgreen"></a>
-  <img alt="Python 3.10" src="https://img.shields.io/badge/python-3.10-blue.svg">
-  <a href="https://github.com/haotian-liu/LLaVA" target="_blank"><img alt="Powered by LLaVA" src="https://img.shields.io/badge/Powered%20by-LLaVA-ff69b4"></a>
-  <img alt="PRs Welcome" src="https://img.shields.io/badge/PRs-welcome-orange.svg">
-  <a href="https://arxiv.org/abs/2410.06126" target="_blank"><img alt="arXiv 2410.06126" src="https://img.shields.io/badge/arXiv-2410.06126-b31b1b"></a>
-  <a href="#license"><img alt="License" src="https://img.shields.io/badge/License-MIT-yellow"></a>
-</p>
+<div align="center">
 
-X2-DFD is a multimodal deepfake detection framework built on LLaVA, designed to be explainable and extendable.
-- Explainable: QA-style reasoning with optional scores from traditional detectors, producing structured decisions and rationales.
-- Extendable: a simple expert/provider registry to plug in new detectors and fusion strategies (see `src/EXPERTS_GUIDE.md`).
+Yize Chen<sup>1*</sup>, Zhiyuan Yan<sup>3*</sup>, Guangliang Cheng<sup>4</sup>, Kangran Zhao<sup>1</sup>, Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
-<p align="center">
-  <img src="figs/fig_teaser.png" alt="Teaser" width="90%"/>
-</p>
+<br>
+<sup>1</sup> The Chinese University of Hong Kong, Shenzhen, Guangdong, 518172, P.R. China<br>
+<sup>3</sup> School of Electronic and Computer Engineering, Peking University, P.R. China<br>
+<sup>4</sup> Department of Computer Science, University of Liverpool, Liverpool, L69 7ZX, UK<br>
+<sup>5</sup> Department of Computer Science and Engineering, University at Buffalo, State University of New York, Buffalo, NY, USA
 
-<p align="center">
-  <img src="figs/fig_framework_overview.png" alt="Framework Overview" width="49%"/>
-  <img src="figs/fig_mllms_capability_in_deepfake.png" alt="MLLMs capability in deepfake" width="49%"/>
-</p>
+<br>
+<sup>*</sup> Equal contribution &nbsp;&nbsp;&nbsp; <sup>†</sup> Corresponding author
 
-## Contents
-- Quick Start (install, weights, demo)
-- Evaluation (one-liner and manual)
-- Training Pipeline
-- Project Structure
-- Config & Environment Variables
-- Dataset JSON Schema
-- Citation and Acknowledgements
-- Security & Data
-- Contributing
-- License
+</div>
 
----
+<div align="center">
 
-## Quick Start
+[![NeurIPS 2025](https://img.shields.io/badge/NeurIPS%202025-Poster-34d058)](https://neurips.cc/)
+[![arXiv](https://img.shields.io/badge/ArXiv-2410.06126-AD1C18.svg?logo=arXiv)](https://arxiv.org/abs/2410.06126)
+[![GitHub issues](https://img.shields.io/github/issues/chenyize111/X2DFD?color=critical&label=Issues)](https://github.com/chenyize111/X2DFD/issues)
+[![GitHub Stars](https://img.shields.io/github/stars/chenyize111/X2DFD?style=social)](https://github.com/chenyize111/X2DFD/stargazers)
+[![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-to%20appear-lightgrey)](#dataset)
+[![Model](https://img.shields.io/badge/%F0%9F%A4%97%20Model-checkpoints%20soon-9cf)](#model)
+[![License](https://img.shields.io/badge/License-MIT-yellow)](#license)
+
+</div>
+
+## 📰 News
+- [2025.11.27]: 🎉 X2-DFD was accepted to NeurIPS 2025 (Poster)!
+- [2025.11.27]: 🚀 Public release of the X2-DFD codebase and docs.
+- [2024.10.XX]: 📝 Preprint available on arXiv: 2410.06126.
+
+## <img id="overview_icon" width="3%" src="https://cdn-icons-png.flaticon.com/256/599/599205.png"> X2-DFD Overview
+
+With the rapid advancement of AIGC, synthetic faces are increasingly pervasive. X2-DFD is a LLaVA-based framework for deepfake detection that emphasizes both explainability and extensibility:
+- Explainable: QA-style reasoning with optional artifact scores from classical experts, producing structured decisions and human-readable rationales.
+- Extendable: a lightweight expert/provider registry for plugging in detectors and fusion strategies (see `src/EXPERTS_GUIDE.md`).
+
+<div align="center">
+<img src="figs/fig_framework_overview.png" alt="X2-DFD framework: experts + LLaVA reasoning pipeline" width="90%"/>
+</div>
+
+
+## <img id="contrib_icon" width="3%" src="https://cdn-icons-png.flaticon.com/256/2435/2435606.png"> Contributions
+
+- We present X2-DFD, a multimodal framework for deepfake detection that unifies expert artifact cues with LLaVA reasoning for explainable decisions.
+- We provide a simple expert/provider registry and a staged pipeline (annotation → weak merge → LoRA training) for easy extension and reproducibility.
+- We offer a minimal set of JSON schemas and quick evaluation configs to standardize data exchange and metrics (ROC AUC).
+
+## 🛠️ Installation
 
 1) Environment (Conda, Python 3.10 recommended)
 ```bash
@@ -62,40 +76,43 @@ python demo.py --image /abs/img.png \
   --adapter-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]
 ```
 
----
+## 📌 Usage
 
-## Evaluation
+### 1) Evaluation (one-liner)
 - One-liner (LoRA inference + ROC AUC):
 ```bash
 ./test.sh
 ```
-  - Inference output: `eval/outputs/infer/latest_run.json`
+  - Inference: `eval/outputs/infer/latest_run.json`
   - Metrics: `eval/outputs/metrics/auc.json`
 
-- Manual:
+### 2) Evaluation (manual)
 ```bash
 python -m eval.infer.runner --config eval/configs/infer_config.yaml
 python -m eval.tools.compute_auc
 ```
 
-- Question template (example, includes expert score):
+Question template (example, includes expert score):
 ```
 <image>
 Is this image real or fake? And the {alias} score is {score}.
 ```
 
----
-
-## Training Pipeline
-- End-to-end (annotate → merge → LoRA train → LoRA test):
+### 3) Training (staged)
+End-to-end (annotation → weak merge → LoRA train → LoRA test):
 ```bash
 ./train.sh --run-train [--train-gpus 0,1]
 ```
 - More scripts: `train/` and `train/scripts/`; legacy scripts are archived in `legacy/` (not recommended).
 
+Stages mirror our methodology:
+- Stage 2 — Explainable annotation (base LLaVA generates rationales)
+- Stage 3 — Weak feature supply (multi-expert artifact scores merged into prompts)
+- Stage 4 — LoRA training (fine-tune lightweight adapter)
+
 ---
 
-## Project Structure
+## 🧭 Project Structure
 - `src/` core code
   - `diffusion/`: networks, preprocessing, detectors
   - `blending/`: detectors and utils
@@ -109,15 +126,15 @@ Coding style: Python 3.10, PEP 8, 4-space indent; prefer type hints and f-string
 
 ---
 
-## Config & Environment Variables
+## ⚙️ Config & Environment Variables
 - Common env vars (see `utils/paths.py`):
   - `X2DFD_BASE_MODEL`, `X2DFD_WEIGHTS`, `X2DFD_OUTPUT`, `X2DFD_DATASETS`
 - GPU auto-detection; override with `GPUS` or `--train-gpus`.
 - All outputs record absolute image paths. Dataset JSON may use a top-level `Description` as image root.
 
----
+<a id="dataset"></a>
 
-## Dataset JSON Schema
+## 📦 Dataset
 Minimal dataset JSON example:
 ```json
 {
@@ -131,7 +148,17 @@ Minimal dataset JSON example:
 - If `Description` is missing, every `images[].image_path` must be absolute.
 - Outputs (evaluation/inference/annotation) always contain absolute image paths.
 
+Tiny sanity JSONs are provided under `datasets/raw/data/test/Tiny_Test/`.
+For large-scale evaluation, set `X2DFD_DATASETS` and use `eval/configs/infer_config.example.yaml`.
+
 ---
+
+<a id="model"></a>
+
+## 🧠 Model
+- Base: LLaVA-1.5-7B (`weights/base/llava-v1.5-7b`).
+- Checkpoints: LoRA adapters will be released soon. Paths default to `weights/checkpoints/ckpt/...`.
+- You can point to your own adapters via `--adapter-path` or config `model.adapter`.
 
 <a id="citation"></a>
 
@@ -151,20 +178,20 @@ A `CITATION.cff` file is also provided for GitHub's "Cite this repository" widge
 
 ---
 
-## Acknowledgements
+## 😄 Acknowledgements
 - We thank the LLaVA team for their open-source project and training/inference pipeline:
   https://github.com/haotian-liu/LLaVA
 - Parts of this repo build on community practices (fusion, detectors, training tools). If we missed an attribution, please open an issue.
 
 ---
 
-## Security & Data
+## 🔐 Security & Data
 - Do NOT commit datasets or weights; keep them locally under `datasets/` and `weights/`.
 - Before releasing, remove any private or restricted samples.
 
 ---
 
-## Contributing
+## 🤝 Contributing
 - We follow Conventional Commits: `feat|fix|docs|refactor|test|chore` with scoped modules, e.g., `feat(diffusion): batched detector infer`.
 - PRs should include: clear description, reproduction commands, AUC before/after (paths to `eval/outputs`), related issues, and focused diffs.
 
@@ -172,6 +199,7 @@ A `CITATION.cff` file is also provided for GitHub's "Cite this repository" widge
 
 <a id="license"></a>
 
-## License
-MIT License. See `LICENSE`.
+<a id="license"></a>
 
+## 📝 License
+MIT License. See `LICENSE`.
