@@ -43,10 +43,10 @@ Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 X2-DFD is a framework for explainable and extendable deepfake detection. It couples artifact-aware expert signals with a vision-language model to produce both a binary verdict (real/fake) and concise, human-readable explanations.
 
-- The framework integrates “experts” (e.g., blending- and diffusion-based detectors) as weak signals. Their scores are rendered into the question to ground the model’s reasoning on concrete artifacts.
-- A base LLaVA model is used to generate rationale-style annotations, and a lightweight LoRA adapter is fine-tuned for the detection task.
-- A registry pattern makes it easy to plug in new experts/providers and fusion strategies without touching the core pipeline (see `src/EXPERTS_GUIDE.md`).
-- Standardized JSON schemas and strict path rules ensure reproducible data handling and evaluation across datasets.
+- **Experts as weak signals.** The framework integrates “experts” (e.g., blending- and diffusion-based detectors). Their scores are rendered into the question to ground the model’s reasoning on concrete artifacts.
+- **Explainable annotation + LoRA.** A base LLaVA model generates rationale-style annotations, and a lightweight **LoRA** adapter is fine-tuned for the detection task.
+- **Registry pattern.** Plug in new experts/providers and fusion strategies without touching the core pipeline (see `src/EXPERTS_GUIDE.md`).
+- **Standardized I/O.** JSON schemas and strict path rules ensure reproducible data handling and evaluation across datasets.
 
 <div align="center">
 <img src="figs/fig_framework_overview.png" alt="X2-DFD framework: experts + LLaVA reasoning pipeline" width="90%"/>
@@ -54,9 +54,9 @@ X2-DFD is a framework for explainable and extendable deepfake detection. It coup
 
 ## <img id="contrib_icon" width="3%" src="https://cdn-icons-png.flaticon.com/256/2435/2435606.png"> Contributions
 
-- A unified framework that combines artifact experts with a multimodal LLM, delivering both accurate real/fake decisions and natural-language explanations.
-- A plug-and-play expert/provider registry and staged pipeline (explainable annotation → weak-signal merge → LoRA training) to streamline extension and reuse.
-- Consistent data interfaces and evaluation: dataset-style JSONs, absolute-path outputs, and one-line ROC AUC computation.
+- **Unified framework.** Combines artifact experts with a multimodal LLM, delivering accurate real/fake decisions and natural-language explanations.
+- **Plug-and-play pipeline.** Expert/provider registry and staged pipeline (explainable annotation → weak-signal merge → LoRA training) streamline extension and reuse.
+- **Consistent evaluation.** Dataset-style JSONs, absolute-path outputs, and one-line ROC AUC computation.
 
 ## 🛠️ Installation
 
@@ -66,10 +66,10 @@ bash install.sh
 conda activate X2DFD
 ```
 
-2) Weights
-- Base model: LLaVA-1.5-7B (Hugging Face) → `weights/base/llava-v1.5-7b`
- - Or set env var: `X2DFD_BASE_MODEL=/abs/path/to/llava-v1.5-7b`
-- Vision tower: CLIP ViT-L/14-336 → `weights/base/clip-vit-large-patch14-336`
+2) **Weights**
+- **Base model:** LLaVA-1.5-7B (Hugging Face) → `weights/base/llava-v1.5-7b`
+  - Or set env var: `X2DFD_BASE_MODEL=/abs/path/to/llava-v1.5-7b`
+- **Vision tower:** CLIP ViT-L/14-336 → `weights/base/clip-vit-large-patch14-336`
 
 3) Single-Image Demo
 ```bash
@@ -87,10 +87,10 @@ python demo.py --image /abs/img.png \
 
 | Component | Where to get | Put under (default) | Env var override | Used in |
 | --- | --- | --- | --- | --- |
-| LLaVA-1.5-7B (base) | Hugging Face: liuhaotian/llava-v1.5-7b | `weights/base/llava-v1.5-7b` | `X2DFD_BASE_MODEL` | annotation, training, evaluation |
-| CLIP ViT-L/14-336 (vision tower) | Hugging Face: openai/clip-vit-large-patch14-336 | `weights/base/clip-vit-large-patch14-336` | `VISION_TOWER` (training), or via config | training |
-| Blending detector (SwinV2-B, 256) | your checkpoint (e.g., `best_gf.pth`) | `weights/blending_models/best_gf.pth` | set in config `weak_supplies[].weights_path` | weak-signal scores (optional) |
-| Diffusion/aligner detector (ours-sync) | your checkpoint folder | `weights/ours-sync/` | set via `weak_supplies[].weights_dir` + `model: ours-sync` | weak-signal scores (optional) |
+| **LLaVA-1.5-7B (base)** | Hugging Face: liuhaotian/llava-v1.5-7b | `weights/base/llava-v1.5-7b` | `X2DFD_BASE_MODEL` | annotation, training, evaluation |
+| **CLIP ViT-L/14-336 (vision tower)** | Hugging Face: openai/clip-vit-large-patch14-336 | `weights/base/clip-vit-large-patch14-336` | `VISION_TOWER` (training), or via config | training |
+| **Blending detector (SwinV2-B, 256)** | your checkpoint (e.g., `best_gf.pth`) | `weights/blending_models/best_gf.pth` | set in config `weak_supplies[].weights_path` | weak-signal scores (optional) |
+| **Diffusion/aligner detector (ours-sync)** | your checkpoint folder | `weights/ours-sync/` | set via `weak_supplies[].weights_dir` + `model: ours-sync` | weak-signal scores (optional) |
 
 Notes
 - If you do not have a given expert checkpoint, remove that expert from `weak_supplies` in the config to run base-only.
@@ -98,7 +98,7 @@ Notes
 
 ## 🚀 Usage
 
-### 1) Evaluation (one-liner)
+### 1) **Evaluation (one-liner)**
 - One-liner (LoRA inference + ROC AUC):
 ```bash
 ./test.sh
@@ -106,7 +106,7 @@ Notes
   - Inference: `eval/outputs/infer/latest_run.json`
   - Metrics: `eval/outputs/metrics/auc.json`
 
-### 2) Evaluation (manual)
+### 2) **Evaluation (manual)**
 ```bash
 python -m eval.infer.runner --config eval/configs/infer_config.yaml
 python -m eval.tools.compute_auc
@@ -118,7 +118,7 @@ Question template (example, includes expert score):
 Is this image real or fake? And the {alias} score is {score}.
 ```
 
-### 3) Training (staged)
+### 3) **Training (staged)**
 End-to-end (annotation → weak merge → LoRA train → LoRA test):
 ```bash
 ./train.sh --run-train [--train-gpus 0,1]
@@ -126,9 +126,9 @@ End-to-end (annotation → weak merge → LoRA train → LoRA test):
 - More scripts: `train/` and `train/scripts/`; legacy scripts are archived in `legacy/` (not recommended).
 
 Stages mirror our methodology:
-- Stage 2 — Explainable annotation (base LLaVA generates rationales)
-- Stage 3 — Weak feature supply (multi-expert artifact scores merged into prompts)
-- Stage 4 — LoRA training (fine-tune lightweight adapter)
+- **Stage 2 — Explainable annotation** (base LLaVA generates rationales)
+- **Stage 3 — Weak feature supply** (multi-expert artifact scores merged into prompts)
+- **Stage 4 — LoRA training** (fine-tune lightweight adapter)
 
 ---
 
@@ -176,8 +176,8 @@ For large-scale evaluation, set `X2DFD_DATASETS` and use `eval/configs/infer_con
 <a id="model"></a>
 
 ## 🧠 Model
-- Base: LLaVA-1.5-7B (`weights/base/llava-v1.5-7b`).
-- Checkpoints: LoRA adapters will be released soon. Paths default to `weights/checkpoints/ckpt/...`.
+- **Base:** LLaVA-1.5-7B (`weights/base/llava-v1.5-7b`).
+- **Checkpoints:** **LoRA** adapters will be released soon. Paths default to `weights/checkpoints/ckpt/...`.
 - You can point to your own adapters via `--adapter-path` or config `model.adapter`.
 
 <a id="citation"></a>
@@ -199,7 +199,7 @@ A `CITATION.cff` file is also provided for GitHub's "Cite this repository" widge
 ---
 
 ## 😄 Acknowledgements
-- We thank the LLaVA team for their open-source project and training/inference pipeline:
+- We thank the **LLaVA** team for their open-source project and training/inference pipeline:
   https://github.com/haotian-liu/LLaVA
 - Parts of this repo build on community practices (fusion, detectors, training tools). If we missed an attribution, please open an issue.
 
