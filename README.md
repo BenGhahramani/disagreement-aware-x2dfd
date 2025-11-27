@@ -11,9 +11,9 @@ Yize Chen<sup>1*</sup>, Zhiyuan Yan<sup>3*</sup>, Guangliang Cheng<sup>4</sup>, 
 Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 <br>
-<sup>1</sup> The Chinese University of Hong Kong, Shenzhen, Guangdong, 518172, P.R. China &nbsp;&nbsp;·&nbsp;&nbsp;
+<sup>1</sup> The Chinese University of Hong Kong, Shenzhen, Guangdong, 518172, P.R. China <br>
 <sup>3</sup> School of Electronic and Computer Engineering, Peking University, P.R. China<br>
-<sup>4</sup> Department of Computer Science, University of Liverpool, Liverpool, L69 7ZX, UK &nbsp;&nbsp;·&nbsp;&nbsp;
+<sup>4</sup> Department of Computer Science, University of Liverpool, Liverpool, L69 7ZX, UK <br>
 <sup>5</sup> Department of Computer Science and Engineering, University at Buffalo, State University of New York, Buffalo, NY, USA
 
 <br>
@@ -25,7 +25,6 @@ Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 [![NeurIPS 2025](https://img.shields.io/badge/NeurIPS%202025-Poster-34d058)](https://neurips.cc/)
 [![arXiv](https://img.shields.io/badge/Arxiv-2410.06126-AD1C18.svg?logo=arXiv)](https://arxiv.org/abs/2410.06126)
-[![Visitor](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fchenyize111%2FX2DFD&count_bg=%23C25AE6&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=Visitor&edge_flat=false)](https://hits.seeyoufarm.com)
 [![GitHub issues](https://img.shields.io/github/issues/chenyize111/X2DFD?color=critical&label=Issues)](https://github.com/chenyize111/X2DFD/issues)
 [![GitHub Stars](https://img.shields.io/github/stars/chenyize111/X2DFD?style=social)](https://github.com/chenyize111/X2DFD/stargazers)
 [![Dataset](https://img.shields.io/badge/%F0%9F%A4%97%20Dataset-info-lightgrey)](#dataset)
