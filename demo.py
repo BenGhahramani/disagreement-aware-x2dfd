@@ -1,20 +1,16 @@
 #!/usr/bin/env python3
 """
-Single-image demo for X2DFD.
+Single-image demo for X2DFD (LoRA required).
 
-Runs LLaVA (base or with LoRA adapter) to answer a binary question for one
-image and prints the result as JSON (optionally with legacy real/fake scores).
+Runs LLaVA with a LoRA adapter to answer a binary question for one image and
+prints the result as JSON (optionally with legacy real/fake scores).
 
-Usage:
+Usage (LoRA required):
   python demo.py \
     --image /abs/path/to/image.png \
     --model-base weights/base/llava-v1.5-7b \
-    [--adapter-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]] \
+    --adapter-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small] \
     [--question "Is this image real or fake?"]
-
-Notes:
-- When --adapter-path is provided, the adapter is loaded on top of --model-base.
-- When --adapter-path is omitted, --model-base is used as a standalone model.
 """
 
 from __future__ import annotations
@@ -43,15 +39,13 @@ def run_demo(
     num_beams: int = 1,
     max_new_tokens: int = 4,
 ) -> Dict[str, Any]:
-    # Resolve loading scheme: adapter+base vs base-only
-    if adapter_path:
-        model_path = adapter_path
-        model_base_arg = model_base
-    else:
-        model_path = model_base or ""
-        model_base_arg = None
-    if not model_path:
-        raise SystemExit("Model path is required: provide --model-base or --adapter-path + --model-base")
+    # LoRA-only: require adapter + base
+    if not adapter_path:
+        raise SystemExit("Adapter is required: provide --adapter-path plus --model-base")
+    if not model_base:
+        raise SystemExit("Base model is required: provide --model-base together with --adapter-path")
+    model_path = adapter_path
+    model_base_arg = model_base
 
     result = single_image_infer_with_scores(
         image_path=image,
@@ -75,7 +69,7 @@ def run_demo(
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Single-image LLaVA demo (base or LoRA)")
+    ap = argparse.ArgumentParser(description="Single-image LLaVA demo (LoRA required)")
     ap.add_argument("--image", required=True, help="Absolute path to an image file")
     ap.add_argument("--question", default="Is this image real or fake?", help="Question to ask")
     ap.add_argument("--model-base", default=os.environ.get("X2DFD_BASE_MODEL", "weights/base/llava-v1.5-7b"), help="Base LLaVA model path")
@@ -105,4 +99,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

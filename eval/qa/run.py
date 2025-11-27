@@ -431,30 +431,7 @@ def _collect_score_pairs(responses: List[QAResponse], label: int) -> List[Tuple[
     return pairs
 
 
-def compute_auc(score_label_pairs: List[Tuple[float, int]]) -> Optional[float]:
-    if not score_label_pairs:
-        return None
-    pos = sum(1 for _, lbl in score_label_pairs if lbl == 1)
-    neg = sum(1 for _, lbl in score_label_pairs if lbl == 0)
-    if pos == 0 or neg == 0:
-        return None
-    sorted_pairs = sorted(score_label_pairs, key=lambda x: x[0])
-    rank = 1
-    rank_sum_pos = 0.0
-    n = len(sorted_pairs)
-    i = 0
-    while i < n:
-        j = i
-        while j < n and sorted_pairs[j][0] == sorted_pairs[i][0]:
-            j += 1
-        group_size = j - i
-        avg_rank = (2 * rank + group_size - 1) / 2.0
-        pos_in_group = sum(1 for _, lbl in sorted_pairs[i:j] if lbl == 1)
-        rank_sum_pos += avg_rank * pos_in_group
-        rank += group_size
-        i = j
-    auc = (rank_sum_pos - pos * (pos + 1) / 2.0) / (pos * neg)
-    return auc
+# AUC computation removed.
 
 def load_conversation_pairs(path: Path) -> List[tuple[str, str]]:
     """Load (image, question) pairs from a conversation-style JSON list."""
@@ -586,7 +563,7 @@ def main() -> None:
     )
 
     if not inference_opts.use_lora:
-        print("[WARN] No LoRA adapter configured; evaluation will use base model and skip AUC computation.")
+        raise SystemExit("[X2DFD] LoRA adapter is required for evaluation. Provide --adapter in config (model.adapter) or CLI.")
 
     print("Loading questions and image paths...")
     questions = load_questions(config.question_path)

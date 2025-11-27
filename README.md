@@ -35,8 +35,9 @@ Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 ## Contents
 - [Install](#install)
-- [LLaVA Weights](#llava-weights)
+- [Weights](#llava-weights)
 - [Demo](#demo)
+- [Quick Inference](#quick-infer)
 - [Model Zoo](#model-zoo)
 - [Dataset](#dataset)
 - [Train](#train)
@@ -51,10 +52,9 @@ Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 X2‑DFD is an eXplainable and eXtendable deepfake detection framework built on MLLMs. It outputs both a binary verdict (real/fake) and concise, human‑readable explanations. At its core, X2‑DFD focuses on two principles:
 
-- **Prompt‑guided explainability.** We design prompts that steer the model to attend to the features it is naturally good at, and use the generated rationales to construct an explainable dataset.
-- **Extensibility via Specific Feature Detectors (SFDs).** We keep the system plug‑and‑play by supplementing hard, low‑level artifact cues (e.g., blending/diffusion trace) with dedicated detectors, further enhancing the model’s capability.
+- **Prompt‑guided explainability.** We design prompts that steer the model to attend to the features it is naturally good at **(strong feature)**, and use the generated rationales to construct an explainable dataset.
+- **Extensibility via Specific Feature Detectors (SFDs).** We keep the system plug‑and‑play by supplementing low‑level artifact cues (e.g., blending/diffusion trace) with dedicated detectors **(weak feature)**, further enhancing the model’s capability.
 
-A lightweight **LoRA** adapter is fine‑tuned on the constructed data for deployment. We also provide a **registry pattern** for experts/providers (see `src/EXPERTS_GUIDE.md`), and standardized JSON schemas/path rules for reproducible evaluation across datasets.
 
 <div align="center">
 <img src="figs/fig_framework_overview.png" alt="X2-DFD framework: experts + LLaVA reasoning pipeline" width="90%"/>
@@ -76,26 +76,48 @@ bash install.sh
 conda activate X2DFD
 ```
 
+Troubleshooting / 安装问题排查
+- 遇到环境安装或依赖冲突（如 CUDA、PyTorch、Deepspeed、bitsandbytes 等）？LLaVA 社区有大量成熟讨论与解答，click here: https://github.com/haotian-liu/LLaVA/issues
+
+
 <a id="llava-weights"></a>
 
 2) **Weights**
-- **Base model:** LLaVA-1.5-7B (Hugging Face) → `weights/base/llava-v1.5-7b`
+- **Base model:** LLaVA-1.5-7B — download from [here](https://huggingface.co/liuhaotian/llava-v1.5-7b), then place under `weights/base/llava-v1.5-7b`.
   - Or set env var: `X2DFD_BASE_MODEL=/abs/path/to/llava-v1.5-7b`
-- **Vision tower:** CLIP ViT-L/14-336 → `weights/base/clip-vit-large-patch14-336`
+- **Vision tower:** CLIP ViT-L/14-336 — download from [here](https://huggingface.co/openai/clip-vit-large-patch14-336) and place under `weights/base/clip-vit-large-patch14-336`.
+- Feature detectors: blending feature detector; diffusion feature detector.
 
 <a id="demo"></a>
 
-3) Single-Image Demo
+3) Single-Image Demo (LoRA required)
 ```bash
-# Base only
-python demo.py --image /abs/img.png \
-  --model-base weights/base/llava-v1.5-7b
-
-# With LoRA adapter
 python demo.py --image /abs/img.png \
   --model-base weights/base/llava-v1.5-7b \
   --adapter-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]
 ```
+
+<a id="quick-infer"></a>
+
+## ⚡ Quick Inference
+
+Two quick runs with different adapters and Specific Feature Detectors (SFDs):
+
+```bash
+# (A) Blending SFD + blending-tuned adapter
+python -m eval.infer.runner \
+  --config eval/configs/infer_config.yaml \
+  --model-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-blending \
+  --experts blending
+
+# (B) Diffusion SFD + diffusion-tuned adapter
+python -m eval.infer.runner \
+  --config eval/configs/infer_config.yaml \
+  --model-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-diffusion \
+  --experts diffusion_detector
+```
+
+Tip: you can also run both SFDs simultaneously via `--experts blending,diffusion_detector`.
 
 ## 📥 Required Weights
 
@@ -107,7 +129,7 @@ python demo.py --image /abs/img.png \
 | **Diffusion/aligner detector (ours-sync)** | [Coming soon](#coming-soon) (folder with config/ckpt) | `weights/ours-sync/` | set via `weak_supplies[].weights_dir` + `model: ours-sync` | weak-signal scores (optional) |
 
 Notes
-- If you do not have a given expert checkpoint, remove that expert from `weak_supplies` in the config to run base-only.
+- If某个专家（SFD）权重缺失，可在 config 的 `weak_supplies` 中移除该专家，仅用剩余专家或不带专家的提示运行（仍需 LoRA）。
 - Paths can be absolute; environment variables in configs are expanded at runtime.
 
 ### 🔀 Optional Expert Variants
@@ -131,17 +153,17 @@ We provide two ready-to-use expert settings:
 <a id="evaluation"></a>
 
 ### 1) **Evaluation (one-liner)**
-- One-liner (LoRA inference + ROC AUC):
+- One-liner (LoRA inference):
 ```bash
 ./test.sh
 ```
+  - Requirement: a valid LoRA adapter must be available at the path configured in `eval/configs/infer_config.yaml -> model.adapter` (default: `weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]`).
+    - If the adapter (or base model) is missing, the runner will stop with a clear message and instructions to download/configure the paths.
   - Inference: `eval/outputs/infer/latest_run.json`
-  - Metrics: `eval/outputs/metrics/auc.json`
 
 ### 2) **Evaluation (manual)**
 ```bash
 python -m eval.infer.runner --config eval/configs/infer_config.yaml
-python -m eval.tools.compute_auc
 ```
 
 Question template (example, includes expert score):
@@ -173,7 +195,7 @@ Stages mirror our methodology:
   - `EXPERTS_GUIDE.md`: registry pattern for experts/providers
 - `utils/`: shared helpers (`model_scoring.py`, `lora_inference.py`, `paths.py`, `pipeline_utils.py`)
 - `train/`: pipeline + training (`pipeline.py`, `model_train.py`, `configs/`, `outputs/`)
-- `eval/`: inference + metrics (`infer/runner.py`, `tools/compute_auc.py`, `configs/`, `outputs/`)
+- `eval/`: inference (`infer/runner.py`, `configs/`, `outputs/`)
 - `datasets/`: raw images, metadata JSONs, prompts; `weights/`: model files (not tracked)
 
 Coding style: Python 3.10, PEP 8, 4-space indent; prefer type hints and f-strings; keep functions small with minimal side effects.
@@ -189,7 +211,14 @@ Coding style: Python 3.10, PEP 8, 4-space indent; prefer type hints and f-string
 <a id="dataset"></a>
 
 ## 📦 Dataset
-Minimal dataset JSON example:
+Main datasets used in our experiments:
+
+| Dataset | Link | Notes |
+| --- | --- | --- |
+| **FF++ (FaceForensics++)** | find [here](https://github.com/ondyari/FaceForensics) | Widely used benchmark for face manipulation detection (train/eval). |
+| DiFF (diffusion images) | [here](https://github.com/xaCheng1996/DiFF) | A small subset of diffusion data was used; inference supports both SFDs. |
+
+  Minimal dataset JSON example:
 ```json
 {
   "Description": "/abs/path/to/datasets/raw/images/FaceForensics++",
@@ -218,7 +247,9 @@ For large-scale evaluation, set `X2DFD_DATASETS` and use `eval/configs/infer_con
 ## 🧠 Model
 - **Base:** LLaVA-1.5-7B (`weights/base/llava-v1.5-7b`).
 - **Checkpoints:** **LoRA** adapters will be released soon. Paths default to `weights/checkpoints/ckpt/...`.
-- You can point to your own adapters via `--adapter-path` or config `model.adapter`.
+- You can point to your own adapters via CLI override or config:
+  - demo: `--adapter-path`
+  - runner: `--model-path` or config `model.adapter`.
 
 <a id="citation"></a>
 

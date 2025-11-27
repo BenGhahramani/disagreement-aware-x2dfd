@@ -430,6 +430,39 @@ def main() -> None:
         pass
     model_base = args.model_base or (cfg.get("model", {}).get("base") if isinstance(cfg, dict) else None) or DEFAULT_BASE
     model_path = args.model_path or (cfg.get("model", {}).get("adapter") if isinstance(cfg, dict) else None) or DEFAULT_ADAPTER
+    # Strict LoRA requirement: if adapter/base is missing, exit with a clear message
+    def _looks_remote(p: str | None) -> bool:
+        try:
+            if not p:
+                return False
+            s = str(p)
+            return ("://" in s) or s.startswith("hf://")
+        except Exception:
+            return False
+
+    missing_msgs: list[str] = []
+    try:
+        if isinstance(model_path, str) and not _looks_remote(model_path) and not os.path.exists(model_path):
+            missing_msgs.append(f"LoRA adapter not found: {model_path}")
+    except Exception:
+        pass
+    try:
+        if isinstance(model_base, str) and not _looks_remote(model_base) and not os.path.exists(model_base):
+            missing_msgs.append(f"Base model not found: {model_base}")
+    except Exception:
+        pass
+    if missing_msgs:
+        tip_lines = [
+            "[X2DFD] Missing required model files:",
+            *[f"- {m}" for m in missing_msgs],
+            "",
+            "How to fix:",
+            "- Download the missing files and place them at the paths above, or:",
+            "- Edit eval/configs/infer_config.yaml -> model.adapter / model.base, or:",
+            "- Override via CLI: --model-path <adapter_dir> --model-base <base_model_dir>",
+        ]
+        print("\n".join(tip_lines))
+        raise SystemExit(2)
     temperature = args.temperature if args.temperature is not None else float(cfg_infer.get("temperature", 0.0))
     top_p = args.top_p if args.top_p is not None else float(cfg_infer.get("top_p", 1.0))
     num_beams = args.num_beams if args.num_beams is not None else int(cfg_infer.get("num_beams", 1))

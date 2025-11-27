@@ -4,16 +4,15 @@
 - `src/` core code: `diffusion/` (networks, processing, detector), `blending/` (detector, utils), `__init__.py`.
 - `utils/` shared helpers: `model_scoring.py`, `lora_inference.py`, `paths.py`, `pipeline_utils.py`.
 - `train/` training pipeline (`pipeline.py`, `model_train.py`, `configs/`, `outputs/`).
-- `eval/` inference + metrics (`infer/runner.py`, `tools/compute_auc.py`, `configs/`, `outputs/`).
+- `eval/` inference (`infer/runner.py`, `configs/`, `outputs/`).
 - `datasets/` raw images, metadata JSONs, prompts; `weights/` model files (not tracked).
 
 ## Build, Test, and Development Commands
 - Environment: `bash install.sh && conda activate X2DFD`.
-- Quick eval (LoRA inference + AUC): `./test.sh`.
+- Quick eval (LoRA inference): `./test.sh`.
 - Manual eval:
   ```
   python -m eval.infer.runner --config eval/configs/infer_config.yaml
-  python -m eval.tools.compute_auc
   ```
 - Demo (single image):
   ```
@@ -29,14 +28,13 @@
 - Keep functions small and side‑effect–light; use dataclasses for simple configs.
 
 ## Testing Guidelines
-- Primary check: compute ROC AUC from “fake score” turns.
-  - Results land in `eval/outputs/…`; latest run: `eval/outputs/infer/latest_run.json`; metrics: `eval/outputs/metrics/auc.json`.
-- Add ad‑hoc validator scripts near modules (e.g., `src/diffusion/test_compare_json.py`).
-- Expected score range is `[0,1]`. Sanity‑test on 2–3 images before large runs.
+- Primary check: 先在 2–3 张图片上做快速 sanity-check（看是否能生成回答与分数 turns），再跑大规模评测。
+- 结果会写到 `eval/outputs/…`；最新一次推理信息：`eval/outputs/infer/latest_run.json`。
+- 可在 `src/` 附近放置临时 validator 脚本（例如 `src/diffusion/test_compare_json.py`）。
 
 ## Commit & Pull Request Guidelines
 - Use Conventional Commits (`feat|fix|docs|refactor|test|chore`); scope by module, e.g. `feat(diffusion): batched detector infer`.
-- PRs must include: clear description, reproduction commands, AUC before/after (paths to `eval/outputs`), linked issues, and focused diffs.
+- PRs must include: clear description, reproduction commands, sample before/after outputs (paths to `eval/outputs`), linked issues, and focused diffs.
 
 ## Security & Configuration Tips
 - Never commit datasets or weights; place under `datasets/` and `weights/` locally.
