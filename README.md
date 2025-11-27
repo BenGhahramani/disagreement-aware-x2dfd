@@ -90,8 +90,8 @@ python demo.py --image /abs/img.png \
 | --- | --- | --- | --- | --- |
 | **LLaVA-1.5-7B (base)** | Hugging Face: liuhaotian/llava-v1.5-7b | `weights/base/llava-v1.5-7b` | `X2DFD_BASE_MODEL` | annotation, training, evaluation |
 | **CLIP ViT-L/14-336 (vision tower)** | Hugging Face: openai/clip-vit-large-patch14-336 | `weights/base/clip-vit-large-patch14-336` | `VISION_TOWER` (training), or via config | training |
-| **Blending detector (SwinV2-B, 256)** | [Download](XXX) (checkpoint file, e.g., `best_gf.pth`) | `weights/blending_models/best_gf.pth` | set in config `weak_supplies[].weights_path` | weak-signal scores (optional) |
-| **Diffusion/aligner detector (ours-sync)** | [Download](XXX) (folder with config/ckpt) | `weights/ours-sync/` | set via `weak_supplies[].weights_dir` + `model: ours-sync` | weak-signal scores (optional) |
+| **Blending detector (SwinV2-B, 256)** | [Coming soon](#coming-soon) (checkpoint file, e.g., `best_gf.pth`) | `weights/blending_models/best_gf.pth` | set in config `weak_supplies[].weights_path` | weak-signal scores (optional) |
+| **Diffusion/aligner detector (ours-sync)** | [Coming soon](#coming-soon) (folder with config/ckpt) | `weights/ours-sync/` | set via `weak_supplies[].weights_dir` + `model: ours-sync` | weak-signal scores (optional) |
 
 Notes
 - If you do not have a given expert checkpoint, remove that expert from `weak_supplies` in the config to run base-only.
@@ -102,15 +102,15 @@ Notes
 We provide two ready-to-use expert settings:
 
 - **Blending-only variant** (lighter): requires only the blending detector checkpoint.
-  - Download blending weights: [XXX](XXX)
+  - Download blending weights: [Coming soon](#coming-soon)
   - Place at: `weights/blending_models/best_gf.pth`
   - Run with blending only (examples):
     - Eval: `python -m eval.infer.runner --config eval/configs/infer_config.yaml --experts blending`
     - Train: `python -m train.pipeline --config train/configs/config.yaml --experts blending --run-train`
 
 - **Blending + Diffusion variant** (stronger): uses both experts.
-  - Download blending weights: [XXX](XXX) → `weights/blending_models/best_gf.pth`
-  - Download diffusion/aligner package: [XXX](XXX) → `weights/ours-sync/`
+  - Download blending weights: [Coming soon](#coming-soon) → `weights/blending_models/best_gf.pth`
+  - Download diffusion/aligner package: [Coming soon](#coming-soon) → `weights/ours-sync/`
   - Eval/Train (default configs already include both experts). You can also pass `--experts blending,diffusion_detector` explicitly.
 
 ## 🚀 Usage
@@ -227,3 +227,11 @@ A `CITATION.cff` file is also provided for GitHub's "Cite this repository" widge
 
 ## 📝 License
 MIT License. See `LICENSE`.
+
+---
+
+<a id="coming-soon"></a>
+
+## ⏳ Coming Soon
+- We will release the expert checkpoints (blending and diffusion/aligner) and provide verified download links here.
+- Once published, the links in the Required Weights table and Optional Expert Variants will point to the release assets.
