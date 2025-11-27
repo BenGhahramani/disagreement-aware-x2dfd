@@ -41,9 +41,12 @@ Siwei Lyu<sup>5</sup>, Baoyuan Wu<sup>1†</sup>
 
 ## <img id="overview_icon" width="3%" src="https://cdn-icons-png.flaticon.com/256/599/599205.png"> X2-DFD Overview
 
-With the rapid advancement of AIGC, synthetic faces are increasingly pervasive. X2-DFD is a LLaVA-based framework for deepfake detection that emphasizes both explainability and extensibility:
-- Explainable: QA-style reasoning with optional artifact scores from classical experts, producing structured decisions and human-readable rationales.
-- Extendable: a lightweight expert/provider registry for plugging in detectors and fusion strategies (see `src/EXPERTS_GUIDE.md`).
+X2-DFD is a framework for explainable and extendable deepfake detection. It couples artifact-aware expert signals with a vision-language model to produce both a binary verdict (real/fake) and concise, human-readable explanations.
+
+- The framework integrates “experts” (e.g., blending- and diffusion-based detectors) as weak signals. Their scores are rendered into the question to ground the model’s reasoning on concrete artifacts.
+- A base LLaVA model is used to generate rationale-style annotations, and a lightweight LoRA adapter is fine-tuned for the detection task.
+- A registry pattern makes it easy to plug in new experts/providers and fusion strategies without touching the core pipeline (see `src/EXPERTS_GUIDE.md`).
+- Standardized JSON schemas and strict path rules ensure reproducible data handling and evaluation across datasets.
 
 <div align="center">
 <img src="figs/fig_framework_overview.png" alt="X2-DFD framework: experts + LLaVA reasoning pipeline" width="90%"/>
@@ -51,9 +54,9 @@ With the rapid advancement of AIGC, synthetic faces are increasingly pervasive. 
 
 ## <img id="contrib_icon" width="3%" src="https://cdn-icons-png.flaticon.com/256/2435/2435606.png"> Contributions
 
-- We present X2-DFD, a multimodal framework for deepfake detection that unifies expert artifact cues with LLaVA reasoning for explainable decisions.
-- We provide a simple expert/provider registry and a staged pipeline (annotation → weak merge → LoRA training) for easy extension and reproducibility.
-- We offer a minimal set of JSON schemas and quick evaluation configs to standardize data exchange and metrics (ROC AUC).
+- A unified framework that combines artifact experts with a multimodal LLM, delivering both accurate real/fake decisions and natural-language explanations.
+- A plug-and-play expert/provider registry and staged pipeline (explainable annotation → weak-signal merge → LoRA training) to streamline extension and reuse.
+- Consistent data interfaces and evaluation: dataset-style JSONs, absolute-path outputs, and one-line ROC AUC computation.
 
 ## 🛠️ Installation
 
@@ -65,7 +68,7 @@ conda activate X2DFD
 
 2) Weights
 - Base model: LLaVA-1.5-7B (Hugging Face) → `weights/base/llava-v1.5-7b`
-  - Or set env var: `X2DFD_BASE_MODEL=/abs/path/to/llava-v1.5-7b`
+ - Or set env var: `X2DFD_BASE_MODEL=/abs/path/to/llava-v1.5-7b`
 - Vision tower: CLIP ViT-L/14-336 → `weights/base/clip-vit-large-patch14-336`
 
 3) Single-Image Demo
@@ -79,6 +82,19 @@ python demo.py --image /abs/img.png \
   --model-base weights/base/llava-v1.5-7b \
   --adapter-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]
 ```
+
+## 📥 Required Weights
+
+| Component | Where to get | Put under (default) | Env var override | Used in |
+| --- | --- | --- | --- | --- |
+| LLaVA-1.5-7B (base) | Hugging Face: liuhaotian/llava-v1.5-7b | `weights/base/llava-v1.5-7b` | `X2DFD_BASE_MODEL` | annotation, training, evaluation |
+| CLIP ViT-L/14-336 (vision tower) | Hugging Face: openai/clip-vit-large-patch14-336 | `weights/base/clip-vit-large-patch14-336` | `VISION_TOWER` (training), or via config | training |
+| Blending detector (SwinV2-B, 256) | your checkpoint (e.g., `best_gf.pth`) | `weights/blending_models/best_gf.pth` | set in config `weak_supplies[].weights_path` | weak-signal scores (optional) |
+| Diffusion/aligner detector (ours-sync) | your checkpoint folder | `weights/ours-sync/` | set via `weak_supplies[].weights_dir` + `model: ours-sync` | weak-signal scores (optional) |
+
+Notes
+- If you do not have a given expert checkpoint, remove that expert from `weak_supplies` in the config to run base-only.
+- Paths can be absolute; environment variables in configs are expanded at runtime.
 
 ## 🚀 Usage
 
