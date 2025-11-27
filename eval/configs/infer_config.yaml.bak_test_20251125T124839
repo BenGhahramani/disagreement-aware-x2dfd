@@ -1,0 +1,38 @@
+# Multi-dataset paired test (subset=100 per file)
+paths:
+  results_dir: "eval/outputs"
+
+weak_supply:
+  model_name: "swinv2_base_window16_256"
+  weights_path: "weights/blending_models/best_gf.pth"
+  alias: "Blending"
+  img_size: 256
+  num_class: 2
+  batch_size: 128
+  num_workers: 8
+  pin_memory: true
+
+model:
+  base: "weights/base/llava-v1.5-7b"
+  adapter: "weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[x2dfd2]"
+
+infer:
+  inputs:
+    - "eval/debug/infer_debug/QuickMulti/Canchat_Real512_real.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/Canchat_LD256_fake.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/Canchat_SG512_fake.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/DF40_FF_real.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/DF40_simswap_fake.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/DF40_fsgan_fake.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/Tiny_UADFV_real.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/Tiny_UADFV_fake.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/Tiny_DFDC_real.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/Tiny_DFDC_fake.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/CelebDFv2_Celeb_real.subset100.json"
+    - "eval/debug/infer_debug/QuickMulti/CelebDFv2_Celeb_fake.subset100.json"
+  question_template: "<image>
+Is this image real or fake? And by observation of {alias} expert, the blending score is {score}."
+  temperature: 0.2
+  top_p: 1.0
+  num_beams: 1
+  max_new_tokens: 4

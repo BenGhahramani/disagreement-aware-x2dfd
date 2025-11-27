@@ -1,0 +1,39 @@
+# Central test config for stepwise evaluation (build prompts + inference)
+
+paths:
+  results_dir: "logs/steps"
+
+# Preferred multi-expert path (mirrors training).
+weak_supplies:
+  - provider: blending
+    alias: Blending
+    model_name: swinv2_base_window16_256
+    weights_path: weights/blending_models/best_gf.pth
+    img_size: 256
+    num_class: 2
+    batch_size: 128
+    num_workers: 8
+    pin_memory: true
+
+  - provider: diffusion_detector
+    alias: Diffusion
+    weights_dir: weights/
+    model: ours-sync
+    batch_size: 32
+    num_workers: 8
+    pin_memory: true
+
+model:
+  base: "weights/base/llava-v1.5-7b"
+  adapter: ""
+
+infer:
+  inputs:
+    - "/data/250010183/workspace/Data_json/matters/DIFF/I2I/LoRA_fake.json"
+    - "eval/debug/infer_debug/QuickPair1/QuickPair1_real.json"
+    - "eval/debug/infer_debug/QuickPair1/QuickPair1_fake.json"
+  question_template: "<image>\nIs this image real or fake? And the {alias} score is {score}."
+  temperature: 0.2
+  top_p: 1.0
+  num_beams: 1
+  max_new_tokens: 4

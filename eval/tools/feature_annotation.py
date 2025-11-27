@@ -181,23 +181,32 @@ def augment_dataset_gpt_only(
         else:
             raise ValueError("augment_dataset_gpt_only expects absolute image paths in dataset JSON")
 
-    # Prepare provider
+    # Prepare provider (support aligner or blending)
     lo = float(((weak_cfg.get('thresholds') or {}).get('lo')) or 0.3)
     hi = float(((weak_cfg.get('thresholds') or {}).get('hi')) or 0.7)
-    alias = weak_cfg.get('alias') or 'Blending'
-    model_name = weak_cfg.get('model_name') or 'swinv2_base_window16_256'
-    weights_path = weak_cfg.get('weights_path') or 'weights/blending_models/best_gf.pth'
-    img_size = int(weak_cfg.get('img_size') or 256)
-    num_class = int(weak_cfg.get('num_class') or 2)
+    provider_name = (weak_cfg.get('provider') or 'blending').strip().lower()
+    alias = weak_cfg.get('alias') or ('Diffusion' if provider_name in ('aligner','diffusion') else 'Blending')
 
-    provider = get_provider(
-        'blending',
-        model_name=model_name,
-        weights_path=weights_path,
-        img_size=img_size,
-        num_class=num_class,
-        device=None,
-    )
+    if provider_name in ('aligner','diffusion','diffusion_detector','diffdet'):
+        provider = get_provider(
+            provider_name,
+            weights_dir=weak_cfg.get('weights_dir') or '',
+            model=weak_cfg.get('model') or '',
+            device=None,
+        )
+    else:
+        model_name = weak_cfg.get('model_name') or 'swinv2_base_window16_256'
+        weights_path = weak_cfg.get('weights_path') or 'weights/blending_models/best_gf.pth'
+        img_size = int(weak_cfg.get('img_size') or 256)
+        num_class = int(weak_cfg.get('num_class') or 2)
+        provider = get_provider(
+            'blending',
+            model_name=model_name,
+            weights_path=weights_path,
+            img_size=img_size,
+            num_class=num_class,
+            device=None,
+        )
 
     score_map = provider.compute_scores(abs_paths)
 
@@ -224,11 +233,12 @@ def augment_dataset_gpt_only(
         sc = None if res is None else res.score
 
         # HUMAN: overwrite with question + score
+        alias_l = (alias or '').strip().lower()
         if sc is None:
-            human_text = f"<image>\nIs this image real or fake? And by observation of {alias} expert, the blending score is N/A."
+            human_text = f"<image>\nIs this image real or fake? And the {alias_l} score is N/A."
             missing += 1
         else:
-            human_text = f"<image>\nIs this image real or fake? And by observation of {alias} expert, the blending score is {float(sc):.3f}."
+            human_text = f"<image>\nIs this image real or fake? And the {alias_l} score is {float(sc):.3f}."
         conv[human_idx]['value'] = human_text
 
         # GPT: original explanation plus conditional supporting note

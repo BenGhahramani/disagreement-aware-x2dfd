@@ -72,7 +72,8 @@ weak_supply:
 # LLaVA/LoRA inference
 model:
   base: "weights/base/llava-v1.5-7b"
-  adapter: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[x2dfd]
+  # Use the adapter present in this repo to avoid missing-path errors
+  adapter: "weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]"
   temperature: 0.0
   top_p: 1.0
   num_beams: 1

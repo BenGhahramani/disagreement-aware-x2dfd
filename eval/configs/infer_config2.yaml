@@ -1,0 +1,137 @@
+# TestBatch: one big collection over test directory (subset=100 each)
+paths:
+  results_dir: "eval/outputs"
+
+weak_supply:
+  # Provider can be 'blending' (default) or 'diffusion_detector'/'diffdet' (unified style). Legacy: 'diffusion'/'aligner'
+  provider: blending
+  model_name: "swinv2_base_window16_256"
+  weights_path: "weights/blending_models/best_gf.pth"
+  alias: "Blending"
+  img_size: 256
+  num_class: 2
+  batch_size: 128
+  num_workers: 8
+  pin_memory: true
+
+  # To switch to diffusion/aligner expert, minimally change to:
+  provider: diffusion_detector
+  alias: Diffusion
+  # NOTE: fix path typo — must be 'weights/', not 'weight/'.
+  weights_dir: weights/
+  model: ours-sync
+  # (model_name/weights_path/img_size/num_class are ignored for diffusion_detector)
+
+# Preferred multi-expert path (mirrors training). When present, runner uses this
+# instead of single weak_supply, and will build the shared multi-expert tail.
+weak_supplies:
+  - provider: blending
+    alias: Blending
+    model_name: swinv2_base_window16_256
+    weights_path: weights/blending_models/best_gf.pth
+    img_size: 256
+    num_class: 2
+    batch_size: 128
+    num_workers: 8
+    pin_memory: true
+    thresholds: { lo: 0.30, hi: 0.70 }
+
+  # - provider: diffusion_detector
+  #   alias: Diffusion
+  #   weights_dir: weights/
+  #   model: ours-sync
+  #   # Reduce batch size to avoid CUDA pooling issues with fp16 on large inputs
+  #   batch_size: 32
+  #   num_workers: 8
+  #   pin_memory: true
+  #   thresholds: { lo: 0.30, hi: 0.70 }
+
+model:
+  base: "weights/base/llava-v1.5-7b"
+  # Use the LoRA adapter that actually exists in this repo
+  adapter: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[x2dfdble]"
+
+infer:
+  inputs:
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Canchat/LD256_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Canchat/LD512_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Canchat/LFW_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Canchat/Real512_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Canchat/SG256_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Canchat/SG512_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/CelebA/Flux/CelebAFlux0_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/CelebA/Real/CelebAReal0_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/CelebA/XDXL/CelebAXDXL0_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v2/Celeb_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v2/Celeb_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v2/YouTube_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceReenact/DaGAN.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceReenact/FSRT.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceReenact/HyperReenact.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceReenact/LIA.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceReenact/LivePortrait.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceReenact/MCNET.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceReenact/TPSMM.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceSwap/BlendFace.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceSwap/Celeb-DF-v2.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceSwap/GHOST.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceSwap/HifiFace.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceSwap/InSwapper.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceSwap/MobileFaceSwap.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceSwap/SimSwap.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/FaceSwap/UniFace.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/TalkingFace/AniTalker.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/TalkingFace/EDTalk.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/TalkingFace/EchoMimic.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/TalkingFace/FLOAT.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/TalkingFace/IP_LAP.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/TalkingFace/Real3DPortrait.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/Celeb-synthesis/TalkingFace/SadTalker.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Celeb-DF-v3/YouTube-real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40/FF_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40/blendface_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40/e4s_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40/facedancer_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40/fsgan_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40/inswap_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40/simswap_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40/uniface_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40_tiny/FF_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DF40_tiny/blendface_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DFD/DFD_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DFD/DFD_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/DiFF_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/FE/CoDiff_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/FE/Imagic_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/FE/cyclediff_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/FS/DCFace_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/FS/DiffFace_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/I2I/DreamBooth_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/I2I/FreeDoMI_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/I2I/LoRA_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/I2I/SDXLRefine_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/T2I/FreeDoMT_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/T2I/HPS_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/T2I/Midjourney_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/DIFF/T2I/SDXL_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/FFHQ/Flux/FFHQFlux0_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/FFHQ/Real/FFHQReal0_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/FFHQ/XDXL/FFHQXDXL0_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/DFDCP_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/DFDCP_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/DFDC_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/DFDC_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/DFR_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/DFR_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/FFIW_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/FFIW_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/UADFV_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/UADFV_real.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/WDF_fake.json"
+    - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Tiny_Test/WDF_real.json"
+  question_template: "<image>\nIs this image real or fake? And the {alias} score is {score}."
+  temperature: 0.2
+  top_p: 1.0
+  num_beams: 1
+  max_new_tokens: 4

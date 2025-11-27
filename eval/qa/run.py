@@ -656,7 +656,7 @@ def main() -> None:
     # Prepare run directory early so per-dataset artefacts can be saved immediately
     top_k = config.top_k
     run_paths = prepare_run_paths(config.results_dir, top_k)
-    auc_pairs: List[Tuple[float, int]] = []
+        # AUC computation removed: no longer collect score-label pairs
 
     try:
         print("Evaluating fake datasets...")
@@ -677,8 +677,7 @@ def main() -> None:
                 progress_tracker.update(progress_key, {"current": 0, "total": total, "desc": label})
                 result = evaluate_pairs(pairs, image_root_prefix=None, inference=inference_opts, truncate_tokens=truncate_tokens)
             fake_results.append(result)
-            if inference_opts.use_lora:
-                auc_pairs.extend(_collect_score_pairs(result.responses, label=1))
+            # AUC computation removed
             
             # Save per-dataset responses and stats immediately after finishing this dataset
             if config.config['output']['save_response_records']:
@@ -717,8 +716,7 @@ def main() -> None:
                 progress_tracker.update(progress_key, {"current": 0, "total": total, "desc": label})
                 result = evaluate_pairs(pairs, image_root_prefix=None, inference=inference_opts, truncate_tokens=truncate_tokens)
             real_results.append(result)
-            if inference_opts.use_lora:
-                auc_pairs.extend(_collect_score_pairs(result.responses, label=0))
+            # AUC computation removed
 
             # Save per-dataset responses and stats immediately after finishing this dataset
             if config.config['output']['save_response_records']:
@@ -750,7 +748,6 @@ def main() -> None:
 
         merged_real_stats = merge_question_stats([r.question_stats for r in real_results])
         merged_fake_stats = merge_question_stats([r.question_stats for r in fake_results])
-        auc_value = compute_auc(auc_pairs) if inference_opts.use_lora else None
         full_ranking = build_question_ranking(merged_real_stats, merged_fake_stats, top_k=None)
         ranking = full_ranking[:top_k]
         ranking_questions = [entry["question"] for entry in ranking]
@@ -798,7 +795,6 @@ def main() -> None:
             "seed": seed,
             "top_k": top_k,
             "balanced_accuracy": balanced_acc,
-            "auc": auc_value,
             "datasets": {
                 "real_accuracy": real_acc,
                 "fake_accuracy": fake_acc,

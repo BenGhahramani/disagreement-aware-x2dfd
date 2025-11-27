@@ -7,7 +7,7 @@ This module centralizes how we:
 
 from __future__ import annotations
 
-from typing import Literal, Optional
+from typing import Literal, Optional, List, Tuple
 
 
 BinaryLabel = Literal["real", "fake"]
@@ -53,3 +53,35 @@ def compose_labeled_response(label: str, explanation: str) -> str:
     if explanation:
         return f"{prefix} {explanation}"
     return prefix
+
+
+# ---- Multi-expert prompt helpers (non-breaking additions) ----
+
+def format_score(score: Optional[float]) -> str:
+    """Format an optional float score to 3 decimals or 'N/A'."""
+    if score is None:
+        return "N/A"
+    try:
+        return f"{float(score):.3f}"
+    except Exception:
+        return "N/A"
+
+
+def expert_sentence(alias: str, score: Optional[float]) -> str:
+    """One expert-tail sentence appended to the binary question.
+
+    Example: " And by observation of Blending expert, the Blending score is 0.812."
+    """
+    return (
+        f" And by observation of {alias} expert, the {alias} score is {format_score(score)}."
+    )
+
+
+def build_multi_expert_prompt(experts: List[Tuple[str, Optional[float]]]) -> str:
+    """Compose the base binary question plus a sentence per expert.
+
+    experts: list of (alias, score)
+    """
+    base = "<image>\nIs this image real or fake?"
+    tail = "".join(expert_sentence(a, s) for a, s in experts)
+    return base + tail

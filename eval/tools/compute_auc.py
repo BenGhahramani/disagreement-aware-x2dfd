@@ -17,15 +17,43 @@ def _load_latest_run_info(path: Path) -> dict:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def _classify_from_path(path: Path) -> int | None:
+    """Return 0 for real, 1 for fake, or None when ambiguous.
+
+    Rules (order matters):
+    - If any parent directory equals 'real' or 'fake' (case-insensitive), use it.
+    - Else use strict filename token match: (^|[_-])(real|fake)($|[_.-]).
+      This prevents false hits like 'Real3DPortrait'.
+    """
+    name = path.name.lower()
+    # Prefer directory cue
+    for seg in path.parts:
+        s = str(seg).lower()
+        if s == "real":
+            return 0
+        if s == "fake":
+            return 1
+    import re
+    # Strict token at end or separated by _ - . boundaries
+    if re.search(r"(^|[_-])real($|[_.-])", name):
+        return 0
+    if re.search(r"(^|[_-])fake($|[_.-])", name):
+        return 1
+    return None
+
+
 def _scan_dir(dir_path: Path) -> Tuple[List[Path], List[Path]]:
     real: List[Path] = []
     fake: List[Path] = []
     for fp in dir_path.rglob("*_result.json"):
-        name = fp.name.lower()
-        if "real" in name:
+        label = _classify_from_path(fp)
+        if label == 0:
             real.append(fp)
-        elif "fake" in name:
+        elif label == 1:
             fake.append(fp)
+        else:
+            # ignore ambiguous files instead of mislabeling
+            continue
     return sorted(real), sorted(fake)
 
 
@@ -107,10 +135,11 @@ def main() -> None:
         real_paths.extend(r)
         fake_paths.extend(f)
 
+    # If explicit lists are provided, prefer them and ignore auto-detected ones
     if args.real:
-        real_paths.extend(Path(p) for p in args.real)
+        real_paths = [Path(p) for p in args.real]
     if args.fake:
-        fake_paths.extend(Path(p) for p in args.fake)
+        fake_paths = [Path(p) for p in args.fake]
 
     if not real_paths or not fake_paths:
         raise SystemExit("No real/fake result files found. Provide --dir or explicit paths.")

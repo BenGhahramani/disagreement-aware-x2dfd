@@ -1,0 +1,37 @@
+cff-version: 1.2.0
+message: If you use this software, please cite the following paper.
+title: X2-DFD: A Framework for eXplainable and eXtendable Deepfake Detection
+authors:
+  - family-names: Chen
+    given-names: Yize
+  - family-names: Yan
+    given-names: Zhiyuan
+  - family-names: Cheng
+    given-names: Guangliang
+  - family-names: Zhao
+    given-names: Kangran
+  - family-names: Lyu
+    given-names: Siwei
+  - family-names: Wu
+    given-names: Baoyuan
+identifiers:
+  - type: url
+    value: https://arxiv.org/abs/2410.06126
+preferred-citation:
+  type: article
+  title: X2-dfd: A framework for explainable and extendable deepfake detection
+  authors:
+    - family-names: Chen
+      given-names: Yize
+    - family-names: Yan
+      given-names: Zhiyuan
+    - family-names: Cheng
+      given-names: Guangliang
+    - family-names: Zhao
+      given-names: Kangran
+    - family-names: Lyu
+      given-names: Siwei
+    - family-names: Wu
+      given-names: Baoyuan
+  journal: arXiv preprint arXiv:2410.06126
+  year: 2024

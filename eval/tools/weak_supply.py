@@ -24,7 +24,7 @@ Examples:
 
 Or run with config (no --real/--fake needed; defaults to eval/configs/config.yaml):
   python weak_supply.py
-  python weak_supply.py --config config.yaml
+  python weak_supply.py --config eval/configs/config.yaml
 """
 
 import os
@@ -228,12 +228,18 @@ def main(args):
     device = args.device or ('cuda:0' if torch.cuda.is_available() else 'cpu')
     print(f"Using device: {device}")
 
+    # Build provider with union of args; each provider will pick what it needs
     provider = get_provider(
         args.provider,
+        # blending
         model_name=args.model_name,
         weights_path=args.weights_path,
         img_size=args.img_size,
         num_class=args.num_class,
+        # aligner
+        weights_dir=(args.weights_dir or ''),
+        model=(args.aligner_model or ''),
+        # common
         device=device,
     )
     print(f"\n--- Provider '{args.provider}' initialized successfully ---")
@@ -307,17 +313,25 @@ if __name__ == '__main__':
                         help="Path to save the intermediate scores JSON file.")
     parser.add_argument('--shuffle', action='store_true', help="Shuffle the final combined list of images before processing.")
     parser.add_argument('--image_root_prefix', default=None, help='Prefix to resolve relative image paths in input JSON files.')
-    parser.add_argument('--config', default='config_small.yaml', help='Config YAML to load inputs from when --real/--fake are omitted.')
+    parser.add_argument(
+        '--config',
+        default='eval/configs/config.yaml',
+        help='Config YAML to load inputs from when --real/--fake are omitted (default: eval/configs/config.yaml).'
+    )
     # Annotations augmentation mode
     parser.add_argument('--annotations_input', default=None, help='Merged annotations JSON to score and augment (alternative mode).')
     parser.add_argument('--annotations_output', default=None, help='Output path for augmented JSON when --annotations_input is provided.')
 
     # Provider (model) options
-    parser.add_argument('--provider', default='blending', help='Score provider name (default: blending).')
-    parser.add_argument('--model_name', default='swinv2_base_window16_256', help='Model name for provider (if applicable).')
-    parser.add_argument('--weights_path', default=os.path.join(str(_ROOT), 'weights', 'blending_models', 'best_gf.pth'), help='Weights path for provider.')
-    parser.add_argument('--img_size', type=int, default=256, help='Input resolution for provider model.')
-    parser.add_argument('--num_class', type=int, default=2, help='Number of classes for provider model.')
+    parser.add_argument('--provider', default='blending', help='Score provider name (blending | aligner | diffusion).')
+    # blending-specific
+    parser.add_argument('--model_name', default='swinv2_base_window16_256', help='[blending] Timm model name.')
+    parser.add_argument('--weights_path', default=os.path.join(str(_ROOT), 'weights', 'blending_models', 'best_gf.pth'), help='[blending] Weights path.')
+    parser.add_argument('--img_size', type=int, default=256, help='[blending] Input resolution.')
+    parser.add_argument('--num_class', type=int, default=2, help='[blending] Number of classes.')
+    # aligner-specific
+    parser.add_argument('--weights_dir', default=None, help='[aligner] Root dir containing <model>/config.yaml & weights file.')
+    parser.add_argument('--model', dest='aligner_model', default=None, help='[aligner] Subfolder name under --weights_dir.')
     parser.add_argument('--device', default=None, help='Device string; default auto-select.')
     parser.add_argument('--batch_size', type=int, default=1000, help='Batch size for outer loop grouping.')
     parser.add_argument('--lo', type=float, default=0.3, help='Low threshold (augmentation mode).')

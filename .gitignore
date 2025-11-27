@@ -17,7 +17,11 @@ Thumbs.db
 # Large outputs and datasets
 eval/outputs/
 train/outputs/
+logs/
+results/
+tmp*
 datasets/raw/images/
+script/
 
 # Weights and checkpoints (recommend Git LFS or local)
 weights/
@@ -30,4 +34,3 @@ weights/
 
 # Logs
 *.log
-

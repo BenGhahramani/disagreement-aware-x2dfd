@@ -35,7 +35,12 @@ from eval.tools.feature_annotation import (
     load_prompt_template,
     process_json_file,
 )
-from utils.model_scoring import get_provider, resolve_abs_paths
+from utils.model_scoring import (
+    get_provider,
+    resolve_abs_paths,
+    ExpertSpec,
+    compute_all_scores,
+)
 from utils.lora_inference import lora_infer_conversation_items
 from utils.annotation_utils import build_binary_question, compose_labeled_response, build_blending_prompt
 from utils.paths import (
@@ -51,7 +56,8 @@ from utils.paths import (
 ensure_core_dirs()
 
 DEFAULT_CONFIG = CONFIG_ROOT_TRAIN / "config.yaml"
-DEFAULT_INFER_CONFIG = CONFIG_ROOT_EVAL / "config.yaml"
+# Use the same default as test.sh / eval.infer.runner to avoid config drift
+DEFAULT_INFER_CONFIG = CONFIG_ROOT_EVAL / "infer_config.yaml"
 
 
 def _load_yaml(path: Path) -> Dict[str, Any]:
@@ -63,6 +69,43 @@ def _load_yaml(path: Path) -> Dict[str, Any]:
     except Exception:
         return {}
 
+def _parse_experts(spec: Optional[str]) -> Optional[set[str]]:
+    """Parse comma-separated experts to a lowercase set.
+
+    - None -> None (do not filter)
+    - "" or "none" -> empty set (disable all)
+    - else -> {provider or alias, ...}
+    """
+    if spec is None:
+        return None
+    s = spec.strip()
+    if not s or s.lower() == "none":
+        return set()
+    return {t.strip().lower() for t in s.split(',') if t.strip()}
+
+def _filter_experts(cfg_list: List[Dict[str, Any]], names: Optional[set[str]]) -> List[Dict[str, Any]]:
+    if names is None:
+        return cfg_list
+    if len(names) == 0:
+        return []
+    out: List[Dict[str, Any]] = []
+    for e in cfg_list:
+        prov = str(e.get('provider') or '').strip().lower()
+        alias = str(e.get('alias') or '').strip().lower()
+        if prov in names or alias in names:
+            out.append(e)
+    return out
+
+def _experts_slug(cfg_list: List[Dict[str, Any]]) -> str:
+    if not cfg_list:
+        return 'base'
+    toks: List[str] = []
+    for e in cfg_list:
+        alias = (e.get('alias') or e.get('provider') or 'expert')
+        slug = ''.join(ch if ch.isalnum() else '-' for ch in str(alias).lower()).strip('-')
+        if slug:
+            toks.append(slug)
+    return '+'.join(toks) if toks else 'base'
 
 def _coerce_path(value: str | Path) -> Path:
     path = Path(value).expanduser()
@@ -116,6 +159,123 @@ def _format_score(sc: Optional[float]) -> str:
         return "N/A"
 
 
+def _format_multi_scores(pairs: List[Tuple[str, Optional[float]]]) -> str:
+    """Return a tail string like: " And the blending score is 0.812, and the aligner score is 0.153."
+
+    pairs: list of (alias, score). Alias is rendered in lower-case for style.
+    """
+    parts: List[str] = []
+    for alias, sc in pairs:
+        name = (alias or "").strip().lower() or "expert"
+        parts.append(f"the {name} score is {_format_score(sc)}")
+    if not parts:
+        return ""
+    if len(parts) == 1:
+        return " And " + parts[0] + "."
+    return " And " + ", ".join(parts[:-1]) + ", and " + parts[-1] + "."
+
+
+def _build_scored_items_multi(
+    dataset_json: Path,
+    *,
+    image_root_prefix: Optional[str],
+    experts_cfg: List[Dict[str, Any]],
+) -> List[Dict[str, Any]]:
+    """Build conversation items using multiple experts in one prompt.
+
+    The HUMAN becomes:
+      "<image>\nIs this image real or fake? The blending score is X, and the aligner score is Y."
+    """
+    with dataset_json.open("r", encoding="utf-8") as f:
+        payload = json.load(f)
+
+    # Root resolution (same rule as single)
+    local_root: Optional[str] = None
+    try:
+        if isinstance(payload, dict):
+            desc = payload.get("Description") or payload.get("description")
+            if isinstance(desc, str) and desc.strip():
+                local_root = desc.strip()
+    except Exception:
+        pass
+
+    # Collect paths
+    rels: List[str] = []
+    if isinstance(payload, dict) and isinstance(payload.get("images"), list):
+        for it in payload["images"]:
+            if isinstance(it, dict):
+                p = it.get("image_path") or it.get("path")
+                rels.append(p if isinstance(p, str) else "")
+    else:
+        items = payload if isinstance(payload, list) else []
+        rels = [it.get("image", "") for it in items if isinstance(it, dict)]
+
+    if local_root:
+        abs_paths = resolve_abs_paths(rels, root_prefix=local_root)
+    else:
+        for p in rels:
+            if p and not os.path.isabs(p):
+                raise SystemExit(f"Missing Description in {dataset_json} while containing relative paths: {p}")
+        abs_paths = resolve_abs_paths(rels, root_prefix=None)
+
+    # Build ExpertSpec list
+    experts: List[ExpertSpec] = []
+    for e in experts_cfg:
+        prov = (e.get("provider") or "").strip().lower()
+        alias = e.get("alias") or ("Diffusion" if prov in ("aligner","diffusion") else ("Blending" if prov == "blending" else prov.title()))
+        kwargs: Dict[str, Any] = {}
+        if prov in ("aligner","diffusion"):
+            kwargs = {
+                "weights_dir": e.get("weights_dir") or "",
+                "model": e.get("model") or "",
+                "device": None,
+                # Optional batching knobs for diffusion/aligner provider
+                "batch_size": int(e.get("batch_size") or 64),
+                "num_workers": int(e.get("num_workers") or 4),
+                "pin_memory": bool(e.get("pin_memory") if e.get("pin_memory") is not None else True),
+                # Optional compile knobs for Aligner
+                "compile_model": bool(e.get("compile_model") or False),
+                "compile_mode": str(e.get("compile_mode") or "safe"),
+            }
+        elif prov == "blending":
+            kwargs = {
+                "model_name": e.get("model_name") or "swinv2_base_window16_256",
+                "weights_path": e.get("weights_path") or "weights/blending_models/best_gf.pth",
+                "img_size": int(e.get("img_size") or 256),
+                "num_class": int(e.get("num_class") or 2),
+                "device": None,
+                "batch_size": int(e.get("batch_size") or 64),
+                "num_workers": int(e.get("num_workers") or 4),
+                "pin_memory": bool(e.get("pin_memory") if e.get("pin_memory") is not None else True),
+            }
+        else:
+            # Fallback: let provider resolve unspecified keys
+            kwargs = dict(e)
+            kwargs.pop("provider", None)
+            kwargs.pop("alias", None)
+        experts.append(ExpertSpec(provider=prov, alias=alias, kwargs=kwargs))
+
+    # Compute scores across experts
+    score_map = compute_all_scores(experts, abs_paths)
+
+    items_out: List[Dict[str, Any]] = []
+    for idx, abs_p in enumerate(abs_paths, start=1):
+        pairs = [(experts[i].alias, (score_map.get(abs_p) or [])[i].score if score_map.get(abs_p) and i < len(score_map[abs_p]) else None)
+                 for i in range(len(experts))]
+        # Build human prompt
+        base = "<image>\nIs this image real or fake?"
+        tail = _format_multi_scores(pairs)
+        q = base + tail
+        items_out.append({
+            "id": str(idx),
+            "image": abs_p,
+            "conversations": [
+                {"from": "human", "value": q},
+                {"from": "gpt", "value": ""},
+            ],
+        })
+    return items_out
+
 def _build_scored_items(
     dataset_json: Path,
     *,
@@ -165,7 +325,8 @@ def _build_scored_items(
     for idx, (rel, abs_p) in enumerate(zip(rels, abs_paths), start=1):
         sr = score_map.get(abs_p)
         sc = None if sr is None else sr.score
-        q = template.format(alias=provider_kwargs.get("alias", "Blending"), score=_format_score(sc))
+        alias_val = (provider_kwargs.get("alias", "Blending") or "").strip().lower()
+        q = template.format(alias=alias_val, score=_format_score(sc))
         items_out.append({
             "id": str(idx),
             "image": abs_p,  # normalize to absolute
@@ -199,22 +360,42 @@ def _merge_annotations(
 
     # Prepare weak provider once if using scores
     provider = None
-    alias = weak_cfg.get("alias") or "Blending"
+    provider_name = (weak_cfg.get("provider") or "blending").strip().lower()
+    is_diff = provider_name in ("aligner", "diffusion", "diffusion_detector", "diffdet")
+    alias = weak_cfg.get("alias") or ("Diffusion" if is_diff else "Blending")
+    metric_word = "diffusion" if is_diff else "blending"
     lo = float(((weak_cfg.get("thresholds") or {}).get("lo")) if isinstance(weak_cfg.get("thresholds"), dict) else weak_cfg.get("lo", 0.3))
     hi = float(((weak_cfg.get("thresholds") or {}).get("hi")) if isinstance(weak_cfg.get("thresholds"), dict) else weak_cfg.get("hi", 0.7))
-    if use_scores:
+    # multi-expert when weak_cfg contains 'weak_supplies' list
+    experts_cfg: List[Dict[str, Any]] = list(weak_cfg.get("weak_supplies") or []) if isinstance(weak_cfg, dict) else []
+    multi_mode = use_scores and bool(experts_cfg)
+    if use_scores and (not multi_mode):
         try:
-            provider = get_provider(
-                "blending",
-                model_name=weak_cfg.get("model_name") or "swinv2_base_window16_256",
-                weights_path=weak_cfg.get("weights_path") or "weights/blending_models/best_gf.pth",
-                img_size=int(weak_cfg.get("img_size") or 256),
-                num_class=int(weak_cfg.get("num_class") or 2),
-                device=None,
-                batch_size=int(weak_cfg.get("batch_size") or 64),
-                num_workers=int(weak_cfg.get("num_workers") or 4),
-                pin_memory=bool(weak_cfg.get("pin_memory") if weak_cfg.get("pin_memory") is not None else True),
-            )
+            if is_diff:
+                provider = get_provider(
+                    provider_name,
+                    weights_dir=weak_cfg.get("weights_dir") or "",
+                    model=weak_cfg.get("model") or "",
+                    device=None,
+                    # bump defaults and allow overrides for diffusion/aligner
+                    batch_size=int(weak_cfg.get("batch_size") or 256),
+                    num_workers=int(weak_cfg.get("num_workers") or 4),
+                    pin_memory=bool(weak_cfg.get("pin_memory") if weak_cfg.get("pin_memory") is not None else True),
+                    compile_model=bool(weak_cfg.get("compile_model") or False),
+                    compile_mode=str(weak_cfg.get("compile_mode") or "safe"),
+                )
+            else:
+                provider = get_provider(
+                    "blending",
+                    model_name=weak_cfg.get("model_name") or "swinv2_base_window16_256",
+                    weights_path=weak_cfg.get("weights_path") or "weights/blending_models/best_gf.pth",
+                    img_size=int(weak_cfg.get("img_size") or 256),
+                    num_class=int(weak_cfg.get("num_class") or 2),
+                    device=None,
+                    batch_size=int(weak_cfg.get("batch_size") or 64),
+                    num_workers=int(weak_cfg.get("num_workers") or 4),
+                    pin_memory=bool(weak_cfg.get("pin_memory") if weak_cfg.get("pin_memory") is not None else True),
+                )
         except Exception as e:
             print(f"[WARN] Failed to initialize weak provider, falling back to no-score merge: {e}")
             provider = None
@@ -231,7 +412,8 @@ def _merge_annotations(
         # Compute scores for this dataset in batch if needed
         dataset_scores: Dict[str, Any] = {}
         abs_paths_for_score: List[str] = []
-        if use_scores and provider is not None:
+        expert_thresholds: List[Tuple[float, float]] = []
+        if use_scores:
             rel_or_abs = [it.get("image") for it in data if isinstance(it, dict)]
             # Enforce absolute paths in merged annotations; no config-based prefixing
             abs_paths_for_score = []
@@ -240,13 +422,58 @@ def _merge_annotations(
                     abs_paths_for_score.append(os.path.normpath(p))
                 else:
                     raise ValueError(f"Non-absolute image path encountered in merged annotations {fp}: {p}")
-            try:
-                score_map = provider.compute_scores(abs_paths_for_score)
-            except Exception as e:
-                print(f"[WARN] Weak provider scoring failed for {fp.name}: {e}")
-                score_map = {}
-            # map by abs path
-            dataset_scores = {ap: (score_map.get(ap).score if score_map.get(ap) is not None else None) for ap in abs_paths_for_score}
+            if multi_mode:
+                # Build ExpertSpec list and per-expert thresholds
+                expert_specs: List[ExpertSpec] = []
+                for e in experts_cfg:
+                    prov = (e.get("provider") or "").strip().lower()
+                    alias_e = e.get("alias") or ("Diffusion" if prov in ("aligner","diffusion") else ("Blending" if prov == "blending" else prov.title()))
+                    kwargs_e: Dict[str, Any] = {}
+                    if prov in ("aligner","diffusion","diffusion_detector","diffdet"):
+                        # add batching knobs for diffusion/aligner experts in multi-expert training
+                        kwargs_e = {
+                            "weights_dir": e.get("weights_dir") or "",
+                            "model": e.get("model") or "",
+                            "device": None,
+                            "batch_size": int(e.get("batch_size") or 256),
+                            "num_workers": int(e.get("num_workers") or 4),
+                            "pin_memory": bool(e.get("pin_memory") if e.get("pin_memory") is not None else True),
+                            # Optional compile knobs per expert
+                            "compile_model": bool(e.get("compile_model") or False),
+                            "compile_mode": str(e.get("compile_mode") or "safe"),
+                        }
+                    elif prov == "blending":
+                        kwargs_e = {
+                            "model_name": e.get("model_name") or "swinv2_base_window16_256",
+                            "weights_path": e.get("weights_path") or "weights/blending_models/best_gf.pth",
+                            "img_size": int(e.get("img_size") or 256),
+                            "num_class": int(e.get("num_class") or 2),
+                            "device": None,
+                            "batch_size": int(e.get("batch_size") or 64),
+                            "num_workers": int(e.get("num_workers") or 4),
+                            "pin_memory": bool(e.get("pin_memory") if e.get("pin_memory") is not None else True),
+                        }
+                    else:
+                        kwargs_e = dict(e)
+                        kwargs_e.pop("provider", None)
+                        kwargs_e.pop("alias", None)
+                    expert_specs.append(ExpertSpec(provider=prov, alias=alias_e, kwargs=kwargs_e))
+                    thr = e.get("thresholds") or {}
+                    lo_e = float(thr.get("lo", lo)) if isinstance(thr, dict) else lo
+                    hi_e = float(thr.get("hi", hi)) if isinstance(thr, dict) else hi
+                    expert_thresholds.append((lo_e, hi_e))
+                try:
+                    dataset_scores = compute_all_scores(expert_specs, abs_paths_for_score)
+                except Exception as e:
+                    print(f"[WARN] Multi-expert scoring failed for {fp.name}: {e}")
+                    dataset_scores = {ap: [] for ap in abs_paths_for_score}
+            else:
+                try:
+                    score_map = provider.compute_scores(abs_paths_for_score) if provider is not None else {}
+                except Exception as e:
+                    print(f"[WARN] Weak provider scoring failed for {fp.name}: {e}")
+                    score_map = {}
+                dataset_scores = {ap: (score_map.get(ap).score if score_map.get(ap) is not None else None) for ap in abs_paths_for_score}
 
         # Iterate and normalize items
         for idx_in_ds, it in enumerate(data):
@@ -263,32 +490,86 @@ def _merge_annotations(
             # Determine score if enabled
             human_text = human_binary
             gpt_value = compose_labeled_response(lbl, original_answer)
-            if use_scores and provider is not None and abs_paths_for_score:
+            if use_scores and abs_paths_for_score:
                 abs_p = abs_paths_for_score[idx_in_ds] if idx_in_ds < len(abs_paths_for_score) else None
-                sc = None
-                if abs_p is not None:
-                    sc = dataset_scores.get(abs_p)
-                # Build human with score using the shared template
-                try:
-                    human_text = question_template.format(alias=alias, score=_format_score(sc))
-                except Exception:
-                    human_text = build_blending_prompt(alias, sc)
-                # Append supportive sentence conditionally
-                if sc is not None:
+                if multi_mode:
+                    # Multi-expert human tail
+                    pairs: List[Tuple[str, Optional[float]]] = []
+                    if abs_p is not None and isinstance(dataset_scores.get(abs_p), list):
+                        for es in dataset_scores.get(abs_p):
+                            pairs.append((es.alias, es.score))
+                    parts = [f"the {(a or '').strip().lower()} score is {_format_score(s)}" for a, s in pairs]
+                    if parts:
+                        if len(parts) == 1:
+                            tail = " And " + parts[0] + "."
+                        else:
+                            tail = " And " + ", ".join(parts[:-1]) + ", and " + parts[-1] + "."
+                        human_text = "<image>\nIs this image real or fake?" + tail
+                    # Grouped supporters
+                    supporters: List[str] = []
+                    if abs_p is not None and isinstance(dataset_scores.get(abs_p), list):
+                        es_list = dataset_scores.get(abs_p)
+                        for idx_e, es in enumerate(es_list):
+                            sc = es.score
+                            if sc is None:
+                                continue
+                            lo_e, hi_e = expert_thresholds[idx_e] if idx_e < len(expert_thresholds) else (lo, hi)
+                            try:
+                                scf = float(sc)
+                            except Exception:
+                                continue
+                            if lbl == "real" and scf <= lo_e:
+                                supporters.append(es.alias)
+                            elif lbl == "fake" and scf >= hi_e:
+                                supporters.append(es.alias)
+                    if supporters:
+                        names = [s.strip().lower() for s in supporters if isinstance(s, str) and s.strip()]
+                        if len(names) == 1:
+                            conj = names[0]
+                        elif len(names) == 2:
+                            conj = f"{names[0]} and {names[1]}"
+                        else:
+                            conj = ", ".join(names[:-1]) + f", and {names[-1]}"
+                        if lbl == "fake":
+                            gpt_value = gpt_value + f" Additionally, the image shows obvious {conj} artifacts supporting fake."
+                        else:
+                            gpt_value = gpt_value + f" Additionally, the image shows very few {conj} artifacts supporting real."
+                else:
+                    sc = None
+                    if abs_p is not None:
+                        sc = dataset_scores.get(abs_p)
                     try:
-                        scf = float(sc)
-                        if lbl == "real" and scf <= lo:
-                            gpt_value = gpt_value + f" Additionally, the {alias} detector indicates very few artifacts supporting real."
-                        elif lbl == "fake" and scf >= hi:
-                            gpt_value = gpt_value + f" Additionally, the {alias} detector indicates a lot of artifacts supporting fake."
+                        human_text = question_template.format(alias=alias, score=_format_score(sc))
                     except Exception:
-                        pass
+                        human_text = (
+                            f"<image>\nIs this image real or fake? And by observation of {alias} expert, "
+                            f"the {metric_word} score is {_format_score(sc)}."
+                        )
+                    supporter = None
+                    if sc is not None:
+                        try:
+                            scf = float(sc)
+                            if lbl == "real" and scf <= lo:
+                                supporter = alias
+                            elif lbl == "fake" and scf >= hi:
+                                supporter = alias
+                        except Exception:
+                            supporter = None
+                    if supporter:
+                        name = supporter.strip().lower()
+                        if lbl == "fake":
+                            gpt_value = gpt_value + f" Additionally, the image shows obvious {name} artifacts supporting fake."
+                        else:
+                            gpt_value = gpt_value + f" Additionally, the image shows very few {name} artifacts supporting real."
             else:
                 # No scores in training merge; still reuse template with N/A score if it has placeholders
                 try:
                     human_text = question_template.format(alias=alias, score=_format_score(None))
                 except Exception:
-                    human_text = human_binary
+                    human_text = (
+                        f"<image>\nIs this image real or fake? And by observation of {alias} expert, "
+                        f"the {metric_word} score is N/A."
+                    )
             normalized.append({
                 "id": "0",  # temporary; will be reassigned
                 "image": image,
@@ -313,9 +594,26 @@ def _merge_annotations(
 
 
 def main() -> None:
-    ap = argparse.ArgumentParser(description="Unified: base QA -> LoRA train -> LoRA test")
+    ap = argparse.ArgumentParser(description="Unified (staged): annotate -> weak -> train -> test")
     ap.add_argument("--config", type=Path, default=DEFAULT_CONFIG, help="Path to uniconfig.yaml (unified)")
-    ap.add_argument("--infer-config", type=Path, default=DEFAULT_INFER_CONFIG, help="Optional separate infer_config; defaults to eval config when omitted")
+    ap.add_argument(
+        "--infer-config",
+        type=Path,
+        default=DEFAULT_INFER_CONFIG,
+        help="Optional separate infer config; defaults to eval/configs/infer_config.yaml",
+    )
+    # Dynamic expert selection
+    ap.add_argument("--experts", default=None, help="Comma-separated experts (provider or alias) for training merge; 'none' disables scores")
+    ap.add_argument("--test-experts", default=None, help="Comma-separated experts for test stage; default to --experts when omitted")
+    # Optional ckpt tag to customize output dir name (appended to slug)
+    ap.add_argument("--ckpt-tag", default=None, help="Optional tag appended to ckpt dir name, e.g., v1 or expA")
+
+    # Staging controls
+    ap.add_argument("--phase", choices=["annotate", "weak", "train", "test", "full"], default="full",
+                    help="Run a specific stage or the full pipeline. 'weak' supplements experts on existing annotations.")
+    ap.add_argument("--force-annotate", action="store_true", help="Re-run annotate stage even if .annotations.done exists")
+    ap.add_argument("--force-weak", action="store_true", help="Re-run weak stage even if .weak.done exists")
+    ap.add_argument("--out-weak-json", type=Path, default=None, help="Output merged JSON for weak stage (default: train/train_weak.json)")
 
     # Train inputs
     ap.add_argument("--train-jsons", nargs="*", default=None, help="Training dataset JSONs (Dataset or conversation schema)")
@@ -360,7 +658,7 @@ def main() -> None:
     q_template = (
         args.question_template
         or (cfg_infer.get("infer", {}).get("question_template") if isinstance(cfg_infer, dict) else None)
-        or "<image>\nIs this image real or fake? And by observation of {alias} expert, the blending score is {score}."
+        or "<image>\nIs this image real or fake? And the {alias} score is {score}."
     )
 
     annotations_cfg = (cfg.get("annotations") or {}) if isinstance(cfg, dict) else {}
@@ -377,7 +675,8 @@ def main() -> None:
         _ensure_dir(d)
 
     annotation_done = train_dir / ".annotations.done"
-    merge_done = train_dir / ".merge.done"
+    merge_done = train_dir / ".merge.done"  # legacy merge marker
+    weak_done = train_dir / ".weak.done"
     train_done = train_dir / ".training.done"
     adapter_record_path = train_dir / "adapter_path.txt"
     test_done = test_dir / ".test.done"
@@ -407,7 +706,8 @@ def main() -> None:
     merged_train: Optional[Path] = None
     train_with_scores: bool = False
 
-    if not test_only:
+    # Only run annotate stage when phase is annotate/train/full (weak stage should not touch annotate)
+    if not test_only and (args.phase in ("annotate", "train", "full")):
         # Determine training JSONs
         train_json_paths: List[Path] = []
         if args.train_jsons:
@@ -447,10 +747,10 @@ def main() -> None:
                 train_pairs.append((p, lbl))
 
         # 1) Base-model annotations for training datasets (or reuse existing)
-        if annotation_done.exists() and not args.skip_annotate:
+        if annotation_done.exists() and not args.skip_annotate and not args.force_annotate:
             print(f"[SKIP] Found existing annotation artefacts in {train_datasets_dir}; reusing per-dataset outputs.")
             _reuse_existing("annotation marker")
-        elif args.skip_annotate:
+        elif args.skip_annotate and not args.force_annotate:
             print("[SKIP] --skip-annotate provided; reusing existing annotation JSONs.")
             _reuse_existing("--skip-annotate")
         else:
@@ -477,11 +777,18 @@ def main() -> None:
             if train_outputs:
                 annotation_done.write_text(datetime.utcnow().isoformat(timespec="seconds"))
 
+        # If only做注释阶段，直接结束
+        if args.phase == "annotate":
+            print("✅ Annotate stage done.")
+            # write minimal run info at end as usual
+            pass
+
         # Merge training datasets
         if not train_pairs:
             raise SystemExit("No annotation JSONs available to merge; ensure annotation stage succeeded.")
 
         merged_train = train_dir / "train_merged.json"
+        out_weak_json = (args.out_weak_json or (train_dir / "train_weak.json"))
         # Determine whether to include scores in training merge
         tr_cfg = (cfg.get("training") or {}) if isinstance(cfg, dict) else {}
         train_with_scores_cfg = bool(tr_cfg.get("train_with_scores", True))
@@ -492,26 +799,123 @@ def main() -> None:
         else:
             train_with_scores = train_with_scores_cfg
 
-        weak_cfg = (cfg.get("weak_supply") or {}) if isinstance(cfg, dict) else {}
+        weak_cfg_single = (cfg.get("weak_supply") or {}) if isinstance(cfg, dict) else {}
+        weak_cfg_multi_raw = (cfg.get("weak_supplies") or []) if isinstance(cfg, dict) else []
+        # Apply expert filter for training merge
+        ex_names = _parse_experts(args.experts)
+        weak_cfg_multi = _filter_experts(weak_cfg_multi_raw, ex_names)
+        # If only single provider configured and it matches filter, include as one-item list
+        if not weak_cfg_multi and weak_cfg_single:
+            prov = str(weak_cfg_single.get('provider') or '').strip().lower()
+            alias = str(weak_cfg_single.get('alias') or '').strip().lower()
+            if ex_names is None or (len(ex_names) > 0 and (prov in ex_names or alias in ex_names)):
+                weak_cfg_multi = [weak_cfg_single]
+        # Blend into one dict so downstream can see 'weak_supplies' when present
+        weak_cfg = dict(weak_cfg_single)
+        if weak_cfg_multi:
+            weak_cfg["weak_supplies"] = weak_cfg_multi
+        # Adapt question template wording for provider: aligner/diffusion -> "diffusion score"
+        q_template_merge = q_template
+        try:
+            prov_name_tmp = (weak_cfg.get("provider") or "blending").strip().lower()
+            if prov_name_tmp in ("aligner", "diffusion") and isinstance(q_template_merge, str):
+                q_template_merge = q_template_merge.replace("blending score", "diffusion score")
+        except Exception:
+            pass
 
-        if merge_done.exists() and merged_train.exists():
-            print(f"[SKIP] Found merged dataset at {merged_train}; skipping merge stage.")
+        # Weak stage: when显式选择 --phase weak，则写出到 train_weak.json 并可单独退出
+        if args.phase == "weak":
+            if (not args.force_weak) and weak_done.exists() and out_weak_json.exists():
+                print(f"[SKIP] Found weak merged dataset at {out_weak_json}; skipping weak stage.")
+            else:
+                _merge_annotations(
+                    train_pairs,
+                    out_weak_json,
+                    use_scores=train_with_scores,
+                    weak_cfg=weak_cfg,
+                    image_root_prefix=image_root_prefix,
+                    question_template=q_template_merge,
+                )
+                weak_done.write_text(datetime.utcnow().isoformat(timespec="seconds"))
+            print("✅ Weak stage done.")
+            # Allow continuing into training when user also passed --run-train; else return early
+            if not bool(args.run_train):
+                # write run info later
+                pass
+        else:
+            # Legacy merged (kept for backward-compatibility). Training会优先使用 train_weak.json（若存在）。
+            if merge_done.exists() and merged_train.exists():
+                print(f"[SKIP] Found merged dataset at {merged_train}; skipping merge stage.")
+            else:
+                _merge_annotations(
+                    train_pairs,
+                    merged_train,
+                    use_scores=train_with_scores,
+                    weak_cfg=weak_cfg,
+                    image_root_prefix=image_root_prefix,
+                    question_template=q_template_merge,
+                )
+                merge_done.write_text(datetime.utcnow().isoformat(timespec="seconds"))
+
+    # ---- Stage: weak (outside annotate block) ----
+    if (not test_only) and (args.phase in ("weak", "train", "full")):
+        reuse_dir = _coerce_path(args.reuse_datasets_dir) if args.reuse_datasets_dir else train_datasets_dir
+        ann_list = sorted(p for p in reuse_dir.glob("*_annotations.json") if p.is_file())
+        if not ann_list:
+            raise SystemExit(f"Weak stage requires *_annotations.json under {reuse_dir}. Provide --reuse-datasets-dir or run --phase annotate first.")
+        weak_pairs: List[Tuple[Path, str]] = [(p, ("real" if "real" in p.name.lower() else "fake")) for p in ann_list]
+
+        # Determine whether to include scores in weak merge (default True)
+        train_with_scores = True if args.train_with_scores else (False if args.no_train_scores else True)
+
+        weak_cfg_single = (cfg.get("weak_supply") or {}) if isinstance(cfg, dict) else {}
+        weak_cfg_multi_raw = (cfg.get("weak_supplies") or []) if isinstance(cfg, dict) else []
+        ex_names = _parse_experts(args.experts)
+        weak_cfg_multi = _filter_experts(weak_cfg_multi_raw, ex_names)
+        if not weak_cfg_multi and weak_cfg_single:
+            prov = str(weak_cfg_single.get('provider') or '').strip().lower()
+            alias = str(weak_cfg_single.get('alias') or '').strip().lower()
+            if ex_names is None or (len(ex_names) > 0 and (prov in ex_names or alias in ex_names)):
+                weak_cfg_multi = [weak_cfg_single]
+        weak_cfg = dict(weak_cfg_single)
+        if weak_cfg_multi:
+            weak_cfg["weak_supplies"] = weak_cfg_multi
+        q_template_merge = q_template
+        try:
+            prov_name_tmp = (weak_cfg.get("provider") or "blending").strip().lower()
+            if prov_name_tmp in ("aligner", "diffusion") and isinstance(q_template_merge, str):
+                q_template_merge = q_template_merge.replace("blending score", "diffusion score")
+        except Exception:
+            pass
+
+        out_weak_json = (args.out_weak_json or (train_dir / "train_weak.json"))
+        if (not args.force_weak) and (train_dir / ".weak.done").exists() and out_weak_json.exists():
+            print(f"[SKIP] Found weak merged dataset at {out_weak_json}; skipping weak stage.")
         else:
             _merge_annotations(
-                train_pairs,
-                merged_train,
+                weak_pairs,
+                out_weak_json,
                 use_scores=train_with_scores,
                 weak_cfg=weak_cfg,
                 image_root_prefix=image_root_prefix,
-                question_template=q_template,
+                question_template=q_template_merge,
             )
-            merge_done.write_text(datetime.utcnow().isoformat(timespec="seconds"))
+            (train_dir / ".weak.done").write_text(datetime.utcnow().isoformat(timespec="seconds"))
+        if args.phase == "weak":
+            print("✅ Weak stage done.")
+            return
 
     # 2) (Optional) Launch LoRA training
     adapter_path = args.adapter_path
     run_train_cfg = bool(args.run_train or (cfg.get("training", {}).get("run_train") if isinstance(cfg, dict) else False))
-    if (not test_only) and run_train_cfg:
-        out_dir_value = args.train_output or (cfg.get("training", {}).get("output_dir") if isinstance(cfg, dict) else None) or (pipeline_root / "ckpt" / "lora")
+    if (not test_only) and run_train_cfg and (args.phase in ("train", "full")):
+        # Auto-name ckpt with expert slug when not explicitly provided
+        experts_for_slug = weak_cfg.get("weak_supplies") or []
+        slug = _experts_slug(experts_for_slug if train_with_scores else [])
+        if args.ckpt_tag:
+            slug = f"{slug}-{''.join(ch if ch.isalnum() or ch in '-_.' else '-' for ch in args.ckpt_tag)}"
+        default_ckpt_dir = pipeline_root / "ckpt" / f"lora-[{slug}]"
+        out_dir_value = args.train_output or (cfg.get("training", {}).get("output_dir") if isinstance(cfg, dict) else None) or default_ckpt_dir
         out_dir_path = _coerce_path(out_dir_value)
         _ensure_dir(out_dir_path)
         if train_done.exists() and adapter_record_path.exists():
@@ -549,6 +953,41 @@ def main() -> None:
             lr_scheduler_type = str(tr.get("lr_scheduler_type", "cosine"))
             logging_steps = str(tr.get("logging_steps", 1))
 
+            # Resolve training toggles from config/env
+            def _to_bool(v: Any, default: bool = False) -> bool:
+                if isinstance(v, bool):
+                    return v
+                if isinstance(v, (int, float)):
+                    return bool(v)
+                try:
+                    s = str(v).strip().lower()
+                except Exception:
+                    return default
+                if s in ("1", "true", "yes", "y"):  # truthy strings
+                    return True
+                if s in ("0", "false", "no", "n"):  # falsy strings
+                    return False
+                return default
+
+            gc_cfg = tr.get("gradient_checkpointing") if isinstance(tr, dict) else None
+            if gc_cfg is None:
+                gc_cfg = os.environ.get("GRADIENT_CHECKPOINTING", "False")
+            gc_flag = _to_bool(gc_cfg, default=False)
+
+            ddp_unused_cfg = tr.get("ddp_find_unused_parameters") if isinstance(tr, dict) else None
+            if ddp_unused_cfg is None:
+                ddp_unused_cfg = os.environ.get("DDP_FIND_UNUSED_PARAMETERS", "False")
+            ddp_unused_flag = _to_bool(ddp_unused_cfg, default=False)
+
+            report_to = str((tr.get("report_to") if isinstance(tr, dict) else None) or os.environ.get("REPORT_TO") or "none")
+
+            # Prefer weak-stage输出作为训练数据集
+            dataset_for_train = str((args.out_weak_json or (train_dir / "train_weak.json")))
+            if not Path(dataset_for_train).exists():
+                dataset_for_train = str(merged_train) if merged_train and merged_train.exists() else None
+            if not dataset_for_train:
+                raise SystemExit("No training dataset JSON found (expected train_weak.json or train_merged.json)")
+
             base_cmd = [
                 "deepspeed", "--master_port", "29000", "--include", f"localhost:{include}",
                 str(Path(__file__).with_name("model_train.py")),
@@ -556,7 +995,7 @@ def main() -> None:
                 "--lora_r", lora_r, "--lora_alpha", lora_alpha, "--mm_projector_lr", mm_projector_lr,
                 "--model_name_or_path", base_model,
                 "--version", "v1",
-                "--data_path", str(merged_train),
+                "--data_path", dataset_for_train,
                 "--image_folder", "",
                 "--vision_tower", vision_tower or "",
                 "--mm_projector_type", mm_projector_type,
@@ -567,7 +1006,8 @@ def main() -> None:
                 "--group_by_modality_length", group_by_modality_length,
                 "--output_dir", str(out_dir_path),
                 "--bf16", "True",
-                "--gradient_checkpointing", "True",
+                "--gradient_checkpointing", ("True" if gc_flag else "False"),
+                "--ddp_find_unused_parameters", ("True" if ddp_unused_flag else "False"),
                 "--num_train_epochs", num_train_epochs,
                 "--per_device_train_batch_size", per_device_train_batch_size,
                 "--per_device_eval_batch_size", per_device_eval_batch_size,
@@ -584,6 +1024,7 @@ def main() -> None:
                 "--model_max_length", model_max_length,
                 "--dataloader_num_workers", dataloader_num_workers,
                 "--lazy_preprocess", "True",
+                "--report_to", report_to,
             ]
             if ds_cfg:
                 base_cmd += ["--deepspeed", ds_cfg]
@@ -614,19 +1055,52 @@ def main() -> None:
     else:
         # Resolve scoring provider and question template
         weak = (cfg_infer.get("weak_supply") or {}) if isinstance(cfg_infer, dict) else {}
+        weak_multi_infer_raw: List[Dict[str, Any]] = (cfg_infer.get("weak_supplies") or []) if isinstance(cfg_infer, dict) else []
+        # Apply expert filter for test stage (default to training filter when omitted)
+        test_names = _parse_experts(args.test_experts if args.test_experts is not None else args.experts)
+        weak_multi_infer: List[Dict[str, Any]] = _filter_experts(weak_multi_infer_raw, test_names)
+        if not weak_multi_infer and weak:
+            prov = str(weak.get('provider') or '').strip().lower()
+            alias = str(weak.get('alias') or '').strip().lower()
+            if test_names is None or (len(test_names) > 0 and (prov in test_names or alias in test_names)):
+                weak_multi_infer = [weak]
         infer_gen_cfg = (cfg_infer.get("infer") or {}) if isinstance(cfg_infer, dict) else {}
-        provider_name = "blending"
-        provider_kwargs: Dict[str, Any] = {
-            "model_name": weak.get("model_name") or "swinv2_base_window16_256",
-            "weights_path": weak.get("weights_path") or "weights/blending_models/best_gf.pth",
-            "img_size": int(weak.get("img_size") or 256),
-            "num_class": int(weak.get("num_class") or 2),
-            "device": None,
-            "batch_size": int(weak.get("batch_size") or 64),
-            "num_workers": int(weak.get("num_workers") or 4),
-            "pin_memory": bool(weak.get("pin_memory") if weak.get("pin_memory") is not None else True),
-        }
-        provider_kwargs["alias"] = weak.get("alias") or "Blending"
+        provider_name = (weak.get("provider") or "blending").strip().lower()
+        provider_kwargs: Dict[str, Any] = {}
+        if provider_name in ("aligner", "diffusion"):
+            provider_kwargs.update({
+                "weights_dir": weak.get("weights_dir") or "",
+                "model": weak.get("model") or "",
+                "device": None,
+                # optional batch + compile knobs for test-time scoring
+                "batch_size": int(weak.get("batch_size") or 256),
+                "num_workers": int(weak.get("num_workers") or 4),
+                "pin_memory": bool(weak.get("pin_memory") if weak.get("pin_memory") is not None else True),
+                "compile_model": bool(weak.get("compile_model") or False),
+                "compile_mode": str(weak.get("compile_mode") or "safe"),
+            })
+            provider_kwargs["alias"] = weak.get("alias") or "Diffusion"
+        else:
+            provider_name = "blending"
+            provider_kwargs.update({
+                "model_name": weak.get("model_name") or "swinv2_base_window16_256",
+                "weights_path": weak.get("weights_path") or "weights/blending_models/best_gf.pth",
+                "img_size": int(weak.get("img_size") or 256),
+                "num_class": int(weak.get("num_class") or 2),
+                "device": None,
+                "batch_size": int(weak.get("batch_size") or 64),
+                "num_workers": int(weak.get("num_workers") or 4),
+                "pin_memory": bool(weak.get("pin_memory") if weak.get("pin_memory") is not None else True),
+            })
+            provider_kwargs["alias"] = weak.get("alias") or "Blending"
+
+        # Adapt test prompt wording: aligner/diffusion -> "diffusion score"
+        q_template_test = q_template
+        try:
+            if provider_name in ("aligner", "diffusion") and isinstance(q_template_test, str):
+                q_template_test = q_template_test.replace("blending score", "diffusion score")
+        except Exception:
+            pass
 
         test_json_paths: List[Path] = []
         if args.test_jsons:
@@ -644,7 +1118,7 @@ def main() -> None:
             print("[INFO] No test datasets specified; skipping LoRA testing stage.")
         else:
             test_outputs: List[Path] = []
-            if test_done.exists():
+            if test_done.exists() or (args.phase not in ("test", "full")):
                 print(f"[SKIP] Existing LoRA test artefacts detected in {test_datasets_dir}; skipping testing stage.")
                 test_outputs = sorted(p for p in test_datasets_dir.glob("*_result.json") if p.is_file())
             else:
@@ -657,13 +1131,21 @@ def main() -> None:
                         test_outputs.append(out_path)
                         continue
 
-                    items = _build_scored_items(
-                        tj_path,
-                        image_root_prefix=None,
-                        template=q_template,
-                        provider_name=provider_name,
-                        provider_kwargs=provider_kwargs,
-                    )
+                    # Multi-expert path takes precedence when configured
+                    if weak_multi_infer:
+                        items = _build_scored_items_multi(
+                            tj_path,
+                            image_root_prefix=None,
+                            experts_cfg=weak_multi_infer,
+                        )
+                    else:
+                        items = _build_scored_items(
+                            tj_path,
+                            image_root_prefix=None,
+                            template=q_template_test,
+                            provider_name=provider_name,
+                            provider_kwargs=provider_kwargs,
+                        )
 
                     # Limit test items if configured
                     if args.max_test_items is not None:

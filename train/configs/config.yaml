@@ -14,25 +14,42 @@ annotations:
   model_path: "weights/base/llava-v1.5-7b"
   # Training dataset JSONs (located under paths.data_dir)
   real_files: [Real.json]
-  fake_files: [Deepfakes.json, Face2Face.json, FaceSwap.json, NeuralTextures.json]
+  fake_files: [Deepfakes.json, Face2Face.json, FaceSwap.json, NeuralTextures.json,DiffFace.json]
+  # fake_files: [Deepfakes_small.json]
 
-# Traditional detector used to compute blending scores for templated questions
-weak_supply:
-  model_name: "swinv2_base_window16_256"
-  weights_path: "weights/blending_models/best_gf.pth"
-  alias: "Blending"
-  img_size: 256
-  num_class: 2
-  # Batched inference tuning for detector
-  batch_size: 128
-  num_workers: 8
-  pin_memory: true
+# Weak-signal experts (multi-expert). When present, takes precedence over legacy weak_supply
+weak_supplies:
+  - provider: blending
+    alias: Blending
+    model_name: swinv2_base_window16_256
+    weights_path: weights/blending_models/best_gf.pth
+    img_size: 256
+    num_class: 2
+    # Batched inference tuning for detector
+    batch_size: 128
+    num_workers: 8
+    pin_memory: true
+    thresholds: { lo: 0.30, hi: 0.70 }
+
+  - provider: diffusion_detector
+    alias: Diffusion
+    # Minimal diffusion/aligner expert; expects subfolder under weights_dir, e.g., 'ours-sync'
+    # NOTE: bugfix — previous value used singular 'weight/' which caused
+    # "Missing config: weight/ours-sync/config.yaml" at runtime. The
+    # correct root folder is 'weights/'. Keep it relative to repo root so
+    # train.pipeline resolves it via _coerce_path.
+    weights_dir: weights/
+    model: ours-sync
+    thresholds: { lo: 0.30, hi: 0.70 }
+    # Optional performance knobs
+    # compile_model: true
+    # compile_mode: aggressive  # safe | aggressive
 
 # Model paths for quick/LoRA inference
 model:
   base: "weights/base/llava-v1.5-7b"
   # Optional: path to an existing LoRA adapter (testing); overridden by training output if training runs
-  adapter: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[x2dfd]"
+  adapter: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[x2dfdfinal]"
 
 # Inference settings for quick/LoRA testing
 infer:
@@ -42,7 +59,7 @@ infer:
     - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Deepfakes_tiny.json"
     - "/data/250010183/workspace/X2DFD/datasets/raw/data/test/Faceswap_tiny.json"
   # Question template with score placeholders used during testing
-  question_template: "<image>\nIs this image real or fake? And by observation of {alias} expert, the blending score is {score}."
+  question_template: "<image>\nIs this image real or fake? And the {alias} score is {score}."
   # Generation parameters
   temperature: 0.2
   top_p: 1.0
@@ -61,7 +78,7 @@ training:
   gpus: "0"
   deepspeed_config: null
   # Where to save LoRA adapter when training is enabled
-  output_dir: "weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]"
+  output_dir: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[x2dfdfinal]"
   # Per-dataset caps (optional)
   max_train_items: null
   max_test_items: null
@@ -88,3 +105,7 @@ training:
   warmup_ratio: 0.03
   lr_scheduler_type: cosine
   logging_steps: 1
+  # Training toggles (pipeline will pass through to LLaVA)
+  gradient_checkpointing: false
+  ddp_find_unused_parameters: false
+  report_to: none
