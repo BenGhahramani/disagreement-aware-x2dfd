@@ -129,19 +129,14 @@ python demo.py --image /abs/img.png \
 
 ### 🔀 Optional Expert Variants
 
-We provide two ready-to-use expert settings:
+- Blending only (light)
+  - Weights: `weights/blending_models/best_gf.pth` (TBR)
+  - Eval: `python -m eval.infer.runner --config eval/configs/infer_config.yaml --experts blending`
+  - Train: `python -m train.pipeline --config train/configs/config.yaml --experts blending --run-train`
 
-- **Blending-only variant** (lighter): requires only the blending detector checkpoint.
-  - Download blending weights: To be released
-  - Place at: `weights/blending_models/best_gf.pth`
-  - Run with blending only (examples):
-    - Eval: `python -m eval.infer.runner --config eval/configs/infer_config.yaml --experts blending`
-    - Train: `python -m train.pipeline --config train/configs/config.yaml --experts blending --run-train`
-
-- **Blending + Diffusion variant** (stronger): uses both experts.
-  - Download blending weights: To be released → `weights/blending_models/best_gf.pth`
-  - Download diffusion/aligner package: To be released → `weights/ours-sync/`
-  - Eval/Train (default configs already include both experts). You can also pass `--experts blending,diffusion_detector` explicitly.
+- Blending + Diffusion (strong)
+  - Weights: blending → `weights/blending_models/best_gf.pth`; diffusion/aligner → `weights/ours-sync/` (both TBR)
+  - Use default configs (both experts enabled), or pass `--experts blending,diffusion_detector`
 
 ## 🚀 Usage
 
@@ -150,14 +145,14 @@ We provide two ready-to-use expert settings:
 ### 1) **Training (staged)**
 End-to-end (annotation → weak merge → LoRA train → LoRA test):
 ```bash
-./train.sh --run-train [--train-gpus 0,1]
+./train.sh --run-train 
 ```
-- More scripts: `train/` and `train/scripts/`; legacy scripts are archived in `legacy/` (not recommended).
+<!-- - More scripts: `train/` and `train/scripts/`; legacy scripts are archived in `legacy/` (not recommended).
 
 Stages mirror our methodology:
 - **Stage 2 — Explainable annotation** (base LLaVA generates rationales)
 - **Stage 3 — Weak feature supply** (multi-expert artifact scores merged into prompts)
-- **Stage 4 — LoRA training** (fine-tune lightweight adapter)
+- **Stage 4 — LoRA training** (fine-tune lightweight adapter) -->
 
 ---
 
