@@ -32,8 +32,14 @@ Siwei Lyu<sup>4</sup>, Baoyuan Wu<sup>1†</sup>
 
 </div>
 ## 📰 News
+
 - [2025.11.27]: 🚀 Public release of the X2-DFD codebase and docs.
 - [2025.9.24]: 🎉 X2-DFD was accepted to NeurIPS 2025!
+
+## TODO
+
+- [x] Public code release
+- [ ] Upload checkpoints (LoRA and detectors)
 
 - ## Contents
 - [Install](#install)
