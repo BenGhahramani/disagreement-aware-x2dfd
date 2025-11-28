@@ -160,14 +160,14 @@ Stages mirror our methodology:
 
 ### 2) **Evaluation**
 
-#### One-liner
+#### Script to Start
 ```bash
 ./test.sh
 ```
 - Requirement: a valid LoRA adapter must be available at the path configured in `eval/configs/infer_config.yaml -> model.adapter` (default: `weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]`). If missing, the runner exits with clear tips.
 - Output pointer: `eval/outputs/infer/latest_run.json`
 
-#### Manual
+#### Config to Start
 ```bash
 python -m eval.infer.runner --config eval/configs/infer_config.yaml
 ```
