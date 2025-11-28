@@ -164,13 +164,13 @@ Stages mirror our methodology:
 ```bash
 ./test.sh
 ```
-- Requirement: a valid LoRA adapter must be available at the path configured in `eval/configs/infer_config.yaml -> model.adapter` (default: `weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]`). If missing, the runner exits with clear tips.
-- Output pointer: `eval/outputs/infer/latest_run.json`
+- Output: `eval/outputs/infer/latest_run.json`. Ensure `eval/configs/infer_config.yaml -> model.adapter` points to your LoRA.
 
 #### Config to Start
 ```bash
 python -m eval.infer.runner --config eval/configs/infer_config.yaml
 ```
+- Edit `model.adapter` (LoRA path) and `infer.inputs` in the YAML. Optional: `--experts blending` or `--experts blending,diffusion_detector`.
 
 #### Batch Inference (config-driven)
 - Set multiple JSONs or a directory under `infer.inputs` in `eval/configs/infer_config.yaml` (directories expand to all `*.json` recursively), then run the command above. Ensure `model.adapter` points to your LoRA, and `weak_supplies` lists the experts you want (e.g., `blending`, `diffusion_detector`).
