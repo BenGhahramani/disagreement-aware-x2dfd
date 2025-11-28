@@ -92,7 +92,7 @@ Before You Run: Prepare Weights
 | Blending detector (SwinV2-B, 256) | To be released (e.g., `best_gf.pth`) | `weights/blending_models/best_gf.pth` | config `weak_supplies[].weights_path` | weak-signal scores (optional) |
 | Diffusion/aligner detector (ours-sync) | To be released (folder with config/ckpt) | `weights/ours-sync/` | config `weak_supplies[].weights_dir` + `model` | weak-signal scores (optional) |
 
-- Data prep reference (if you need to prepare datasets): https://github.com/SCLBD/DeepfakeBench
+- Preprocessing: follow [DeepfakeBench](https://github.com/SCLBD/DeepfakeBench).
 
 ## ⚡ Quick Inference
 
