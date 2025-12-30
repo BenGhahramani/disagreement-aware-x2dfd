@@ -77,7 +77,7 @@ model:
   temperature: 0.0
   top_p: 1.0
   num_beams: 1
-  max_new_tokens: 256
+  max_new_tokens: 4
 
 # Inference inputs (for pipeline test stage or standalone usage)
 infer:
