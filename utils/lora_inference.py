@@ -46,6 +46,8 @@ import json
 import sys
 import tempfile
 import time
+import inspect
+import types
 
 
 IMAGE_PLACEHOLDER = "<image>"
@@ -142,6 +144,82 @@ def _resolve_model_dtype(model) -> torch.dtype:
         return torch.float16
 
 
+def _patch_forward_cache_position(model: Any) -> None:
+    """Make LLaVA models compatible with newer Transformers generation kwargs.
+
+    transformers>=4.43 may pass `cache_position` into forward(); older LLaVA
+    model implementations don't accept it. Patch at runtime without modifying
+    the upstream LLaVA checkout.
+    """
+    try:
+        sig = inspect.signature(model.forward)
+        if "cache_position" in sig.parameters:
+            return
+    except Exception:
+        # If we can't introspect, try patching anyway
+        pass
+
+    orig_forward = model.forward
+
+    # Capture original signature so we only forward supported args.
+    try:
+        sig = inspect.signature(orig_forward)
+        accepted = set(sig.parameters.keys())
+        has_var_kw = any(p.kind == inspect.Parameter.VAR_KEYWORD for p in sig.parameters.values())
+    except Exception:
+        accepted = set()
+        has_var_kw = True
+
+    def _forward(  # type: ignore[no-untyped-def]
+        self,
+        input_ids=None,
+        attention_mask=None,
+        position_ids=None,
+        past_key_values=None,
+        inputs_embeds=None,
+        labels=None,
+        use_cache=None,
+        output_attentions=None,
+        output_hidden_states=None,
+        images=None,
+        image_sizes=None,
+        return_dict=None,
+        cache_position=None,
+        **kwargs,
+    ):
+        # Drop unsupported kwarg(s) introduced by newer Transformers.
+        kwargs.pop("cache_position", None)
+
+        call_kwargs = {
+            "input_ids": input_ids,
+            "attention_mask": attention_mask,
+            "position_ids": position_ids,
+            "past_key_values": past_key_values,
+            "inputs_embeds": inputs_embeds,
+            "labels": labels,
+            "use_cache": use_cache,
+            "output_attentions": output_attentions,
+            "output_hidden_states": output_hidden_states,
+            "images": images,
+            "image_sizes": image_sizes,
+            "return_dict": return_dict,
+        }
+        if accepted:
+            call_kwargs = {k: v for k, v in call_kwargs.items() if k in accepted}
+            if has_var_kw and kwargs:
+                call_kwargs.update(kwargs)
+        elif kwargs:
+            # If we can't introspect, fall back to forwarding kwargs as-is.
+            call_kwargs.update(kwargs)
+
+        return orig_forward(**call_kwargs)
+
+    try:
+        model.forward = types.MethodType(_forward, model)
+    except Exception:
+        return
+
+
 def _get_or_load_model(model_path: str, model_base: Optional[str] = None):
     key = (model_path, model_base)
     if key not in _MODEL_CACHE:
@@ -150,6 +228,7 @@ def _get_or_load_model(model_path: str, model_base: Optional[str] = None):
         tokenizer, model, image_processor, context_len = load_pretrained_model(
             model_path, model_base, model_name, False
         )
+        _patch_forward_cache_position(model)
         model.eval()
         _MODEL_CACHE[key] = (tokenizer, model, image_processor, context_len)
     return _MODEL_CACHE[key]
@@ -216,12 +295,14 @@ def single_image_infer(
         prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt"
     ).unsqueeze(0)
     input_ids = input_ids.to(model_device)
+    attention_mask = torch.ones_like(input_ids, dtype=torch.long, device=model_device)
 
     with torch.inference_mode():
         generation_output = model.generate(
             input_ids,
             images=image_inputs,
             image_sizes=image_sizes,
+            attention_mask=attention_mask,
             do_sample=temperature > 0,
             temperature=temperature,
             top_p=top_p,
@@ -321,12 +402,14 @@ def single_image_infer_with_scores(
         prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt"
     ).unsqueeze(0)
     input_ids = input_ids.to(model_device)
+    attention_mask = torch.ones_like(input_ids, dtype=torch.long, device=model_device)
 
     with torch.inference_mode():
         generation_output = model.generate(
             input_ids,
             images=image_inputs,
             image_sizes=image_sizes,
+            attention_mask=attention_mask,
             do_sample=temperature > 0,
             temperature=temperature,
             top_p=top_p,
@@ -355,11 +438,16 @@ def single_image_infer_with_scores(
 
     _ = compute_perplexity(answer)  # computed but not returned (matches snippet intent)
 
-    # Legacy probability extraction: fixed step [3], direct tokenizer indices
+    # Legacy probability extraction: fixed step [3], direct tokenizer indices.
+    # Make it robust to shorter generations by falling back to the last available step.
     real_prob: Optional[float] = None
     fake_prob: Optional[float] = None
     try:
-        logits = generation_output.scores[3][0]
+        scores = getattr(generation_output, "scores", None)
+        if not isinstance(scores, (list, tuple)) or len(scores) == 0:
+            raise ValueError("No generation scores available")
+        step_idx = 3 if len(scores) > 3 else (len(scores) - 1)
+        logits = scores[step_idx][0]
         probs = torch.nn.functional.softmax(
             torch.tensor([
                 logits[tokenizer("real").input_ids[1]],

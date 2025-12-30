@@ -39,7 +39,7 @@ Siwei Lyu<sup>4</sup>, Baoyuan Wu<sup>1†</sup>
 ## TODO
 
 - [x] Public code release
-- [ ] Upload checkpoints (LoRA and detectors)
+- [ ] Upload checkpoints (Ready to Release)
 
 - ## Contents
 - [Install](#install)
@@ -93,32 +93,33 @@ Before You Run: Prepare Weights
 | --- | --- | --- | --- | --- |
 | LLaVA-1.5-7B (base) | Hugging Face: liuhaotian/llava-v1.5-7b | `weights/base/llava-v1.5-7b` | `X2DFD_BASE_MODEL` | annotation, training, evaluation |
 | CLIP ViT-L/14-336 (vision tower) | Hugging Face: openai/clip-vit-large-patch14-336 | `weights/base/clip-vit-large-patch14-336` | `VISION_TOWER` (training) or config | training |
-| X2‑DFD LoRA (Blending‑only) | To be released (adapter dir) | `weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-blending` | runner: `--model-path` / config `model.adapter` | inference, training |
-| X2‑DFD LoRA (Blending+Diffusion) | To be released (adapter dir) | `weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-diffusion` | runner: `--model-path` / config `model.adapter` | inference, training |
-| Blending detector (SwinV2-B, 256) | To be released (e.g., `best_gf.pth`) | `weights/blending_models/best_gf.pth` | config `weak_supplies[].weights_path` | weak-signal scores (optional) |
-| Diffusion/aligner detector (ours-sync) | To be released (folder with config/ckpt) | `weights/ours-sync/` | config `weak_supplies[].weights_dir` + `model` | weak-signal scores (optional) |
+| X2‑DFD LoRA (Blending+Diffusion, recommended) | Baidu Netdisk (see below) | `weights/checkpoints/ckpt/llava-v1.5-7b-lora-[ble-diff]` | runner: `--model-path` / config `model.adapter` | inference, training |
+| Blending detector (SwinV2-B, 256) | Baidu Netdisk (see below) | `weights/blending_models/best_gf.pth` | config `weak_supplies[].weights_path` | weak-signal scores |
+| Diffusion detector (ours-sync) | Baidu Netdisk (see below) | `weights/ours-sync/` | config `weak_supplies[].weights_dir` + `model` | weak-signal scores |
+
+### 📥 Baidu Netdisk Links
+Download and place files to the paths above.
+- X2‑DFD LoRA (ble+diff): 链接：`https://pan.baidu.com/s/1jeBFWS_pAK2vfoI2Z69CTg?pwd=x39g`  提取码：`x39g`
+- Blending detector weights (`best_gf.pth`): 链接：`https://pan.baidu.com/s/1jeBFWS_pAK2vfoI2Z69CTg?pwd=x39g`  提取码：`x39g`
+- Diffusion detector weights (`weights/ours-sync/`): 链接：`https://pan.baidu.com/s/1jeBFWS_pAK2vfoI2Z69CTg?pwd=x39g`  提取码：`x39g`
 
 - Preprocessing: follow [DeepfakeBench](https://github.com/SCLBD/DeepfakeBench).
 
 ## ⚡ Quick Inference
 
-Two quick runs with different adapters and Specific Feature Detectors (SFDs):
+Recommended quick run (two experts + ble+diff LoRA):
 
 ```bash
-# (A) Blending SFD + blending-tuned adapter
 python -m eval.infer.runner \
   --config eval/configs/infer_config.yaml \
-  --model-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-blending \
-  --experts blending
-
-# (B) Diffusion SFD + diffusion-tuned adapter
-python -m eval.infer.runner \
-  --config eval/configs/infer_config.yaml \
-  --model-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-diffusion \
-  --experts diffusion_detector
+  --model-path weights/checkpoints/ckpt/llava-v1.5-7b-lora-[ble-diff] \
+  --model-base weights/base/llava-v1.5-7b \
+  --experts blending,diffusion_detector
 ```
 
-Tip: you can also run both SFDs simultaneously via `--experts blending,diffusion_detector`.
+Tip:
+- Use `--experts blending` for blending only; `--experts diffusion_detector` for diffusion only.
+- Use `--experts none` to disable expert scores in the prompt.
 
 <a id="demo"></a>
 
@@ -126,7 +127,7 @@ Tip: you can also run both SFDs simultaneously via `--experts blending,diffusion
 ```bash
 python demo.py --image /abs/img.png \
   --model-base weights/base/llava-v1.5-7b \
-  --adapter-path weights/checkpoints/ckpt/FR/llava-v1.5-7b-lora-[small]
+  --adapter-path weights/checkpoints/ckpt/llava-v1.5-7b-lora-[ble-diff]
 ```
 
 <a id="quick-infer"></a>
@@ -136,12 +137,12 @@ python demo.py --image /abs/img.png \
 ### 🔀 Optional Expert Variants
 
 - Blending only (light)
-  - Weights: `weights/blending_models/best_gf.pth` (TBR)
+  - Weights: `weights/blending_models/best_gf.pth`
   - Eval: `python -m eval.infer.runner --config eval/configs/infer_config.yaml --experts blending`
   - Train: `python -m train.pipeline --config train/configs/config.yaml --experts blending --run-train`
 
 - Blending + Diffusion (strong)
-  - Weights: blending → `weights/blending_models/best_gf.pth`; diffusion/aligner → `weights/ours-sync/` (both TBR)
+  - Weights: blending → `weights/blending_models/best_gf.pth`; diffusion → `weights/ours-sync/`
   - Use default configs (both experts enabled), or pass `--experts blending,diffusion_detector`
 
 ## 🚀 Usage
@@ -171,6 +172,18 @@ Stages mirror our methodology:
 ./test.sh
 ```
 - Output: `eval/outputs/infer/latest_run.json`. Ensure `eval/configs/infer_config.yaml -> model.adapter` points to your LoRA.
+
+#### How Others Can Test (minimal reproduction)
+1) Install: `bash install.sh && conda activate X2DFD`
+2) Download weights (Baidu links above) and place them to:
+   - LoRA: `weights/checkpoints/ckpt/llava-v1.5-7b-lora-[ble-diff]`
+   - Blending: `weights/blending_models/best_gf.pth`
+   - Diffusion: `weights/ours-sync/`
+   - Base: `weights/base/llava-v1.5-7b`
+3) Run the tiny eval set: `./test.sh`
+4) Check:
+   - Run metadata: `eval/outputs/infer/latest_run.json`
+   - Results JSON(s): listed in `latest_run.json -> outputs` (each item includes the full answer plus `real score`/`fake score` turns)
 
 #### Config to Start
 ```bash
@@ -225,7 +238,7 @@ Main datasets used in our experiments:
 
 ## 🧠 Model
 - **Base:** LLaVA-1.5-7B (`weights/base/llava-v1.5-7b`).
-- **Checkpoints:** **LoRA** adapters will be released soon. Paths default to `weights/checkpoints/ckpt/...`.
+- **Checkpoints:** **LoRA** adapters live under `weights/checkpoints/ckpt/...` (see Baidu Netdisk links above).
 - You can point to your own adapters via CLI override or config:
   - demo: `--adapter-path`
   - runner: `--model-path` or config `model.adapter`.

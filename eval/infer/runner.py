@@ -430,7 +430,24 @@ def main() -> None:
         pass
     model_base = args.model_base or (cfg.get("model", {}).get("base") if isinstance(cfg, dict) else None) or DEFAULT_BASE
     model_path = args.model_path or (cfg.get("model", {}).get("adapter") if isinstance(cfg, dict) else None) or DEFAULT_ADAPTER
-    # Strict LoRA requirement: if adapter/base is missing, exit with a clear message
+
+    def _is_lora_adapter_dir(p: str | None) -> bool:
+        if not p:
+            return False
+        try:
+            if not os.path.isdir(p):
+                return False
+            return os.path.exists(os.path.join(p, "adapter_config.json")) or os.path.exists(os.path.join(p, "adapter_model.safetensors")) or os.path.exists(os.path.join(p, "adapter_model.bin"))
+        except Exception:
+            return False
+
+    # If user points to a merged checkpoint directory, do NOT require model_base.
+    # (LLaVA's builder merges LoRA in load_pretrained_model only when model name contains 'lora'.)
+    using_lora = _is_lora_adapter_dir(model_path) or ("lora" in os.path.basename(str(model_path)).lower())
+    if not using_lora:
+        model_base = None
+
+    # Strict existence checks, but only require base when using LoRA.
     def _looks_remote(p: str | None) -> bool:
         try:
             if not p:
@@ -443,11 +460,11 @@ def main() -> None:
     missing_msgs: list[str] = []
     try:
         if isinstance(model_path, str) and not _looks_remote(model_path) and not os.path.exists(model_path):
-            missing_msgs.append(f"LoRA adapter not found: {model_path}")
+            missing_msgs.append(f"Model not found: {model_path}")
     except Exception:
         pass
     try:
-        if isinstance(model_base, str) and not _looks_remote(model_base) and not os.path.exists(model_base):
+        if using_lora and isinstance(model_base, str) and not _looks_remote(model_base) and not os.path.exists(model_base):
             missing_msgs.append(f"Base model not found: {model_base}")
     except Exception:
         pass
@@ -459,7 +476,9 @@ def main() -> None:
             "How to fix:",
             "- Download the missing files and place them at the paths above, or:",
             "- Edit eval/configs/infer_config.yaml -> model.adapter / model.base, or:",
-            "- Override via CLI: --model-path <adapter_dir> --model-base <base_model_dir>",
+            "- Override via CLI:",
+            "  - LoRA:   --model-path <adapter_dir> --model-base <base_model_dir>",
+            "  - Merged: --model-path <merged_model_dir>   (no --model-base needed)",
         ]
         print("\n".join(tip_lines))
         raise SystemExit(2)

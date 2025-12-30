@@ -1,11 +1,9 @@
-"""
-Sane default eval config for public release.
-
-This version uses only the tiny JSONs inside the repo (datasets/raw/data/test/Tiny_Test)
-so `./test.sh` runs quickly. For a larger evaluation, copy this file to
-`infer_config.example.yaml` and replace `infer.inputs` with your dataset JSONs
-or use environment variables like ${X2DFD_DATASETS} (runner will expand env vars).
-"""
+# Sane default eval config for public release.
+#
+# This version uses only the tiny JSONs inside the repo (datasets/raw/data/test/Tiny_Test)
+# so `./test.sh` runs quickly. For a larger evaluation, copy this file to
+# `infer_config.example.yaml` and replace `infer.inputs` with your dataset JSONs
+# or use environment variables like ${X2DFD_DATASETS} (runner will expand env vars).
 
 paths:
   results_dir: "eval/outputs"
@@ -35,7 +33,7 @@ weak_supplies:
 
 model:
   base: "weights/base/llava-v1.5-7b"
-  adapter: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[x2dfdfinal]"
+  adapter: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[ble-diff]"
 
 infer:
   inputs:
@@ -44,7 +42,7 @@ infer:
     - "datasets/raw/data/test/Tiny_Test/DFDC_real.json"
     - "datasets/raw/data/test/Tiny_Test/DFDC_fake.json"
   question_template: "<image>\nIs this image real or fake? And the {alias} score is {score}."
-  temperature: 0.2
+  temperature: 0.0
   top_p: 1.0
   num_beams: 1
   max_new_tokens: 4
