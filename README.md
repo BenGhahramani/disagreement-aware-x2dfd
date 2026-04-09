@@ -103,6 +103,10 @@ Download and place files to the paths above.
 - Blending detector weights (`best_gf.pth`): [Baidu Disk](https://pan.baidu.com/s/1V5u2xDULlFBOOB_PJxWBfA?pwd=9pbq).
 - Diffusion detector weights (`weights/ours-sync/`): [Baidu Disk](https://pan.baidu.com/s/1V5u2xDULlFBOOB_PJxWBfA?pwd=9pbq).
 
+### 📥 Google Drive Link
+You can also download the packaged weights from Google Drive:
+- All weights package: [Google Drive](https://drive.google.com/file/d/1RkzA3ZIxxrO2YmUtW5mvVoQNPI47y-O1/view?usp=sharing).
+
 - Preprocessing: follow [DeepfakeBench](https://github.com/SCLBD/DeepfakeBench).
 
 ## ⚡ Quick Inference
