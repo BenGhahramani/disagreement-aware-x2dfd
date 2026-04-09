@@ -99,9 +99,9 @@ Before You Run: Prepare Weights
 
 ### 📥 Baidu Netdisk Links
 Download and place files to the paths above.
-- X2‑DFD LoRA (ble+diff): [Baidu Disk](https://pan.baidu.com/s/1jeBFWS_pAK2vfoI2Z69CTg?pwd=x39g).
-- Blending detector weights (`best_gf.pth`): [Baidu Disk](https://pan.baidu.com/s/1jeBFWS_pAK2vfoI2Z69CTg?pwd=x39g).
-- Diffusion detector weights (`weights/ours-sync/`): [Baidu Disk](https://pan.baidu.com/s/1jeBFWS_pAK2vfoI2Z69CTg?pwd=x39g).
+- X2‑DFD LoRA (ble+diff): [Baidu Disk](https://pan.baidu.com/s/1V5u2xDULlFBOOB_PJxWBfA?pwd=9pbq).
+- Blending detector weights (`best_gf.pth`): [Baidu Disk](https://pan.baidu.com/s/1V5u2xDULlFBOOB_PJxWBfA?pwd=9pbq).
+- Diffusion detector weights (`weights/ours-sync/`): [Baidu Disk](https://pan.baidu.com/s/1V5u2xDULlFBOOB_PJxWBfA?pwd=9pbq).
 
 - Preprocessing: follow [DeepfakeBench](https://github.com/SCLBD/DeepfakeBench).
 
