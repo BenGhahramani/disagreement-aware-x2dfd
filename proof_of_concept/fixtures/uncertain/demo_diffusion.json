@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_uncertain.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake? And the diffusion score is 0.488."},
+      {"from": "gpt", "value": "fake. Diffusion expert is near its decision threshold."},
+      {"from": "real score", "value": "0.4800"},
+      {"from": "fake score", "value": "0.5200"}
+    ]
+  }
+]

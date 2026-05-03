@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_stable.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake? And the blending score is 0.847, and the diffusion score is 0.792."},
+      {"from": "gpt", "value": "fake. Both experts agree: blending seam plus residual diffusion trace point to manipulation."},
+      {"from": "real score", "value": "0.0800"},
+      {"from": "fake score", "value": "0.9200"}
+    ]
+  }
+]

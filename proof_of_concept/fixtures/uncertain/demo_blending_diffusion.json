@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_uncertain.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake? And the blending score is 0.518, and the diffusion score is 0.488."},
+      {"from": "gpt", "value": "fake. Both experts hover near their thresholds; treat the verdict as low confidence."},
+      {"from": "real score", "value": "0.4600"},
+      {"from": "fake score", "value": "0.5400"}
+    ]
+  }
+]

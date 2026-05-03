@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_contested.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake?"},
+      {"from": "gpt", "value": "real. The face appears natural with consistent skin texture and no obvious seams."},
+      {"from": "real score", "value": "0.7800"},
+      {"from": "fake score", "value": "0.2200"}
+    ]
+  }
+]

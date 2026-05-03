@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_failed.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake?"},
+      {"from": "gpt", "value": "fake. Asymmetric facial features suggest manipulation."},
+      {"from": "real score", "value": "0.2000"},
+      {"from": "fake score", "value": "0.8000"}
+    ]
+  }
+]

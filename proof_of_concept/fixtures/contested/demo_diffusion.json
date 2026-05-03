@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_contested.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake? And the diffusion score is 0.811."},
+      {"from": "gpt", "value": "fake. High diffusion score indicates synthetic generation despite the face looking visually plausible."},
+      {"from": "real score", "value": "0.3200"},
+      {"from": "fake score", "value": "0.6800"}
+    ]
+  }
+]

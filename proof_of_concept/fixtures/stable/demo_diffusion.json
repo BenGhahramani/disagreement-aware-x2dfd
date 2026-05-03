@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_stable.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake? And the diffusion score is 0.792."},
+      {"from": "gpt", "value": "fake. The diffusion-trace expert reports strong synthetic signal in mid-frequency residuals."},
+      {"from": "real score", "value": "0.1300"},
+      {"from": "fake score", "value": "0.8700"}
+    ]
+  }
+]

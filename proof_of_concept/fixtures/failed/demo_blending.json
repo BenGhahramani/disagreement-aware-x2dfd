@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_failed.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake? And the blending score is 0.736."},
+      {"from": "gpt", "value": "fake. Blending detector flags high seam likelihood."},
+      {"from": "real score", "value": "0.1800"},
+      {"from": "fake score", "value": "0.8200"}
+    ]
+  }
+]

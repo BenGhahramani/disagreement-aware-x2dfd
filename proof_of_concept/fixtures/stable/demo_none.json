@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_stable.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake?"},
+      {"from": "gpt", "value": "fake. The face shows visible blending artefacts along the jawline and inconsistent lighting across the forehead."},
+      {"from": "real score", "value": "0.1100"},
+      {"from": "fake score", "value": "0.8900"}
+    ]
+  }
+]

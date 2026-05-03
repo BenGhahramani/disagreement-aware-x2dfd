@@ -1,0 +1,12 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_contested.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake? And the blending score is 0.214."},
+      {"from": "gpt", "value": "real. Low blending score and natural skin tone support a real verdict."},
+      {"from": "real score", "value": "0.6200"},
+      {"from": "fake score", "value": "0.3800"}
+    ]
+  }
+]

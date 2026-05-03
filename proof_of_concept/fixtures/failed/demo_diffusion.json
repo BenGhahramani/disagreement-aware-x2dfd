@@ -1,0 +1,10 @@
+[
+  {
+    "id": "1",
+    "image": "/data/poc/demo_failed.png",
+    "conversations": [
+      {"from": "human", "value": "<image>\nIs this image real or fake? And the diffusion score is N/A."},
+      {"from": "gpt", "value": "Inference error: RuntimeError: CUDA out of memory while loading diffusion expert"}
+    ]
+  }
+]
