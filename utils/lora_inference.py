@@ -52,8 +52,8 @@ import types
 
 IMAGE_PLACEHOLDER = "<image>"
 
-# Cache model by (model_path, model_base)
-_MODEL_CACHE: dict[tuple[str, Optional[str]], tuple[Any, ...]] = {}
+# Cache model by (model_path, model_base, load_8bit, load_4bit)
+_MODEL_CACHE: dict[tuple[str, Optional[str], bool, bool], tuple[Any, ...]] = {}
 
 # Reuse helpers for conversation turn handling
 try:
@@ -220,13 +220,73 @@ def _patch_forward_cache_position(model: Any) -> None:
         return
 
 
+def _env_flag(name: str) -> bool:
+    return os.environ.get(name, "0").strip().lower() in {"1", "true", "yes"}
+
+
+def quantisation_from_env() -> Tuple[bool, bool]:
+    """Return ``(load_8bit, load_4bit)`` for LLaVA's own quantised load path.
+
+    Both default to False, so behaviour is unchanged unless a caller opts in.
+    4-bit exists because LLaVA-1.5-7B in fp16 needs ~14 GiB and does not fit a
+    10 GiB card.
+    """
+    load_8bit = _env_flag("X2DFD_LOAD_8BIT")
+    load_4bit = _env_flag("X2DFD_LOAD_4BIT")
+    if load_8bit and load_4bit:
+        raise ValueError("X2DFD_LOAD_8BIT and X2DFD_LOAD_4BIT are mutually exclusive")
+    return load_8bit, load_4bit
+
+
+def quantisation_kwargs(load_8bit: bool, load_4bit: bool) -> Dict[str, Any]:
+    """Build the `from_pretrained` kwargs that implement the requested quantisation.
+
+    LLaVA's own ``load_4bit`` flag is deliberately not used. It quantises every
+    Linear layer including ``mm_projector``, and the builder then loads the fp16
+    projector out of ``non_lora_trainables.bin`` into what has become a packed
+    uint8 parameter::
+
+        size mismatch for model.mm_projector.0.weight: copying a param with
+        shape torch.Size([4096, 1024]) from checkpoint, the shape in current
+        model is torch.Size([2097152, 1])
+
+    Passing our own BitsAndBytesConfig through the loader's kwargs keeps the
+    projector and lm_head in fp16 while everything else is quantised, which both
+    avoids that mismatch and keeps the whole model on the GPU. Staying off CPU
+    offload matters independently: peft 0.10 re-dispatches an offloaded model
+    through ``accelerate.get_balanced_memory``, which divides by the number of
+    GPUs with free memory and raises ZeroDivisionError once the card is full.
+    """
+    if not (load_4bit or load_8bit):
+        return {}
+
+    from transformers import BitsAndBytesConfig
+
+    keep_in_fp16 = ["mm_projector", "lm_head"]
+    if load_8bit:
+        config = BitsAndBytesConfig(load_in_8bit=True, llm_int8_skip_modules=keep_in_fp16)
+    else:
+        config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_quant_type="nf4",
+            llm_int8_skip_modules=keep_in_fp16,
+        )
+    return {"quantization_config": config}
+
+
 def _get_or_load_model(model_path: str, model_base: Optional[str] = None):
-    key = (model_path, model_base)
+    load_8bit, load_4bit = quantisation_from_env()
+    key = (model_path, model_base, load_8bit, load_4bit)
     if key not in _MODEL_CACHE:
         disable_torch_init()
         model_name = get_model_name_from_path(model_path)
+        # load_8bit/load_4bit stay False: quantisation is supplied as a
+        # quantization_config kwarg instead (see quantisation_kwargs).
         tokenizer, model, image_processor, context_len = load_pretrained_model(
-            model_path, model_base, model_name, False
+            model_path, model_base, model_name, False, False,
+            **quantisation_kwargs(load_8bit, load_4bit),
         )
         _patch_forward_cache_position(model)
         model.eval()

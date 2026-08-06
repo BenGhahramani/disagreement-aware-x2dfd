@@ -30,11 +30,20 @@ Markers:
 python -m pytest -m unit
 ```
 
-Current unit coverage:
+Current unit coverage (109 tests):
 
 - `tests/test_check_environment.py` — 34 tests for the Stage 1 environment
   checker (mocked imports, fake torch module, tmp-path weights/datasets,
   exit-code mapping).
+- `tests/test_make_peft_compatible_config.py` — 35 tests for the adapter-config
+  down-converter (field classification, refusal on meaningful values, exact
+  preservation of supported fields, backup and in-place behaviour). The accepted
+  field set is injected, so these run without PEFT or any adapter on disk.
+- `tests/test_smoke_test_helpers.py` — 40 tests for the Stage 2 smoke-test
+  wrapper (manifest validation, command construction, subprocess failure,
+  timeout, CUDA OOM detection, missing/malformed output, missing prediction or
+  scores, valid output) plus the quantisation switch. The inference subprocess
+  is always mocked.
 
 ## Integration tests
 
@@ -72,15 +81,33 @@ python -m tools.check_environment --skip-weights --skip-datasets   # software la
 Exit `0` means the machine can attempt real inference. Exit `1` lists the
 blocking items. See `docs/RUNTIME_SETUP.md` for the current machine status.
 
-As of 2026-08-06 the software layer passes (exit `0` with the skip flags) and
-the full check fails only on missing weights and missing dataset images.
+As of 2026-08-06 all weights are installed and
+`python -m tools.check_environment --skip-datasets` exits `0`; the full check
+fails only on the dataset images named in `eval/configs/infer_config.yaml`.
+
+## Adapter-config compatibility
+
+```bash
+python -m tools.make_peft_compatible_config <adapter_dir>              # writes adapter_config.compatible.json
+python -m tools.make_peft_compatible_config <adapter_dir> --in-place   # rewrites after backing up
+python -m tools.make_peft_compatible_config <adapter_dir> --json
+```
+
+Exit `0` converted or already compatible, `1` blocked because an unsupported
+field held a meaningful value, `2` usage error. Background in
+`docs/WEIGHTS_SETUP.md`.
 
 ## Real smoke test (Stage 2)
 
-Not implemented yet — blocked because no weights are installed
-(`docs/WEIGHTS_SETUP.md`) and no dataset image resolves locally. The planned
-entry point is `tools/run_smoke_test.py` with unit tests in
-`tests/test_smoke_test_helpers.py`.
+```bash
+python -m tools.run_smoke_test --manifest datasets/raw/data/poc/demo_one.json --experts none --load-4bit
+```
+
+Requires the weights and a GPU. `--load-4bit` is effectively mandatory on a
+10 GiB card: the fp16 path needs CPU offload, which the pinned PEFT/accelerate
+pair cannot combine with a LoRA adapter. Exit `0` means the run produced a
+prediction with both scores; a passing run is recorded in
+`docs/SMOKE_TEST_RESULTS.md` and `eval/outputs/smoke_test_summary.json`.
 
 ## Expert matrix (Stage 3)
 

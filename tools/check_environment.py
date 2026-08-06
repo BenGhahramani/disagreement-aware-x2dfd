@@ -121,6 +121,9 @@ CORE_IMPORTS: Tuple[ImportSpec, ...] = (
     ImportSpec("einops", "tensor reshaping in LLaVA"),
     ImportSpec("sentencepiece", "LLaVA tokenizer"),
     ImportSpec("safetensors", "weight loading"),
+    # LlamaTokenizer(use_fast=False) converts the sentencepiece model through
+    # protobuf; without it the runner fails at tokenizer load, not at import.
+    ImportSpec("google.protobuf", "slow LlamaTokenizer conversion in LLaVA's builder"),
 )
 
 OPTIONAL_IMPORTS: Tuple[ImportSpec, ...] = (

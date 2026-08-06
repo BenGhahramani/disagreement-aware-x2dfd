@@ -108,6 +108,20 @@ def test_optional_import_missing_is_warn_only() -> None:
     assert results[0].required is False
 
 
+def test_protobuf_is_a_required_import() -> None:
+    """Regression: a missing protobuf only surfaced at tokenizer load time.
+
+    LlamaTokenizer(use_fast=False) raises ImportError deep inside the runner,
+    where lora_inference swallows it into the answer text, so the checker has to
+    catch it up front.
+    """
+    modules = {spec.module for spec in ce.CORE_IMPORTS}
+    assert "google.protobuf" in modules
+
+    results = ce.check_imports(list(ce.CORE_IMPORTS), finder=finder_for(set()))
+    assert status_of(results, "import.google.protobuf") is ce.Status.FAIL
+
+
 # --------------------------------------------------------------------------
 # torch / CUDA / VRAM
 # --------------------------------------------------------------------------
