@@ -30,20 +30,16 @@ Markers:
 python -m pytest -m unit
 ```
 
-Current unit coverage (109 tests):
+Current unit coverage (164 tests):
 
-- `tests/test_check_environment.py` — 34 tests for the Stage 1 environment
-  checker (mocked imports, fake torch module, tmp-path weights/datasets,
-  exit-code mapping).
-- `tests/test_make_peft_compatible_config.py` — 35 tests for the adapter-config
-  down-converter (field classification, refusal on meaningful values, exact
-  preservation of supported fields, backup and in-place behaviour). The accepted
-  field set is injected, so these run without PEFT or any adapter on disk.
-- `tests/test_smoke_test_helpers.py` — 40 tests for the Stage 2 smoke-test
-  wrapper (manifest validation, command construction, subprocess failure,
-  timeout, CUDA OOM detection, missing/malformed output, missing prediction or
-  scores, valid output) plus the quantisation switch. The inference subprocess
-  is always mocked.
+- `tests/test_check_environment.py` — environment checker (mocked imports, fake
+  torch, tmp-path weights/datasets, exit-code mapping, protobuf regression).
+- `tests/test_make_peft_compatible_config.py` — adapter-config down-converter.
+- `tests/test_smoke_test_helpers.py` — Stage 2 smoke-test wrapper (mocked
+  subprocess) plus the quantisation switch.
+- `tests/test_expert_matrix.py` — 44 tests for Stage 3 (config normalisation,
+  distinct POC-shaped outputs, valid/malformed/hidden-error cases, partial
+  failure, CUDA OOM, summary generation).
 
 ## Integration tests
 
@@ -111,7 +107,19 @@ prediction with both scores; a passing run is recorded in
 
 ## Expert matrix (Stage 3)
 
-Not implemented yet. Planned entry point: `tools/run_expert_matrix.py`.
+```bash
+python -m tools.run_expert_matrix --manifest datasets/raw/data/poc/demo_one_crop.json --config eval/configs/infer_config.windows.yaml --load-4bit
+```
+
+Requires weights and a GPU. Runs `none`, `blending`, `diffusion`, and
+`blending,diffusion` in separate subprocesses. Results:
+`eval/outputs/expert_matrix_summary.json` and `docs/EXPERT_MATRIX_RESULTS.md`.
+
+Feed the matrix directory into the existing proof of concept:
+
+```bash
+python -m proof_of_concept.run_demo --scenario-dir eval/outputs/expert_matrix/demo_one_crop --output proof_of_concept/outputs/real_example_report.md
+```
 
 ## Small evaluation batch (Stage 5)
 

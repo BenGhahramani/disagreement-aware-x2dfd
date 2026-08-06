@@ -1,0 +1,59 @@
+# Windows-compatible copy of infer_config.yaml.
+#
+# Identical to that file except that both experts use `num_workers: 0`.
+#
+# Why: the detectors define their Dataset class *inside* the infer method
+# (`src/blending/detector.py::BlendingDetector.infer.<locals>._ImageDataset`,
+# and the same pattern in `src/diffusion/detector.py`). On Linux, DataLoader
+# workers are forked and inherit the class object, so this is invisible. On
+# Windows the default start method is `spawn`, which pickles the dataset to
+# send it to each worker, and a class defined in a function body cannot be
+# pickled:
+#
+#   AttributeError: Can't pickle local object
+#   'BlendingDetector.infer.<locals>._ImageDataset'
+#
+# `num_workers: 0` loads batches in the calling process, so nothing is pickled.
+# For the single-image and small-batch work this repo currently does, worker
+# processes cost more than they save anyway. The upstream config is left alone
+# so Linux behaviour is unchanged; pass this file with `--config` on Windows.
+
+paths:
+  results_dir: "eval/outputs"
+
+weak_supplies:
+  - provider: blending
+    alias: Blending
+    model_name: swinv2_base_window16_256
+    weights_path: weights/blending_models/best_gf.pth
+    img_size: 256
+    num_class: 2
+    batch_size: 128
+    num_workers: 0
+    pin_memory: true
+    thresholds: { lo: 0.30, hi: 0.70 }
+
+  - provider: diffusion_detector
+    alias: Diffusion
+    weights_dir: weights/
+    model: ours-sync
+    batch_size: 32
+    num_workers: 0
+    pin_memory: true
+    thresholds: { lo: 0.30, hi: 0.70 }
+
+model:
+  base: "weights/base/llava-v1.5-7b"
+  adapter: "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[ble-diff]"
+
+infer:
+  inputs:
+    - "datasets/raw/data/test/Tiny_Test/DFDCP_real.json"
+    - "datasets/raw/data/test/Tiny_Test/DFDCP_fake.json"
+    - "datasets/raw/data/test/Tiny_Test/DFDC_real.json"
+    - "datasets/raw/data/test/Tiny_Test/DFDC_fake.json"
+  question_template: "<image>\nIs this image real or fake? And the {alias} score is {score}."
+  temperature: 0.0
+  top_p: 1.0
+  num_beams: 1
+  max_new_tokens: 4

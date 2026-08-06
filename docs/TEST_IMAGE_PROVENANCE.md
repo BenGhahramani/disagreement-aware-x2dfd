@@ -26,7 +26,7 @@ Suitability against the stated requirements: identifiable human face, clear and
 front-facing, unobstructed, high resolution, JPEG, public domain, an official
 published portrait rather than a private or sensitive photograph.
 
-### Caveat for Stage 2
+### Caveat for Stage 2 (addressed in Stage 3)
 
 This is a full upper-body studio portrait: the face occupies only a modest
 fraction of the frame. The upstream X2DFD evaluation data is built from
@@ -36,9 +36,72 @@ JSONs point at per-frame crops such as
 `Tiny_Test/DFDCP/real/1152039_A_001/000.png`.
 
 A full portrait is therefore out of distribution relative to what the LoRA was
-trained on. It is adequate for a first mechanical smoke test — does the model
-load, run, and emit a parsable verdict — but a face-cropped variant should be
-added before any result is treated as evidence about detector behaviour.
+trained on. It was adequate for the Stage 2 mechanical smoke test — does the
+model load, run, and emit a parsable verdict — but the expert matrix runs on the
+face crop below instead.
+
+## `datasets/raw/images/poc/real_face_01_crop.jpg`
+
+A face crop derived from the portrait above. The original is untouched
+(2,927,608 bytes, unchanged).
+
+| Field | Value |
+| --- | --- |
+| Derived from | `real_face_01.jpg` (5202 × 6502) |
+| Method | OpenCV Haar frontal-face cascade, largest detection, squared and margined |
+| Detection box (source px) | x=2343, y=1054, w=946, h=946 |
+| Crop box (source px) | x=2201, y=912, w=1230, h=1230 |
+| Output | JPEG, 256 × 256, RGB, quality 95, 24,630 bytes |
+| SHA-256 | `e8bd4ea46bd95e8cf7ac82eaabf0a8ab4adb55506d7ea8b7ca9420cc75142fd8` |
+| Created | 2026-08-06 |
+
+Produced with `tools/make_face_crop.py`:
+
+```bash
+.venv\Scripts\python.exe -m tools.make_face_crop \
+  --image  datasets/raw/images/poc/real_face_01.jpg \
+  --output datasets/raw/images/poc/real_face_01_crop.jpg
+```
+
+The recipe, at its default parameters:
+
+1. Downscale a copy to 1024 px on the long side (`INTER_AREA`) for detection
+   only, so detection cost does not scale with source resolution.
+2. Greyscale, `cv2.equalizeHist`, then
+   `haarcascade_frontalface_default.xml` with `scaleFactor=1.1`,
+   `minNeighbors=5`, `minSize=(48, 48)`.
+3. Take the largest detection and map it back to full-resolution coordinates
+   (here the detection ran at ratio 1024/6502 ≈ 0.1575).
+4. Expand to a square of `1.3 ×` the longer detection side, centred on the
+   detection and clamped to the image bounds.
+5. Resize to 256 × 256 with `INTER_AREA` and write JPEG at quality 95.
+
+**Determinism:** Haar cascades involve no randomness, and every parameter above
+is fixed, so re-running reproduces the file byte-for-byte. Verified by running
+the tool a second time to a temporary path and comparing SHA-256 — identical.
+
+**Why 256 × 256:** it matches both detectors without further distortion.
+`src/blending/detector.py` resizes its input to `(img_size, img_size)` with
+`img_size: 256` from `eval/configs/infer_config.yaml`, and the diffusion expert
+applies `CenterCrop(224)` with no resize, which keeps the central 224 px of the
+face rather than an arbitrary 224 px patch of a large image.
+
+**Still a caveat:** this approximates DeepfakeBench's preprocessing but is not
+identical to it. DeepfakeBench uses a landmark-based aligner (dlib/RetinaFace)
+with its own margin convention, so the framing here will differ somewhat from
+the crops the LoRA was actually trained on.
+
+### Manifest for the crop
+
+`datasets/raw/data/poc/demo_one_crop.json`, same absolute-`Description`
+convention as below:
+
+```json
+{
+  "Description": "C:/Users/Ben/Desktop/UNI/REIT/root/disagreement-aware-x2dfd/datasets/raw/images/poc",
+  "images": [{ "image_path": "real_face_01_crop.jpg", "label": "real" }]
+}
+```
 
 ## Manifest
 

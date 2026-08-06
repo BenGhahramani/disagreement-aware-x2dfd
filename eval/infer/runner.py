@@ -67,6 +67,22 @@ DEFAULT_TEMPLATE = (
 )
 
 
+def _int_or_default(value: Any, default: int) -> int:
+    """Coerce a config value to int, treating only ``None`` as "unset".
+
+    ``int(value or default)`` cannot express a configured zero, which matters
+    for ``num_workers``: on Windows the DataLoader's spawn start method cannot
+    pickle the detectors' locally-defined Dataset classes, so ``num_workers: 0``
+    is the only way those experts run at all.
+    """
+    if value is None:
+        return int(default)
+    try:
+        return int(value)
+    except (TypeError, ValueError):
+        return int(default)
+
+
 def _load_yaml(path: str) -> Dict[str, Any]:
     if not yaml:
         return {}
@@ -225,7 +241,7 @@ def _build_conversations_multi(
                 "model": e.get("model") or "",
                 "device": None,
                 "batch_size": int(e.get("batch_size") or 256),
-                "num_workers": int(e.get("num_workers") or 4),
+                "num_workers": _int_or_default(e.get("num_workers"), 4),
                 "pin_memory": bool(e.get("pin_memory") if e.get("pin_memory") is not None else True),
             }
         elif prov == "blending":
@@ -236,7 +252,7 @@ def _build_conversations_multi(
                 "num_class": int(e.get("num_class") or 2),
                 "device": None,
                 "batch_size": int(e.get("batch_size") or 64),
-                "num_workers": int(e.get("num_workers") or 4),
+                "num_workers": _int_or_default(e.get("num_workers"), 4),
                 "pin_memory": bool(e.get("pin_memory") if e.get("pin_memory") is not None else True),
             }
         else:
