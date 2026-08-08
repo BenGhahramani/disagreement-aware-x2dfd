@@ -121,6 +121,24 @@ Feed the matrix directory into the existing proof of concept:
 python -m proof_of_concept.run_demo --scenario-dir eval/outputs/expert_matrix/demo_one_crop --output proof_of_concept/outputs/real_example_report.md
 ```
 
+## Supervisor dashboard (saved outputs only)
+
+Preferred Thursday launch (checks venv + saved Stage 3 files, then opens the browser):
+
+```powershell
+.\run_demo.ps1
+```
+
+Equivalent manual command:
+
+```powershell
+.venv\Scripts\python.exe -m streamlit run dashboard/app.py
+```
+
+Loads `eval/outputs/expert_matrix/demo_one_crop/` and
+`eval/outputs/expert_matrix_summary.json`. No upload or live inference.
+View-model unit tests: `tests/test_dashboard_view_model.py`.
+
 ## Small evaluation batch (Stage 5)
 
 Not implemented yet. Planned entry point: `tools/run_small_evaluation.py`.
