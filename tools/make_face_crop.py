@@ -54,6 +54,14 @@ EXIT_USAGE = 2
 Box = Tuple[int, int, int, int]  # x, y, w, h
 
 
+class FaceCropError(Exception):
+    """The crop could not be produced (missing file, decode failure, I/O)."""
+
+
+class NoFaceFoundError(FaceCropError):
+    """Haar cascade found no face in the source image."""
+
+
 @dataclass(frozen=True)
 class CropPlan:
     """The square region chosen for cropping, in source-image pixels."""
@@ -198,51 +206,87 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
     return args
 
 
-def main(argv: Optional[Sequence[str]] = None) -> int:
-    args = parse_args(argv)
+def write_face_crop(
+    image_path: Path,
+    output_path: Path,
+    *,
+    size: int = DEFAULT_SIZE,
+    margin: float = DEFAULT_MARGIN,
+    detect_width: int = DEFAULT_DETECT_WIDTH,
+    scale_factor: float = DEFAULT_SCALE_FACTOR,
+    min_neighbours: int = DEFAULT_MIN_NEIGHBOURS,
+    quality: int = DEFAULT_QUALITY,
+    overwrite: bool = False,
+) -> CropPlan:
+    """Write the Stage 3 deterministic 256×256 JPEG face crop.
+
+    Raises:
+        NoFaceFoundError: Haar found no face.
+        FaceCropError: missing file, undecodable image, or write failure.
+    """
 
     import cv2
 
-    if not args.image.is_file():
-        LOGGER.error("image not found: %s", args.image)
-        return EXIT_USAGE
-    if args.output.exists() and not args.overwrite:
-        LOGGER.error("output already exists (pass --overwrite): %s", args.output)
-        return EXIT_USAGE
+    image_path = Path(image_path)
+    output_path = Path(output_path)
+    if not image_path.is_file():
+        raise FaceCropError(f"image not found: {image_path}")
+    if output_path.exists() and not overwrite:
+        raise FaceCropError(f"output already exists (pass overwrite=True): {output_path}")
 
-    image = cv2.imread(str(args.image), cv2.IMREAD_COLOR)
+    image = cv2.imread(str(image_path), cv2.IMREAD_COLOR)
     if image is None:
-        LOGGER.error("cannot decode image: %s", args.image)
-        return EXIT_USAGE
+        raise FaceCropError(f"cannot decode image: {image_path}")
     height, width = image.shape[:2]
     LOGGER.info("source: %dx%d px", width, height)
 
     try:
         plan = plan_crop(
             image,
-            detect_width=args.detect_width,
-            scale_factor=args.scale_factor,
-            min_neighbours=args.min_neighbours,
-            margin=args.margin,
+            detect_width=detect_width,
+            scale_factor=scale_factor,
+            min_neighbours=min_neighbours,
+            margin=margin,
         )
     except RuntimeError as exc:
-        LOGGER.error("%s", exc)
-        return EXIT_USAGE
+        raise FaceCropError(str(exc)) from exc
 
     if plan is None:
-        LOGGER.error("no face detected in %s", args.image)
-        return EXIT_FAIL
+        raise NoFaceFoundError(f"no face detected in {image_path}")
 
     x, y, side, _ = plan.square
     cropped = image[y : y + side, x : x + side]
-    resized = cv2.resize(cropped, (args.size, args.size), interpolation=cv2.INTER_AREA)
+    resized = cv2.resize(cropped, (size, size), interpolation=cv2.INTER_AREA)
 
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    if not cv2.imwrite(str(args.output), resized, [int(cv2.IMWRITE_JPEG_QUALITY), args.quality]):
-        LOGGER.error("failed to write %s", args.output)
+    output_path.parent.mkdir(parents=True, exist_ok=True)
+    if not cv2.imwrite(str(output_path), resized, [int(cv2.IMWRITE_JPEG_QUALITY), quality]):
+        raise FaceCropError(f"failed to write {output_path}")
+    return plan
+
+
+def main(argv: Optional[Sequence[str]] = None) -> int:
+    args = parse_args(argv)
+
+    try:
+        plan = write_face_crop(
+            args.image,
+            args.output,
+            size=args.size,
+            margin=args.margin,
+            detect_width=args.detect_width,
+            scale_factor=args.scale_factor,
+            min_neighbours=args.min_neighbours,
+            quality=args.quality,
+            overwrite=args.overwrite,
+        )
+    except NoFaceFoundError as exc:
+        LOGGER.error("%s", exc)
+        return EXIT_FAIL
+    except FaceCropError as exc:
+        LOGGER.error("%s", exc)
         return EXIT_USAGE
 
-    print(f"source        : {args.image} ({width}x{height})")
+    print(f"source        : {args.image}")
     print(f"detection xywh: {plan.detection}")
     print(f"crop xywh     : {plan.square}")
     print(f"output        : {args.output} ({args.size}x{args.size}, JPEG q{args.quality})")

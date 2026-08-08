@@ -121,7 +121,7 @@ Feed the matrix directory into the existing proof of concept:
 python -m proof_of_concept.run_demo --scenario-dir eval/outputs/expert_matrix/demo_one_crop --output proof_of_concept/outputs/real_example_report.md
 ```
 
-## Supervisor dashboard (saved outputs only)
+## Supervisor dashboard
 
 Preferred Thursday launch (checks venv + saved Stage 3 files, then opens the browser):
 
@@ -135,9 +135,12 @@ Equivalent manual command:
 .venv\Scripts\python.exe -m streamlit run dashboard/app.py
 ```
 
-Loads `eval/outputs/expert_matrix/demo_one_crop/` and
-`eval/outputs/expert_matrix_summary.json`. No upload or live inference.
-View-model unit tests: `tests/test_dashboard_view_model.py`.
+Default tab **Saved example** loads `eval/outputs/expert_matrix/demo_one_crop/`
+and `eval/outputs/expert_matrix_summary.json` only. The **Analyse new image**
+tab can upload a JPEG/PNG and call `dashboard.live_analysis.analyse_image`
+(4-bit Windows config); it does not start until **Analyse image** is clicked.
+View-model / live-controller unit tests:
+`tests/test_dashboard_view_model.py`, `tests/test_live_controller.py`.
 
 ## Small evaluation batch (Stage 5)
 

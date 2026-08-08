@@ -1,13 +1,13 @@
-"""Minimal Streamlit dashboard over saved Stage 3 expert-matrix outputs.
+"""Streamlit dashboard: saved Stage 3 demo (default) plus optional live analysis.
 
-Decision-support view only — no upload, no live inference. Launch from the
-repository root::
+Launch from the repository root::
 
     .venv\\Scripts\\python.exe -m streamlit run dashboard/app.py
 """
 from __future__ import annotations
 
 import sys
+from decimal import ROUND_HALF_UP, Decimal
 from pathlib import Path
 from typing import Optional
 
@@ -17,6 +17,15 @@ if str(_REPO_ROOT) not in sys.path:
 
 import streamlit as st
 
+from dashboard.live_analysis import LiveAnalysisResult
+from dashboard.live_controller import (
+    persist_upload,
+    progress_fraction,
+    progress_label,
+    run_live_analysis,
+    structured_error_messages,
+    unexpected_error_message,
+)
 from dashboard.view_model import (
     DEFAULT_MATRIX_DIR,
     DEFAULT_SUMMARY,
@@ -88,7 +97,9 @@ _PAGE_CSS = """
 def _fmt(value: Optional[float], *, digits: int = 3) -> str:
     if value is None:
         return "—"
-    return f"{value:.{digits}f}"
+    quant = Decimal("1").scaleb(-digits)
+    rounded = Decimal(str(value)).quantize(quant, rounding=ROUND_HALF_UP)
+    return f"{rounded:.{digits}f}"
 
 
 def _score_bar(label: str, value: Optional[float], *, help_text: Optional[str] = None) -> None:
@@ -139,7 +150,7 @@ def _render_conflicts(view: DashboardView) -> None:
     st.subheader("Evidence conflict")
     if not view.evidence_conflicts:
         st.info(
-            "No specialist-versus-language-model conflict noted for this saved run. "
+            "No specialist-versus-language-model conflict noted for this run. "
             "Official status above is unchanged."
         )
         return
@@ -180,23 +191,8 @@ def _render_technical(view: DashboardView) -> None:
             st.markdown(f"**Summary JSON:** `{view.summary_path}`")
 
 
-def main() -> None:
-    st.set_page_config(
-        page_title="X2DFD disagreement dashboard",
-        page_icon="◈",
-        layout="wide",
-        initial_sidebar_state="collapsed",
-    )
-    st.markdown(_PAGE_CSS, unsafe_allow_html=True)
-
-    st.title("Disagreement-aware X2DFD")
-    st.caption("Supervisor demo · saved Stage 3 expert-matrix outputs only")
-
-    try:
-        view = build_dashboard_view(DEFAULT_MATRIX_DIR, summary_path=DEFAULT_SUMMARY)
-    except Exception as exc:
-        st.error(f"Could not build the dashboard view: {type(exc).__name__}: {exc}")
-        st.stop()
+def render_dashboard_view(view: DashboardView) -> None:
+    """Shared result UI for the saved Stage 3 example and a live run."""
 
     st.markdown(f'<div class="disclaimer">{view.disclaimer}</div>', unsafe_allow_html=True)
 
@@ -206,7 +202,7 @@ def main() -> None:
         st.warning(message)
 
     if view.errors and not view.cards:
-        st.stop()
+        return
 
     left, right = st.columns([0.92, 2.08], gap="large")
     with left:
@@ -229,6 +225,104 @@ def main() -> None:
                     _render_card(card)
 
     _render_technical(view)
+
+
+def _render_saved_example() -> None:
+    try:
+        view = build_dashboard_view(DEFAULT_MATRIX_DIR, summary_path=DEFAULT_SUMMARY)
+    except Exception as exc:
+        st.error(unexpected_error_message(exc))
+        return
+    render_dashboard_view(view)
+
+
+def _render_live_errors(result: LiveAnalysisResult) -> None:
+    for message in structured_error_messages(result):
+        st.error(message)
+
+
+def _render_live_tab() -> None:
+    st.info(
+        "A complete live analysis runs the real 4-bit X2DFD pipeline on the GPU "
+        "(four sequential expert configurations) and typically takes **1–2 minutes**. "
+        "Nothing starts until you click **Analyse image**."
+    )
+
+    uploaded = st.file_uploader(
+        "Upload a JPEG or PNG face photograph",
+        type=["jpg", "jpeg", "png"],
+        accept_multiple_files=False,
+    )
+    if uploaded is None:
+        result = st.session_state.get("live_result")
+        if isinstance(result, LiveAnalysisResult):
+            _render_live_errors(result)
+            if result.view is not None:
+                render_dashboard_view(result.view)
+            if result.work_dir is not None:
+                st.caption(f"Results preserved at `{result.work_dir}`")
+        return
+
+    file_id = f"{uploaded.name}:{uploaded.size}"
+    if st.session_state.get("live_file_id") != file_id:
+        st.session_state.live_file_id = file_id
+        st.session_state.pop("live_result", None)
+
+    data = uploaded.getvalue()
+    st.subheader("Upload preview")
+    st.image(data, width=300)
+    st.caption(uploaded.name)
+
+    analyse = st.button("Analyse image", type="primary")
+    if analyse:
+        st.session_state.pop("live_result", None)
+        progress_bar = st.progress(0.0, text="Starting…")
+        status = st.empty()
+
+        def on_progress(event) -> None:
+            progress_bar.progress(progress_fraction(event), text=progress_label(event))
+            status.caption(event.detail or event.message)
+
+        try:
+            saved_path = persist_upload(data, uploaded.name)
+            result = run_live_analysis(saved_path, progress_callback=on_progress)
+        except Exception as exc:
+            st.session_state.live_result = None
+            st.error(unexpected_error_message(exc))
+            return
+        st.session_state.live_result = result
+
+    result = st.session_state.get("live_result")
+    if not isinstance(result, LiveAnalysisResult):
+        return
+
+    _render_live_errors(result)
+    if result.view is not None:
+        render_dashboard_view(result.view)
+    if result.work_dir is not None:
+        st.caption(f"Results preserved at `{result.work_dir}`")
+
+
+def main() -> None:
+    st.set_page_config(
+        page_title="X2DFD disagreement dashboard",
+        page_icon="◈",
+        layout="wide",
+        initial_sidebar_state="collapsed",
+    )
+    st.markdown(_PAGE_CSS, unsafe_allow_html=True)
+
+    st.title("Disagreement-aware X2DFD")
+    st.caption(
+        "Default view is the saved Stage 3 supervisor demo. "
+        "Live analysis is optional and does not replace those outputs."
+    )
+
+    saved_tab, live_tab = st.tabs(["Saved example", "Analyse new image"])
+    with saved_tab:
+        _render_saved_example()
+    with live_tab:
+        _render_live_tab()
 
 
 if __name__ == "__main__":
