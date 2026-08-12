@@ -26,12 +26,15 @@ from dashboard.live_controller import (
     structured_error_messages,
     unexpected_error_message,
 )
+from dashboard.saved_examples import (
+    SAVED_EXAMPLES,
+    default_saved_example_id,
+    load_saved_example,
+    resolve_saved_example,
+)
 from dashboard.view_model import (
-    DEFAULT_MATRIX_DIR,
-    DEFAULT_SUMMARY,
     DashboardView,
     bar_fraction,
-    build_dashboard_view,
 )
 from proof_of_concept.schema import Status
 
@@ -44,15 +47,17 @@ _STATUS_STYLE = {
 
 _PAGE_CSS = """
 <style>
+    /* Streamlit's fixed header (~3.75rem) sits over the main block; offset
+       content without hiding the header. rem tracks user font scaling. */
     [data-testid="stMainBlockContainer"],
     .block-container {
         max-width: 100% !important;
-        padding-top: 1.05rem;
+        padding-top: calc(1.05rem + 2.75rem) !important;
         padding-bottom: 1.4rem;
         padding-left: 1.6rem !important;
         padding-right: 1.6rem !important;
     }
-    h1 { font-size: 1.85rem !important; padding-top: 0.1rem !important; }
+    h1 { font-size: 1.85rem !important; margin-top: 0 !important; }
     .status-banner {
         border-left: 6px solid var(--accent);
         background: var(--bg);
@@ -228,8 +233,27 @@ def render_dashboard_view(view: DashboardView) -> None:
 
 
 def _render_saved_example() -> None:
+    labels = [spec.selector_label for spec in SAVED_EXAMPLES]
+    ids = [spec.example_id for spec in SAVED_EXAMPLES]
+    default_index = ids.index(default_saved_example_id()) if default_saved_example_id() in ids else 0
+    choice = st.radio(
+        "Saved demonstration",
+        labels,
+        index=default_index,
+        horizontal=True,
+        help="Pre-computed expert-matrix outputs. Switching examples does not run GPU inference.",
+    )
+    spec = resolve_saved_example(ids[labels.index(choice)])
+    st.markdown(
+        f"""
+        <div class="disclaimer" style="margin-top:0.35rem">
+          <strong>{spec.ground_truth_label}.</strong> {spec.provenance_summary}
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
     try:
-        view = build_dashboard_view(DEFAULT_MATRIX_DIR, summary_path=DEFAULT_SUMMARY)
+        view = load_saved_example(spec.example_id)
     except Exception as exc:
         st.error(unexpected_error_message(exc))
         return
@@ -314,7 +338,7 @@ def main() -> None:
 
     st.title("Disagreement-aware X2DFD")
     st.caption(
-        "Default view is the saved Stage 3 supervisor demo. "
+        "Default view is the saved supervisor demo (two labelled examples). "
         "Live analysis is optional and does not replace those outputs."
     )
 
