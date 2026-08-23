@@ -58,7 +58,7 @@ window, so use `qos=gpu` for install sessions:
 
 ```bash
 salloc --account=AccountString \
-  --partition=gpu_cuda --qos=gpu --gres=gpu:l40:1 \
+  --partition=gpu_cuda --qos=gpu --gres=gpu:l40s:1 \
   --cpus-per-task=4 --mem=32G --time=02:00:00
 ```
 
@@ -120,7 +120,7 @@ UQ Bunya’s **debug** QoS for a short first validation run:
 | --- | --- | --- |
 | `--partition` | `gpu_cuda` | NVIDIA GPUs for PyTorch/CUDA stack |
 | `--qos` | `debug` | Short initial smoke test only (30 min limit) |
-| `--gres` | `gpu:l40:1` | One L40 GPU for single-image LLaVA-7B + experts |
+| `--gres` | `gpu:l40s:1` | One L40S GPU for single-image LLaVA-7B + experts |
 | `--cpus-per-task` | `4` | DataLoader + preprocessing headroom |
 | `--mem` | `32G` | Host RAM for model load and experts |
 | `--time` | `00:30:00` | Sufficient for one-image smoke test on debug QoS |
@@ -131,10 +131,10 @@ UQ Bunya’s **debug** QoS for a short first validation run:
   production evaluation batches.
 - **Production evaluation jobs** should use `--qos=gpu` with a longer `--time`
   (for example `02:00:00` or more for multi-image labelled runs).
-- **GPU type** may later be changed to `l40s`, `a100`, or `h100` (for example
-  `--gres=gpu:l40s:1`, `--gres=gpu:a100:1`, `--gres=gpu:h100:1`) depending on
-  memory requirements and experiment needs. The smoke script pins `l40` as a
-  sensible default for the first CUDA validation.
+- **GPU type** may later be changed to `a100` or `h100` (for example
+  `--gres=gpu:a100:1`, `--gres=gpu:h100:1`) depending on memory requirements
+  and experiment needs. The smoke script pins `l40s` as the default for the
+  first CUDA validation on current Bunya capacity.
 
 The local pilot used **4-bit loading** on a 10 GiB RTX 3080. Bunya nodes may have
 more VRAM; the first smoke test still uses `--load-4bit` to match the verified local

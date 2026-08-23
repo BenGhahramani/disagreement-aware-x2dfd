@@ -3,7 +3,7 @@
 #SBATCH --account=AccountString
 #SBATCH --partition=gpu_cuda
 #SBATCH --qos=debug
-#SBATCH --gres=gpu:l40:1
+#SBATCH --gres=gpu:l40s:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 #SBATCH --time=00:30:00
@@ -12,9 +12,9 @@
 #
 # Minimal one-image X2DFD smoke test for UQ Bunya.
 #
-# Resource profile: short initial smoke test only (--qos=debug, 30 min, L40).
+# Resource profile: short initial smoke test only (--qos=debug, 30 min, L40S).
 # Production evaluation jobs should use --qos=gpu and a longer --time; GPU type
-# may be changed to l40s, a100, or h100 depending on memory and experiment needs.
+# may be changed to a100 or h100 depending on memory and experiment needs.
 # See docs/BUNYA_SETUP.md.
 #
 # BEFORE SUBMITTING:
