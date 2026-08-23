@@ -16,9 +16,12 @@ from dashboard.view_model import (
     DEFAULT_SUMMARY,
     DISCLAIMER,
     ConfigCard,
+    EvidenceAgreement,
     bar_fraction,
     build_config_card,
     build_dashboard_view,
+    build_model_assessment,
+    derive_evidence_agreement,
     describe_evidence_conflicts,
     expert_scores_from_run_file,
     extract_expert_scores,
@@ -196,10 +199,10 @@ def test_describe_conflict_uses_actual_saved_values() -> None:
     )
     notes = describe_evidence_conflicts([card])
     assert len(notes) == 1
-    assert "very low fake likelihood" in notes[0]
+    assert "very low detector scores" in notes[0]
     assert "blending 0.009" in notes[0]
     assert "diffusion 0.048" in notes[0]
-    assert "language-model verdict is fake" in notes[0]
+    assert "X2-DFD / LLaVA verdict is fake" in notes[0]
     assert "Both specialist detectors" in notes[0]
 
 
@@ -219,8 +222,8 @@ def test_describe_conflict_high_experts_vs_real_label() -> None:
     )
     notes = describe_evidence_conflicts([card])
     assert len(notes) == 1
-    assert "high fake likelihood" in notes[0]
-    assert "language-model verdict is real" in notes[0]
+    assert "high detector scores" in notes[0]
+    assert "X2-DFD / LLaVA verdict is real" in notes[0]
 
 
 def test_describe_conflict_empty_when_aligned() -> None:
@@ -393,6 +396,184 @@ def test_real_stage3_matrix_renders_uncertain_with_conflict() -> None:
     assert combined.expert_scores.get("diffusion") == pytest.approx(0.048)
     assert view.evidence_conflicts
     assert "Both specialist detectors" in view.evidence_conflicts[0]
-    assert "very low fake likelihood" in view.evidence_conflicts[0]
+    assert "very low detector scores" in view.evidence_conflicts[0]
+    assert view.evidence_agreement is EvidenceAgreement.CONFLICT
+    assert view.model_assessment_label == "fake"
+    assert "model score" in view.model_assessment_text.lower()
     assert view.quantisation == "4-bit"
     assert view.ok is True
+
+
+def _card(
+    *,
+    run_name: str = "blending_diffusion",
+    label: str = "fake",
+    real: float = 0.31,
+    fake: float = 0.69,
+    experts: Optional[Dict[str, Optional[float]]] = None,
+) -> ConfigCard:
+    return ConfigCard(
+        run_name=run_name,
+        title=run_name,
+        label=label,
+        real_score=real,
+        fake_score=fake,
+        expert_scores=experts or {},
+        explanation="",
+        runtime_s=1.0,
+        peak_vram_mib=None,
+        output_path=None,
+        error=None,
+    )
+
+
+def test_evidence_agreement_strong_conflict() -> None:
+    cards = [
+        _card(experts={"blending": 0.009, "diffusion": 0.048}),
+    ]
+    conflicts = describe_evidence_conflicts(cards)
+    assert conflicts
+    assert derive_evidence_agreement(cards, conflicts=conflicts) is EvidenceAgreement.CONFLICT
+    label, score, text = build_model_assessment(cards)
+    assert label == "fake"
+    assert score == pytest.approx(0.69)
+    assert text == "Fake — model score 0.690"
+
+
+def test_evidence_agreement_strong_agreement() -> None:
+    cards = [
+        _card(real=0.05, fake=0.95, experts={"blending": 0.99, "diffusion": 0.97}),
+    ]
+    assert describe_evidence_conflicts(cards) == []
+    assert derive_evidence_agreement(cards) is EvidenceAgreement.AGREEMENT
+
+
+def test_evidence_agreement_middling_is_insufficient() -> None:
+    cards = [
+        _card(experts={"blending": 0.45, "diffusion": 0.55}),
+    ]
+    assert describe_evidence_conflicts(cards) == []
+    assert derive_evidence_agreement(cards) is EvidenceAgreement.INSUFFICIENT
+
+
+def test_evidence_agreement_mixed_support_and_inconclusive_is_insufficient() -> None:
+    # Fake label: blending > 0.70 supports; diffusion in [0.30, 0.70] inconclusive.
+    cards = [
+        _card(experts={"blending": 0.85, "diffusion": 0.50}),
+    ]
+    assert describe_evidence_conflicts(cards) == []
+    assert derive_evidence_agreement(cards) is EvidenceAgreement.INSUFFICIENT
+
+
+def test_evidence_agreement_insufficient_without_specialists() -> None:
+    cards = [_card(run_name="none", experts={})]
+    assert describe_evidence_conflicts(cards) == []
+    assert derive_evidence_agreement(cards) is EvidenceAgreement.INSUFFICIENT
+
+
+def test_evidence_agreement_does_not_change_evaluator_status(tmp_path: Path) -> None:
+    directory = _write_matrix(
+        tmp_path,
+        scores={
+            "none": ("0.24", "0.76"),
+            "blending": ("0.36", "0.64"),
+            "diffusion": ("0.29", "0.71"),
+            "blending_diffusion": ("0.31", "0.69"),
+        },
+    )
+    view = build_dashboard_view(directory, summary_path=None)
+    assert view.status is Status.UNCERTAIN
+    assert view.evidence_agreement is EvidenceAgreement.CONFLICT
+    assert view.model_assessment_label == "fake"
+    assert "model score" in view.model_assessment_text.lower()
+    assert "0.30 / 0.70" in view.evidence_band_note
+
+
+def test_evidence_agreement_preserves_stable_and_contested(tmp_path: Path) -> None:
+    stable_root = tmp_path / "stable"
+    stable_root.mkdir()
+    stable_dir = _write_matrix(
+        stable_root,
+        scores={
+            "none": ("0.02", "0.98"),
+            "blending": ("0.03", "0.97"),
+            "diffusion": ("0.01", "0.99"),
+            "blending_diffusion": ("0.01", "0.99"),
+        },
+        prompts={
+            "none": "",
+            "blending": " And the blending score is 0.95.",
+            "diffusion": " And the diffusion score is 0.94.",
+            "blending_diffusion": (
+                " And the blending score is 0.95, and the diffusion score is 0.94."
+            ),
+        },
+    )
+    stable = build_dashboard_view(stable_dir, summary_path=None)
+    assert stable.status is Status.STABLE
+    assert stable.evidence_agreement is EvidenceAgreement.AGREEMENT
+
+    contested_root = tmp_path / "contested"
+    contested_root.mkdir()
+    contested_dir = _write_matrix(
+        contested_root,
+        answers={
+            "none": "This image is real",
+            "blending": "This image is fake",
+            "diffusion": "This image is fake",
+            "blending_diffusion": "This image is fake",
+        },
+        scores={
+            "none": ("0.80", "0.20"),
+            "blending": ("0.10", "0.90"),
+            "diffusion": ("0.15", "0.85"),
+            "blending_diffusion": ("0.12", "0.88"),
+        },
+        prompts={
+            "none": "",
+            "blending": " And the blending score is 0.92.",
+            "diffusion": " And the diffusion score is 0.91.",
+            "blending_diffusion": (
+                " And the blending score is 0.92, and the diffusion score is 0.91."
+            ),
+        },
+    )
+    contested = build_dashboard_view(contested_dir, summary_path=None)
+    assert contested.status is Status.CONTESTED
+    # Agreement axis is independent; Contested must not be rewritten.
+    assert contested.evidence_agreement in {
+        EvidenceAgreement.AGREEMENT,
+        EvidenceAgreement.CONFLICT,
+        EvidenceAgreement.INSUFFICIENT,
+    }
+
+
+@pytest.mark.skipif(
+    not DEFAULT_MATRIX_DIR.is_dir(),
+    reason="Stage 3 matrix outputs not present on this machine",
+)
+def test_nasa_saved_example_yields_conflict() -> None:
+    from dashboard.saved_examples import load_saved_example
+
+    view = load_saved_example("nasa")
+    assert view.status is Status.UNCERTAIN
+    assert view.evidence_agreement is EvidenceAgreement.CONFLICT
+    assert view.model_assessment_label == "fake"
+    assert view.model_assessment_score is not None
+    assert "Fake — model score" in view.model_assessment_text
+
+
+@pytest.mark.skipif(
+    not (
+        Path("eval/outputs/live_analysis/20260808T085812Z_ffpp_ex_deepfakes") / "matrix"
+    ).is_dir(),
+    reason="FF++ live-analysis outputs not present on this machine",
+)
+def test_ffpp_saved_example_yields_agreement() -> None:
+    from dashboard.saved_examples import load_saved_example
+
+    view = load_saved_example("ffpp_deepfakes")
+    assert view.status is Status.STABLE
+    assert view.evidence_agreement is EvidenceAgreement.AGREEMENT
+    assert view.model_assessment_label == "fake"
+    assert view.evidence_conflicts == []

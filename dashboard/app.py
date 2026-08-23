@@ -33,8 +33,15 @@ from dashboard.saved_examples import (
     resolve_saved_example,
 )
 from dashboard.view_model import (
+    CALIBRATION_NOTE,
+    EVIDENCE_BAND_NOTE,
+    EVIDENCE_PROVENANCE,
+    LABEL_MODEL_FAKE,
+    LABEL_MODEL_REAL,
+    THRESHOLD_NOTE,
     DashboardView,
     bar_fraction,
+    detector_score_label,
 )
 from proof_of_concept.schema import Status
 
@@ -71,6 +78,27 @@ _PAGE_CSS = """
         color: var(--accent);
     }
     .status-banner p { margin: 0; color: #222; line-height: 1.42; font-size: 0.98rem; }
+    .assessment-panel {
+        background: #f7f8f6;
+        border: 1px solid #d9ddd4;
+        border-radius: 8px;
+        padding: 0.7rem 0.9rem;
+        margin: 0.25rem 0 0.55rem 0;
+    }
+    .assessment-panel h4 {
+        margin: 0 0 0.25rem 0;
+        font-size: 0.92rem;
+        color: #555;
+        font-weight: 600;
+        text-transform: none;
+    }
+    .assessment-panel .value {
+        margin: 0 0 0.65rem 0;
+        font-size: 1.05rem;
+        color: #1a1a1a;
+        line-height: 1.35;
+    }
+    .assessment-panel .value:last-child { margin-bottom: 0; }
     .disclaimer {
         background: #f4f4f2;
         border: 1px solid #d8d8d2;
@@ -120,15 +148,29 @@ def _score_bar(label: str, value: Optional[float], *, help_text: Optional[str] =
 
 def _render_status(view: DashboardView) -> None:
     accent, background = _STATUS_STYLE.get(view.status, ("#333", "#eee"))
+    agreement = view.evidence_agreement
+    agreement_label = (
+        agreement.display_label if hasattr(agreement, "display_label") else str(agreement)
+    )
     st.markdown(
         f"""
+        <div class="assessment-panel">
+          <h4>Model assessment</h4>
+          <p class="value">{view.model_assessment_text}</p>
+          <h4>Evidence agreement</h4>
+          <p class="value">{agreement_label}</p>
+          <h4>Prototype evidence status</h4>
+          <p class="value">{view.status.value}</p>
+        </div>
         <div class="status-banner" style="--accent:{accent};--bg:{background}">
-          <h2>Evidence status: {view.status.value}</h2>
+          <h2>Prototype evidence status: {view.status.value}</h2>
           <p>{view.rationale}</p>
         </div>
         """,
         unsafe_allow_html=True,
     )
+    st.caption(view.threshold_note or THRESHOLD_NOTE)
+    st.caption(view.evidence_band_note or EVIDENCE_BAND_NOTE)
 
 
 def _render_card(card) -> None:
@@ -138,13 +180,14 @@ def _render_card(card) -> None:
         return
     verdict = (card.label or "—").upper()
     st.markdown(f"**Final verdict:** `{verdict}`")
-    _score_bar("LM real probability", card.real_score)
-    _score_bar("LM fake probability", card.fake_score)
+    st.caption("Source: X2-DFD / LLaVA")
+    _score_bar(LABEL_MODEL_REAL, card.real_score)
+    _score_bar(LABEL_MODEL_FAKE, card.fake_score)
     if card.expert_scores:
         st.markdown("**Specialist detector score(s)**")
-        st.caption("Detector fake-likelihood, not an LM token probability.")
+        st.caption("Detector scores (not model token scores).")
         for name, score in card.expert_scores.items():
-            _score_bar(name.title(), score)
+            _score_bar(detector_score_label(name), score)
     else:
         st.caption("No specialist detector score for this configuration.")
     if card.explanation:
@@ -152,23 +195,39 @@ def _render_card(card) -> None:
 
 
 def _render_conflicts(view: DashboardView) -> None:
-    st.subheader("Evidence conflict")
+    st.subheader("Evidence conflict detail")
     if not view.evidence_conflicts:
         st.info(
-            "No specialist-versus-language-model conflict noted for this run. "
-            "Official status above is unchanged."
+            "No specialist-versus-model conflict detail for this run. "
+            "See Evidence agreement above; official prototype status is unchanged."
         )
         return
     body = "".join(f"<p>{note}</p>" for note in view.evidence_conflicts)
     st.markdown(
         f"""
         <div class="conflict-box">
-          <h4>Observed specialist / language-model tension</h4>
+          <h4>Observed specialist / model tension</h4>
           {body}
           <p style="margin:0.5rem 0 0 0;font-size:0.9rem;color:#555">
-            This note is descriptive only. The official evidence status remains
-            <strong>{view.status.value}</strong> as returned by the existing evaluator.
+            This note is descriptive only. Evidence agreement is a separate axis from
+            the prototype evidence status
+            (<strong>{view.status.value}</strong>) returned by the existing evaluator.
           </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
+def _render_provenance(view: DashboardView) -> None:
+    items = view.evidence_provenance or list(EVIDENCE_PROVENANCE)
+    lines = "".join(f"<li>{item}</li>" for item in items)
+    st.markdown(
+        f"""
+        <div class="disclaimer">
+          <strong>Evidence provenance</strong>
+          <ul style="margin:0.35rem 0 0.35rem 1.1rem;padding:0">{lines}</ul>
+          <p style="margin:0;font-size:0.92rem;color:#444">{view.calibration_note or CALIBRATION_NOTE}</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -179,6 +238,7 @@ def _render_technical(view: DashboardView) -> None:
     with st.expander("Technical details", expanded=False):
         st.markdown(f"**Quantisation:** {view.quantisation}")
         st.caption(view.nf4_note)
+        st.caption(view.threshold_note or THRESHOLD_NOTE)
         rows = []
         for card in view.cards:
             rows.append(
@@ -200,6 +260,7 @@ def render_dashboard_view(view: DashboardView) -> None:
     """Shared result UI for the saved Stage 3 example and a live run."""
 
     st.markdown(f'<div class="disclaimer">{view.disclaimer}</div>', unsafe_allow_html=True)
+    _render_provenance(view)
 
     for message in view.errors:
         st.error(message)

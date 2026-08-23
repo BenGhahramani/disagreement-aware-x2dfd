@@ -3,15 +3,18 @@
 Loads saved expert-matrix outputs only. Official status always comes from
 ``proof_of_concept.evaluator.evaluate`` — this module never invents a new
 classification. Evidence-conflict notes are factual observations about
-specialist detector scores versus the language-model label.
+specialist detector scores versus the X2-DFD / LLaVA label.
+
+User-facing score labels use score wording (not calibrated probability).
 """
 from __future__ import annotations
 
 import json
 import sys
 from dataclasses import dataclass, field
+from enum import Enum
 from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 # Allow ``streamlit run dashboard/app.py`` (script dir on sys.path) to import
 # the repository packages when launched from the repo root.
@@ -37,8 +40,9 @@ RUN_TITLES: Dict[str, str] = {
     "blending_diffusion": "Blending + Diffusion",
 }
 
-# Same lo/hi band as infer_config.yaml. Used only to phrase "low" / "high"
-# specialist scores — never to change official Status.
+# Same lo/hi band as infer_config.yaml. Prototype evidence-interpretation
+# thresholds for specialist-versus-model support / conflict / inconclusive —
+# never used to change official Stable / Uncertain / Contested Status.
 EXPERT_LO: float = 0.30
 EXPERT_HI: float = 0.70
 
@@ -47,12 +51,86 @@ DISCLAIMER = (
     "is authentic or manipulated."
 )
 
+CALIBRATION_NOTE = (
+    "Scores are model outputs and are not currently calibrated probabilities."
+)
+
+THRESHOLD_NOTE = (
+    "The 0.70 Stable / Uncertain cutoff is a prototype threshold used by this "
+    "dashboard, not a scientifically established confidence boundary."
+)
+
+EVIDENCE_BAND_NOTE = (
+    "The 0.30 / 0.70 specialist-score bands used for evidence agreement are "
+    "prototype evidence-interpretation thresholds, not scientifically "
+    "validated cut-offs."
+)
+
 NF4_NOTE = (
     "Inference used 4-bit NF4 quantisation so LLaVA-1.5-7B fits an RTX 3080 "
     "(10 GiB). Merging the LoRA adapter into 4-bit weights can introduce small "
-    "rounding differences versus a full-precision run. Language-model token "
-    "probabilities and specialist detector scores are not interchangeable."
+    "rounding differences versus a full-precision run. Model scores and "
+    "specialist detector scores are not interchangeable."
 )
+
+# User-facing score labels (presentation only — numeric values unchanged).
+LABEL_MODEL_REAL = "Model real score"
+LABEL_MODEL_FAKE = "Model fake score"
+LABEL_BLENDING_DETECTOR = "Blending detector score"
+LABEL_DIFFUSION_DETECTOR = "Diffusion detector score"
+
+DETECTOR_SCORE_LABELS: Dict[str, str] = {
+    "blending": LABEL_BLENDING_DETECTOR,
+    "diffusion": LABEL_DIFFUSION_DETECTOR,
+}
+
+PROVENANCE_MODEL = "X2-DFD / LLaVA (main model score)"
+PROVENANCE_BLENDING = "Blending specialist detector"
+PROVENANCE_DIFFUSION = "Diffusion specialist detector"
+
+EVIDENCE_PROVENANCE: tuple[str, ...] = (
+    PROVENANCE_MODEL,
+    PROVENANCE_BLENDING,
+    PROVENANCE_DIFFUSION,
+)
+
+
+def detector_score_label(name: str) -> str:
+    """User-facing label for a specialist detector score key."""
+
+    return DETECTOR_SCORE_LABELS.get(name, f"{name.replace('_', ' ').title()} detector score")
+
+
+def display_rationale(rationale: str) -> str:
+    """Rewrite evaluator rationale wording for the dashboard without changing rules.
+
+    Keeps numeric thresholds and status logic intact; only softens
+    'confidence' / 'probability' phrasing for presentation.
+    """
+
+    text = rationale or ""
+    text = text.replace("combined-experts confidence", "combined-experts model score")
+    text = text.replace("combined-experts probability", "combined-experts model score")
+    return text
+
+
+class EvidenceAgreement(str, Enum):
+    """Descriptive second axis — independent of Stable / Uncertain / Contested."""
+
+    AGREEMENT = "agreement"
+    CONFLICT = "conflict"
+    INSUFFICIENT = "insufficient evidence"
+
+    @property
+    def display_label(self) -> str:
+        return {
+            EvidenceAgreement.AGREEMENT: "Agreement",
+            EvidenceAgreement.CONFLICT: "Conflict",
+            EvidenceAgreement.INSUFFICIENT: "Insufficient evidence",
+        }[self]
+
+
+PRIMARY_ASSESSMENT_RUN = "blending_diffusion"
 
 
 @dataclass(frozen=True)
@@ -99,8 +177,16 @@ class DashboardView:
     quantisation: str
     matrix_dir: Path
     summary_path: Optional[Path]
+    model_assessment_label: Optional[str] = None
+    model_assessment_score: Optional[float] = None
+    model_assessment_text: str = "Model assessment unavailable"
+    evidence_agreement: EvidenceAgreement = EvidenceAgreement.INSUFFICIENT
     disclaimer: str = DISCLAIMER
     nf4_note: str = NF4_NOTE
+    calibration_note: str = CALIBRATION_NOTE
+    threshold_note: str = THRESHOLD_NOTE
+    evidence_band_note: str = EVIDENCE_BAND_NOTE
+    evidence_provenance: List[str] = field(default_factory=lambda: list(EVIDENCE_PROVENANCE))
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
 
@@ -118,8 +204,16 @@ class DashboardView:
             "quantisation": self.quantisation,
             "matrix_dir": str(self.matrix_dir),
             "summary_path": str(self.summary_path) if self.summary_path else None,
+            "model_assessment_label": self.model_assessment_label,
+            "model_assessment_score": self.model_assessment_score,
+            "model_assessment_text": self.model_assessment_text,
+            "evidence_agreement": self.evidence_agreement.value,
             "disclaimer": self.disclaimer,
             "nf4_note": self.nf4_note,
+            "calibration_note": self.calibration_note,
+            "threshold_note": self.threshold_note,
+            "evidence_band_note": self.evidence_band_note,
+            "evidence_provenance": list(self.evidence_provenance),
             "errors": list(self.errors),
             "warnings": list(self.warnings),
         }
@@ -222,13 +316,13 @@ def describe_evidence_conflicts(
     lo: float = EXPERT_LO,
     hi: float = EXPERT_HI,
 ) -> List[str]:
-    """Factual notes when specialist fake-likelihood conflicts with the LM label.
+    """Factual notes when specialist detector scores conflict with the model label.
 
     Does **not** change Status. Uses the pipeline's lo/hi bands only to phrase
     "low" / "high". If nothing conflicts, returns an empty list.
     """
 
-    preferred = next((c for c in cards if c.run_name == "blending_diffusion"), None)
+    preferred = next((c for c in cards if c.run_name == PRIMARY_ASSESSMENT_RUN), None)
     candidates = [preferred] if preferred is not None else []
     candidates.extend(c for c in cards if c is not preferred)
 
@@ -253,8 +347,8 @@ def describe_evidence_conflicts(
                 who = "Specialist detectors (" + ", ".join(low) + ")"
             verb = "assigns" if len(low) == 1 else "assign"
             notes = (
-                f"{who} {verb} very low fake likelihood ({detail}) "
-                f"while the language-model verdict is fake."
+                f"{who} {verb} very low detector scores ({detail}) "
+                f"while the X2-DFD / LLaVA verdict is fake."
             )
             return [notes]
         if card.label == "real" and high:
@@ -267,11 +361,133 @@ def describe_evidence_conflicts(
                 who = "Specialist detectors (" + ", ".join(high) + ")"
             verb = "assigns" if len(high) == 1 else "assign"
             notes = (
-                f"{who} {verb} high fake likelihood ({detail}) "
-                f"while the language-model verdict is real."
+                f"{who} {verb} high detector scores ({detail}) "
+                f"while the X2-DFD / LLaVA verdict is real."
             )
             return [notes]
     return []
+
+
+def primary_assessment_card(cards: Sequence[ConfigCard]) -> Optional[ConfigCard]:
+    """Prefer the combined-experts card; otherwise the first card with a label."""
+
+    preferred = next((c for c in cards if c.run_name == PRIMARY_ASSESSMENT_RUN), None)
+    if preferred is not None:
+        return preferred
+    return next((c for c in cards if c.label is not None), None)
+
+
+def _has_specialist_scores(card: Optional[ConfigCard]) -> bool:
+    if card is None or not card.expert_scores:
+        return False
+    return any(score is not None for score in card.expert_scores.values())
+
+
+def build_model_assessment(
+    cards: Sequence[ConfigCard],
+) -> tuple[Optional[str], Optional[float], str]:
+    """Return ``(label, score, display_text)`` from X2-DFD / LLaVA outputs only."""
+
+    card = primary_assessment_card(cards)
+    if card is None or card.label is None:
+        return None, None, "Model assessment unavailable"
+    label = card.label
+    if label == "fake":
+        score = card.fake_score
+    elif label == "real":
+        score = card.real_score
+    else:
+        score = None
+    title = label.capitalize()
+    if score is None:
+        return label, None, title
+    return label, score, f"{title} — model score {score:.3f}"
+
+
+def _specialist_relation(
+    label: str,
+    score: float,
+    *,
+    lo: float = EXPERT_LO,
+    hi: float = EXPERT_HI,
+) -> str:
+    """Map one specialist score to support / conflict / inconclusive vs model label.
+
+    Uses the existing prototype 0.30 / 0.70 bands only (no new cut-offs).
+    """
+
+    if label == "fake":
+        if score > hi:
+            return "support"
+        if score < lo:
+            return "conflict"
+        return "inconclusive"
+    if label == "real":
+        if score < lo:
+            return "support"
+        if score > hi:
+            return "conflict"
+        return "inconclusive"
+    return "inconclusive"
+
+
+def _usable_specialist_scores(
+    cards: Sequence[ConfigCard],
+) -> tuple[Optional[str], List[float]]:
+    """Return ``(model_label, specialist scores)`` for agreement classification."""
+
+    card = primary_assessment_card(cards)
+    if card is None or card.label is None:
+        return None, []
+
+    if _has_specialist_scores(card):
+        scores = [s for s in card.expert_scores.values() if s is not None]
+        return card.label, scores
+
+    for other in cards:
+        if other is card or not _has_specialist_scores(other):
+            continue
+        scores = [s for s in other.expert_scores.values() if s is not None]
+        if scores:
+            return card.label, scores
+    return card.label, []
+
+
+def derive_evidence_agreement(
+    cards: Sequence[ConfigCard],
+    *,
+    conflicts: Optional[List[str]] = None,
+) -> EvidenceAgreement:
+    """Classify specialist-versus-model agreement without changing evaluator Status.
+
+    Categories (prototype 0.30 / 0.70 bands; same constants as conflict phrasing):
+
+    - ``conflict`` — any usable specialist score conflicts with the model label
+    - ``agreement`` — every usable specialist score supports the model label
+    - ``insufficient evidence`` — no model label, no specialists, or any
+      middling/inconclusive specialist score (including mixed support + inconclusive)
+
+    ``conflicts`` is accepted for call-site compatibility; classification is always
+    derived from specialist scores. When conflict notes are supplied and non-empty,
+    the result is still ``conflict`` (aligned with :func:`describe_evidence_conflicts`).
+    """
+
+    label, scores = _usable_specialist_scores(cards)
+    if label is None:
+        return EvidenceAgreement.INSUFFICIENT
+    if not scores:
+        return EvidenceAgreement.INSUFFICIENT
+
+    # Prefer explicit conflict notes when the caller already computed them.
+    if conflicts:
+        return EvidenceAgreement.CONFLICT
+
+    relations = [_specialist_relation(label, score) for score in scores]
+    if any(rel == "conflict" for rel in relations):
+        return EvidenceAgreement.CONFLICT
+    if relations and all(rel == "support" for rel in relations):
+        return EvidenceAgreement.AGREEMENT
+    return EvidenceAgreement.INSUFFICIENT
 
 
 def build_config_card(
@@ -409,15 +625,23 @@ def build_dashboard_view(
     if summary and isinstance(summary.get("quantisation"), str):
         quantisation = summary["quantisation"]
 
+    conflicts = describe_evidence_conflicts(cards)
+    assessment_label, assessment_score, assessment_text = build_model_assessment(cards)
+    agreement = derive_evidence_agreement(cards, conflicts=conflicts)
+
     return DashboardView(
         image_path=image_path,
         status=status,
-        rationale=rationale,
+        rationale=display_rationale(rationale),
         cards=cards,
-        evidence_conflicts=describe_evidence_conflicts(cards),
+        evidence_conflicts=conflicts,
         quantisation=quantisation,
         matrix_dir=directory.resolve(),
         summary_path=resolved_summary,
+        model_assessment_label=assessment_label,
+        model_assessment_score=assessment_score,
+        model_assessment_text=assessment_text,
+        evidence_agreement=agreement,
         errors=errors,
         warnings=warnings,
     )
