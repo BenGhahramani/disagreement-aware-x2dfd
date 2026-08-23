@@ -25,20 +25,19 @@ if str(_REPO_ROOT) not in sys.path:
 from proof_of_concept.evaluator import evaluate
 from proof_of_concept.normaliser import _extract_experts_from_human, load_scenario, primary_image
 from proof_of_concept.schema import RunRecord, Status
+from eval.experiment_configs import (
+    PRIMARY_ASSESSMENT_RUN,
+    RUN_ORDER,
+    RUN_TITLES,
+)
 
 PROJECT_ROOT = _REPO_ROOT
 DEFAULT_MATRIX_DIR = PROJECT_ROOT / "eval" / "outputs" / "expert_matrix" / "demo_one_crop"
 DEFAULT_SUMMARY = PROJECT_ROOT / "eval" / "outputs" / "expert_matrix_summary.json"
 DEFAULT_IMAGE = PROJECT_ROOT / "datasets" / "raw" / "images" / "poc" / "real_face_01_crop.jpg"
 
-RUN_ORDER: tuple[str, ...] = ("none", "blending", "diffusion", "blending_diffusion")
-
-RUN_TITLES: Dict[str, str] = {
-    "none": "No expert",
-    "blending": "Blending",
-    "diffusion": "Diffusion",
-    "blending_diffusion": "Blending + Diffusion",
-}
+# Re-exported from eval.experiment_configs (canonical 2x2 design).
+# RUN_ORDER / RUN_TITLES / PRIMARY_ASSESSMENT_RUN — do not redefine here.
 
 # Same lo/hi band as infer_config.yaml. Prototype evidence-interpretation
 # thresholds for specialist-versus-model support / conflict / inconclusive —
@@ -128,9 +127,6 @@ class EvidenceAgreement(str, Enum):
             EvidenceAgreement.CONFLICT: "Conflict",
             EvidenceAgreement.INSUFFICIENT: "Insufficient evidence",
         }[self]
-
-
-PRIMARY_ASSESSMENT_RUN = "blending_diffusion"
 
 
 @dataclass(frozen=True)

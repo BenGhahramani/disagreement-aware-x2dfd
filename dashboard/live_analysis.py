@@ -28,6 +28,7 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 from dashboard.view_model import DashboardView, build_dashboard_view
+from eval.experiment_configs import DEFAULT_CONFIGS
 from tools.make_face_crop import (
     DEFAULT_DETECT_WIDTH,
     DEFAULT_MARGIN,
@@ -41,7 +42,6 @@ from tools.make_face_crop import (
     write_face_crop,
 )
 from tools.run_expert_matrix import (
-    DEFAULT_CONFIGS,
     DEFAULT_TIMEOUT_S,
     ExpertConfig,
     RunOutcome,

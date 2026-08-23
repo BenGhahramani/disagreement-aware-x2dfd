@@ -45,6 +45,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional, Sequence, Tuple
 
+from eval.experiment_configs import DEFAULT_CONFIGS
 from tools.run_smoke_test import (
     ManifestError,
     OutputError,
@@ -69,7 +70,7 @@ DEFAULT_CONFIG = Path("eval") / "configs" / "infer_config.yaml"
 DEFAULT_OUTPUT_DIR = Path("eval") / "outputs" / "expert_matrix"
 DEFAULT_SUMMARY = Path("eval") / "outputs" / "expert_matrix_summary.json"
 DEFAULT_TIMEOUT_S = 3600.0
-DEFAULT_CONFIGS: Tuple[str, ...] = ("none", "blending", "diffusion", "blending,diffusion")
+# DEFAULT_CONFIGS: canonical 2x2 experts_arg order from eval.experiment_configs.
 
 # Canonical expert names, in the order they appear in a run name. Values are the
 # token the runner matches (against a weak_supplies provider *or* alias, see
