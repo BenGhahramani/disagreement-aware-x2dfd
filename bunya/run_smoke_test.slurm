@@ -1,9 +1,9 @@
 #!/bin/bash
 #SBATCH --job-name=x2dfd-smoke
-#SBATCH --account=AccountString
+#SBATCH --account=a_css
 #SBATCH --partition=gpu_cuda
-#SBATCH --qos=debug
-#SBATCH --gres=gpu:l40s:1
+#SBATCH --qos=gpu
+#SBATCH --gres=gpu:nvidia_a100_80gb_pcie_3g.40gb:1
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=32G
 #SBATCH --time=00:30:00
@@ -30,6 +30,10 @@
 
 set -euo pipefail
 
+module use /sw/auto/rocky9a/epyc3_a100/modules/all
+module load python/3.10.4-gcccore-11.3.0-bare
+module load cuda/12.1.1
+
 echo "=== X2DFD Bunya smoke test ==="
 echo "host: $(hostname)"
 echo "date: $(date -Is)"
@@ -38,9 +42,9 @@ echo "slurm_job_id: ${SLURM_JOB_ID:-unset}"
 # ---------------------------------------------------------------------------
 # User-editable paths (keep active work on scratch)
 # ---------------------------------------------------------------------------
-SCRATCH_BASE="${SCRATCH:-/scratch/${USER}}"
+SCRATCH_BASE="${SCRATCH:-/scratch/user/${USER}}"
 PROJECT_DIR="${X2DFD_PROJECT_DIR:-${SCRATCH_BASE}/disagreement-aware-x2dfd}"
-WEIGHTS_DIR="${X2DFD_WEIGHTS:-${SCRATCH_BASE}/x2dfd/weights}"
+WEIGHTS_DIR="${X2DFD_WEIGHTS:-${PROJECT_DIR}/weights}"
 OUTPUT_DIR="${X2DFD_OUTPUT:-${SCRATCH_BASE}/x2dfd/runs/smoke/${SLURM_JOB_ID:-manual}}"
 VENV_DIR="${X2DFD_VENV:-${PROJECT_DIR}/.venv}"
 PYTHON="${VENV_DIR}/bin/python"
@@ -64,6 +68,7 @@ fail() {
 [[ -x "${PYTHON}" ]] || fail \
   "venv python not found at ${PYTHON}. Create the environment on a compute node; see docs/BUNYA_SETUP.md"
 
+source "${VENV_DIR}/bin/activate"
 cd "${PROJECT_DIR}"
 mkdir -p "${OUTPUT_DIR}"
 

@@ -1,0 +1,45 @@
+{
+  "description": "Tiny 2-real + 2-fake pilot for labelled evaluation pipeline validation. Not for statistical conclusions.",
+  "images": [
+    {
+      "id": "nasa_jonny_kim",
+      "path": "../raw/images/poc/real_face_01.jpg",
+      "ground_truth": "real",
+      "dataset": "NASA",
+      "source": "NASA Johnson Space Center photo jsc2024e052605_alt (astronaut Jonny Kim official portrait)",
+      "manipulation": null,
+      "already_cropped": false,
+      "notes": "Known authentic. Stage 3 demo source. Public-domain USGov/NASA material used previously as real_face_01.jpg."
+    },
+    {
+      "id": "nasa_mae_jemison",
+      "path": "../raw/images/live/mae_carol_jemison.jpg",
+      "ground_truth": "real",
+      "dataset": "NASA",
+      "source": "NASA Johnson Space Center photo S92-40463 / Wikimedia File:Mae_Carol_Jemison.jpg",
+      "manipulation": null,
+      "already_cropped": false,
+      "notes": "Known authentic. Official STS-47 Mission Specialist Mae Carol Jemison portrait (1 July 1992). See datasets/raw/data/live/PROVENANCE.md."
+    },
+    {
+      "id": "ffpp_ex_deepfakes",
+      "path": "../raw/images/live/ffpp_ex_deepfakes.png",
+      "ground_truth": "fake",
+      "dataset": "FaceForensics++",
+      "source": "ondyari/FaceForensics official repo images/ex_deepfakes.png",
+      "manipulation": "Deepfakes",
+      "already_cropped": false,
+      "notes": "Known manipulated. Faceswap autoencoder + Poisson edit. Official example with paired mask. See datasets/raw/data/live/FFPP_EX_DEEPFAKES_PROVENANCE.md. Not FF++ blind benchmark."
+    },
+    {
+      "id": "ffpp_ex_neuraltextures",
+      "path": "../raw/images/live/ffpp_ex_neuraltextures.png",
+      "ground_truth": "fake",
+      "dataset": "FaceForensics++",
+      "source": "ondyari/FaceForensics official repo images/ex_neuraltextures.png",
+      "manipulation": "NeuralTextures",
+      "already_cropped": false,
+      "notes": "Known manipulated. Official FaceForensics++ NeuralTextures example with paired mask. See datasets/raw/data/live/FFPP_EX_NEURALTEXTURES_PROVENANCE.md. Not FF++ blind benchmark."
+    }
+  ]
+}
