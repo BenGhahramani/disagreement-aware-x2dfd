@@ -30,10 +30,12 @@ Markers:
 python -m pytest -m unit
 ```
 
-Current unit coverage (164 tests):
+Current unit coverage includes (non-exhaustive):
 
 - `tests/test_check_environment.py` — environment checker (mocked imports, fake
   torch, tmp-path weights/datasets, exit-code mapping, protobuf regression).
+- `tests/test_celebdf_v2_prepare.py` — Celeb-DF-v2 official-test sampling,
+  deterministic selection, frame fallback, manifest generation (synthetic videos).
 - `tests/test_make_peft_compatible_config.py` — adapter-config down-converter.
 - `tests/test_smoke_test_helpers.py` — Stage 2 smoke-test wrapper (mocked
   subprocess) plus the quantisation switch.

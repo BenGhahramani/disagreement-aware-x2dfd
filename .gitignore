@@ -27,6 +27,22 @@ tmp*
 datasets/raw/images/
 script/
 
+# Celeb-DF-v2 extracted frames (videos must never be committed)
+datasets/evaluation/celebdf_v2_final/frames/
+datasets/evaluation/**/frames/
+
+# DeepFakeFace extracted images (source ZIPs must never be committed)
+datasets/evaluation/deepfakeface_final/images/
+datasets/evaluation/**/images/
+
+# Slurm logs accidentally created under the repo
+bunya/*.out
+bunya/*.err
+labelled-eval-*.out
+labelled-eval-*.err
+labelled-analysis-*.out
+labelled-analysis-*.err
+
 # Weights and checkpoints (recommend Git LFS or local)
 weights/
 *.bin

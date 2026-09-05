@@ -241,6 +241,10 @@ LLaVA stack; that is out of scope until the bare-metal venv smoke test passes.
 | File | Purpose |
 | --- | --- |
 | [bunya/run_smoke_test.slurm](../bunya/run_smoke_test.slurm) | Batch smoke test |
+| [bunya/submit_labelled_evaluation.sh](../bunya/submit_labelled_evaluation.sh) | One-command labelled FP16 submit + analysis dependency |
+| [bunya/run_labelled_evaluation.slurm](../bunya/run_labelled_evaluation.slurm) | Production labelled evaluation (FP16) |
+| [bunya/run_labelled_analysis.slurm](../bunya/run_labelled_analysis.slurm) | Post-inference analysis (`afterok`) |
+| [docs/BUNYA_LABELLED_EVALUATION.md](BUNYA_LABELLED_EVALUATION.md) | SCP + submit workflow for thesis datasets |
 | [eval/configs/infer_config.bunya.yaml](../eval/configs/infer_config.bunya.yaml) | Linux/Bunya infer config |
 | [tools/check_bunya_environment.py](../tools/check_bunya_environment.py) | Bunya-oriented env check |
 | [docs/WEIGHTS_SETUP.md](WEIGHTS_SETUP.md) | Weight download and layout |
