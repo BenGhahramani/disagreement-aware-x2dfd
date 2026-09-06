@@ -208,6 +208,15 @@ def write_analysis_outputs(
         "warning": analysis.get("warning"),
         "pipeline_validation_only": analysis.get("pipeline_validation_only"),
         "analysis": analysis,
+        # Truth-centred summaries also promoted for direct access (same objects).
+        "truth_transitions": analysis.get("truth_transitions"),
+        "correctness_x_evidence_agreement": analysis.get(
+            "correctness_x_evidence_agreement"
+        ),
+        "manipulation_metrics": analysis.get("manipulation_metrics"),
+        "correctness_x_prototype_status": analysis.get(
+            "correctness_x_prototype_status"
+        ),
     }
     summary_path = output_dir / "analysis_summary.json"
     _write_json(summary_path, summary)
@@ -275,6 +284,71 @@ def write_analysis_outputs(
             "stdev",
             "roc_auc",
             "roc_auc_unavailable_reason",
+        ],
+    )
+
+    cx_agree = analysis.get("correctness_x_evidence_agreement") or {}
+    _write_csv(
+        output_dir / "correctness_x_agreement.csv",
+        cx_agree.get("rows") or [],
+        [
+            "correctness",
+            "evidence_agreement",
+            "count",
+            "rate_within_agreement_category",
+            "n_correct",
+            "n_wrong",
+            "accuracy",
+            "n_in_agreement_category",
+        ],
+    )
+    _write_csv(
+        output_dir / "truth_transition_summary.csv",
+        analysis.get("truth_transitions") or [],
+        [
+            "baseline_run",
+            "comparison_run",
+            "n_compared",
+            "n_missing_or_unusable",
+            "wrong_to_correct",
+            "correct_to_wrong",
+            "correct_to_correct",
+            "wrong_to_wrong",
+            "net_correctness_change",
+            "baseline_correct",
+            "comparison_correct",
+            "comparison_accuracy",
+        ],
+    )
+    _write_csv(
+        output_dir / "manipulation_metrics.csv",
+        analysis.get("manipulation_metrics") or [],
+        [
+            "manipulation",
+            "run_name",
+            "n",
+            "n_missing_or_unusable",
+            "n_correct",
+            "accuracy",
+            "tp",
+            "tn",
+            "fp",
+            "fn",
+            "sensitivity_fake",
+            "specificity_real",
+        ],
+    )
+    _write_csv(
+        output_dir / "correctness_x_status.csv",
+        analysis.get("correctness_x_prototype_status") or [],
+        [
+            "status",
+            "n",
+            "correct",
+            "wrong",
+            "accuracy",
+            "run_name",
+            "n_missing_or_unusable_total",
         ],
     )
 

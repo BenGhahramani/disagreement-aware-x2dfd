@@ -17,9 +17,15 @@ from eval.labelled_analysis import (
     compute_agreement_analysis,
     compute_calibration_diagnostics,
     compute_configuration_metrics,
+    compute_correctness_x_evidence_agreement,
+    compute_correctness_x_prototype_status,
+    compute_manipulation_metrics,
     compute_score_deltas,
     compute_specialist_summaries,
+    compute_truth_transition_summary,
+    deepfakeface_manipulation_group,
     load_and_validate_aggregate,
+    prediction_matches_ground_truth,
 )
 from tools.analyse_labelled_evaluation import run_analysis
 
@@ -494,12 +500,385 @@ def test_output_files_written(tmp_path: Path) -> None:
         "score_deltas.csv",
         "agreement_crosstab.csv",
         "specialist_summary.csv",
+        "correctness_x_agreement.csv",
+        "truth_transition_summary.csv",
+        "manipulation_metrics.csv",
+        "correctness_x_status.csv",
     ):
         assert (out_dir / name).is_file(), name
     summary = json.loads((out_dir / "analysis_summary.json").read_text(encoding="utf-8"))
     assert summary["source_aggregate_sha256"]
     assert "interpretation_thresholds" in summary
     assert summary["warning"] == PILOT_WARNING
+    assert "truth_transitions" in summary
+    assert "correctness_x_evidence_agreement" in summary
+    assert "manipulation_metrics" in summary
+    assert "correctness_x_prototype_status" in summary
+    assert "truth_transitions" in summary["analysis"]
     assert result["figures"]
     for fig in result["figures"]:
         assert Path(fig).is_file()
+
+
+# --------------------------------------------------------------------------
+# truth-centred extensions
+# --------------------------------------------------------------------------
+
+
+def test_prediction_matches_ground_truth() -> None:
+    assert prediction_matches_ground_truth(predicted_label="fake", ground_truth="fake") is True
+    assert prediction_matches_ground_truth(predicted_label="real", ground_truth="fake") is False
+    assert prediction_matches_ground_truth(predicted_label=None, ground_truth="fake") is None
+    assert prediction_matches_ground_truth(predicted_label="maybe", ground_truth="fake") is None
+
+
+def test_truth_transitions_four_way_split() -> None:
+    payload = {
+        "images": [
+            # wrong → correct
+            _image(
+                "w2c",
+                "fake",
+                [
+                    _cfg("none", label="real", fake_score=0.3),
+                    _cfg("blending", label="fake", fake_score=0.8, blending=0.9),
+                    _cfg("diffusion", label="real", fake_score=0.3, diffusion=0.2),
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.85,
+                        blending=0.9,
+                        diffusion=0.2,
+                    ),
+                ],
+            ),
+            # correct → wrong
+            _image(
+                "c2w",
+                "real",
+                [
+                    _cfg("none", label="real", fake_score=0.2),
+                    _cfg("blending", label="fake", fake_score=0.7, blending=0.8),
+                    _cfg("diffusion", label="real", fake_score=0.2, diffusion=0.1),
+                    _cfg(
+                        "blending_diffusion",
+                        label="real",
+                        fake_score=0.25,
+                        blending=0.8,
+                        diffusion=0.1,
+                    ),
+                ],
+            ),
+            # correct → correct
+            _image(
+                "c2c",
+                "fake",
+                [
+                    _cfg("none", label="fake", fake_score=0.9),
+                    _cfg("blending", label="fake", fake_score=0.91, blending=0.85),
+                    _cfg("diffusion", label="fake", fake_score=0.9, diffusion=0.88),
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.92,
+                        blending=0.85,
+                        diffusion=0.88,
+                    ),
+                ],
+            ),
+            # wrong → wrong
+            _image(
+                "w2w",
+                "real",
+                [
+                    _cfg("none", label="fake", fake_score=0.8),
+                    _cfg("blending", label="fake", fake_score=0.82, blending=0.7),
+                    _cfg("diffusion", label="fake", fake_score=0.81, diffusion=0.75),
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.83,
+                        blending=0.7,
+                        diffusion=0.75,
+                    ),
+                ],
+            ),
+        ]
+    }
+    images = load_and_validate_aggregate(payload)["images"]
+    rows = {r["comparison_run"]: r for r in compute_truth_transition_summary(images)}
+    blend = rows["blending"]
+    assert blend["wrong_to_correct"] == 1
+    assert blend["correct_to_wrong"] == 1
+    assert blend["correct_to_correct"] == 1
+    assert blend["wrong_to_wrong"] == 1
+    assert blend["net_correctness_change"] == 0
+    assert blend["baseline_correct"] == 2
+    assert blend["comparison_correct"] == 2
+    assert blend["comparison_accuracy"] == pytest.approx(0.5)
+    assert blend["n_compared"] == 4
+
+    per_image, _ = compute_score_deltas(images)
+    transitions = {
+        (r["image_id"], r["comparison_run"]): r["transition"]
+        for r in per_image
+        if r["comparison_run"] == "blending"
+    }
+    assert transitions[("w2c", "blending")] == "wrong_to_correct"
+    assert transitions[("c2w", "blending")] == "correct_to_wrong"
+    assert transitions[("c2c", "blending")] == "correct_to_correct"
+    assert transitions[("w2w", "blending")] == "wrong_to_wrong"
+
+
+def test_correctness_x_agreement_rates() -> None:
+    payload = {
+        "images": [
+            _image(
+                "ok_agree",
+                "fake",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.9,
+                        blending=0.8,
+                        diffusion=0.85,
+                    )
+                ],
+                evidence_agreement="agreement",
+            ),
+            _image(
+                "bad_agree",
+                "real",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.8,
+                        blending=0.75,
+                        diffusion=0.7,
+                    )
+                ],
+                evidence_agreement="agreement",
+            ),
+            _image(
+                "ok_conflict",
+                "fake",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.85,
+                        blending=0.1,
+                        diffusion=0.9,
+                    )
+                ],
+                evidence_agreement="conflict",
+            ),
+            _image(
+                "bad_conflict",
+                "real",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.7,
+                        blending=0.2,
+                        diffusion=0.8,
+                    )
+                ],
+                evidence_agreement="conflict",
+            ),
+            _image(
+                "ok_insuff",
+                "real",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="real",
+                        fake_score=0.4,
+                        blending=0.5,
+                        diffusion=0.5,
+                    )
+                ],
+                evidence_agreement="insufficient evidence",
+            ),
+            # unusable prediction must not count as correct
+            _image(
+                "missing_pred",
+                "fake",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.9,
+                        status="fail",
+                    )
+                ],
+                evidence_agreement="agreement",
+            ),
+        ]
+    }
+    images = load_and_validate_aggregate(payload)["images"]
+    result = compute_correctness_x_evidence_agreement(images)
+    assert result["n_missing_or_unusable"] == 1
+    by = result["by_agreement"]
+    assert by["agreement"]["n"] == 2
+    assert by["agreement"]["n_correct"] == 1
+    assert by["agreement"]["n_wrong"] == 1
+    assert by["agreement"]["accuracy"] == pytest.approx(0.5)
+    assert by["conflict"]["accuracy"] == pytest.approx(0.5)
+    assert by["insufficient evidence"]["n_correct"] == 1
+    assert by["insufficient evidence"]["accuracy"] == pytest.approx(1.0)
+
+    flat = {(r["correctness"], r["evidence_agreement"]): r for r in result["rows"]}
+    assert flat[("correct", "agreement")]["count"] == 1
+    assert flat[("wrong", "agreement")]["rate_within_agreement_category"] == pytest.approx(
+        0.5
+    )
+    assert flat[("correct", "conflict")]["rate_within_agreement_category"] == pytest.approx(
+        0.5
+    )
+
+
+def test_deepfakeface_manipulation_grouping_and_undefined_specificity() -> None:
+    assert (
+        deepfakeface_manipulation_group(
+            {
+                "image_id": "dff_wiki_1",
+                "dataset": "DeepFakeFace",
+                "ground_truth": "real",
+                "manipulation": None,
+            }
+        )
+        == "wiki_real"
+    )
+    assert (
+        deepfakeface_manipulation_group(
+            {
+                "image_id": "x",
+                "dataset": "DeepFakeFace",
+                "ground_truth": "fake",
+                "manipulation": "insight",
+            }
+        )
+        == "insight"
+    )
+    assert (
+        deepfakeface_manipulation_group(
+            {"image_id": "celeb_1", "dataset": "Celeb-DF-v2", "ground_truth": "fake"}
+        )
+        is None
+    )
+
+    payload = {
+        "images": [
+            _image(
+                "dff_wiki_a",
+                "real",
+                [_cfg(name, label="real", fake_score=0.1) for name in RUN_ORDER],
+                dataset="DeepFakeFace",
+                manipulation=None,
+            ),
+            _image(
+                "dff_insight_a",
+                "fake",
+                [_cfg(name, label="fake", fake_score=0.9) for name in RUN_ORDER],
+                dataset="DeepFakeFace",
+                manipulation="insight",
+            ),
+            _image(
+                "dff_insight_b",
+                "fake",
+                [_cfg(name, label="real", fake_score=0.2) for name in RUN_ORDER],
+                dataset="DeepFakeFace",
+                manipulation="insight",
+            ),
+            # non-DFF must not appear
+            _image(
+                "celeb_x",
+                "fake",
+                [_cfg(name, label="fake", fake_score=0.9) for name in RUN_ORDER],
+                dataset="Celeb-DF-v2",
+                manipulation=None,
+            ),
+        ]
+    }
+    images = load_and_validate_aggregate(payload)["images"]
+    rows = compute_manipulation_metrics(images)
+    assert all(r["manipulation"] in {"wiki_real", "insight"} for r in rows)
+    insight_none = next(
+        r for r in rows if r["manipulation"] == "insight" and r["run_name"] == "none"
+    )
+    assert insight_none["n"] == 2
+    assert insight_none["n_correct"] == 1
+    assert insight_none["tp"] == 1 and insight_none["fn"] == 1
+    assert insight_none["tn"] == 0 and insight_none["fp"] == 0
+    assert insight_none["sensitivity_fake"] == pytest.approx(0.5)
+    assert insight_none["specificity_real"] is None  # no reals in subgroup
+
+    wiki_none = next(
+        r for r in rows if r["manipulation"] == "wiki_real" and r["run_name"] == "none"
+    )
+    assert wiki_none["n"] == 1
+    assert wiki_none["specificity_real"] == pytest.approx(1.0)
+    assert wiki_none["sensitivity_fake"] is None  # no fakes in wiki_real
+
+
+def test_correctness_x_prototype_status_and_unusable_excluded() -> None:
+    payload = {
+        "images": [
+            _image(
+                "s1",
+                "fake",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.9,
+                        blending=0.8,
+                        diffusion=0.8,
+                    )
+                ],
+                prototype_status="Stable",
+                evidence_agreement="agreement",
+            ),
+            _image(
+                "s2",
+                "real",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.8,
+                        blending=0.7,
+                        diffusion=0.2,
+                    )
+                ],
+                prototype_status="Contested",
+                evidence_agreement="conflict",
+            ),
+            _image(
+                "s3",
+                "fake",
+                [
+                    _cfg(
+                        "blending_diffusion",
+                        label="fake",
+                        fake_score=0.9,
+                        status="fail",
+                    )
+                ],
+                prototype_status="Stable",
+                evidence_agreement="agreement",
+            ),
+        ]
+    }
+    images = load_and_validate_aggregate(payload)["images"]
+    rows = {r["status"]: r for r in compute_correctness_x_prototype_status(images)}
+    assert rows["Stable"]["n"] == 1
+    assert rows["Stable"]["correct"] == 1
+    assert rows["Stable"]["accuracy"] == pytest.approx(1.0)
+    assert rows["Contested"]["correct"] == 0
+    assert rows["Contested"]["wrong"] == 1
+    assert rows["Stable"]["n_missing_or_unusable_total"] == 1
