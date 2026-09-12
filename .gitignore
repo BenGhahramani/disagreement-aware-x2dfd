@@ -35,6 +35,14 @@ datasets/evaluation/**/frames/
 datasets/evaluation/deepfakeface_final/images/
 datasets/evaluation/**/images/
 
+# FF++ c23 source-domain prep artefacts (keep official_splits/*.json tracked)
+datasets/evaluation/ffpp_c23_source/frames/
+datasets/evaluation/ffpp_c23_source/crops/
+datasets/evaluation/ffpp_c23_source/preparation_manifest.json
+datasets/evaluation/ffpp_c23_source/infer_input.json
+datasets/evaluation/ffpp_c23_source/preparation_*.json
+datasets/evaluation/**/crops/
+
 # Slurm logs accidentally created under the repo
 bunya/*.out
 bunya/*.err
@@ -42,6 +50,10 @@ labelled-eval-*.out
 labelled-eval-*.err
 labelled-analysis-*.out
 labelled-analysis-*.err
+ffpp-src-*.out
+ffpp-src-*.err
+ffpp-src-analysis-*.out
+ffpp-src-analysis-*.err
 
 # Weights and checkpoints (recommend Git LFS or local)
 weights/
