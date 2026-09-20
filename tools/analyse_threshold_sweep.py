@@ -6,11 +6,17 @@ in labelled aggregates or FF++ score files.
 
 Examples::
 
-    # Labelled DeepFakeFace / Celeb-DF-v2 aggregate
+    # Full-set descriptive sweep (one config)
     python -m tools.analyse_threshold_sweep \\
       --labelled-aggregate path/to/aggregate.json \\
       --run-name blending_diffusion \\
       --output-dir eval/outputs/threshold_sweep/deepfakeface
+
+    # Validation→select / held-out→evaluate protocol (all four configs)
+    python -m tools.analyse_threshold_sweep \\
+      --labelled-aggregate path/to/aggregate.json \\
+      --validation-protocol \\
+      --output-dir eval/outputs/threshold_sweep/deepfakeface_valtest
 
     # FF++ frame scores
     python -m tools.analyse_threshold_sweep \\
@@ -24,19 +30,24 @@ from __future__ import annotations
 import argparse
 import json
 import logging
-import sys
 from pathlib import Path
 from typing import Optional, Sequence
 
 from eval.experiment_configs import PRIMARY_ASSESSMENT_RUN, RUN_ORDER
 from eval.threshold_sweep import (
+    DEFAULT_SPLIT_SEED,
+    DEFAULT_VAL_FRACTION,
     REFERENCE_THRESHOLD,
+    SELECTION_CRITERIA,
     ThresholdSweepError,
     load_ffpp_frame_rows,
+    load_samples_by_run_from_labelled_aggregate,
     load_samples_from_ffpp_frames,
     load_samples_from_labelled_aggregate,
     run_threshold_sweep,
+    run_validation_test_protocol,
     write_threshold_outputs,
+    write_validation_protocol_outputs,
 )
 
 LOGGER = logging.getLogger("x2dfd.analyse_threshold_sweep")
@@ -77,7 +88,35 @@ def parse_args(argv: Optional[Sequence[str]] = None) -> argparse.Namespace:
         "--run-name",
         default=PRIMARY_ASSESSMENT_RUN,
         choices=list(RUN_ORDER),
-        help=f"labelled aggregate config cell (default: {PRIMARY_ASSESSMENT_RUN})",
+        help=f"labelled aggregate config cell for full-set sweep "
+        f"(default: {PRIMARY_ASSESSMENT_RUN})",
+    )
+    p.add_argument(
+        "--validation-protocol",
+        action="store_true",
+        help=(
+            "Stratified val/test protocol: select thresholds on validation only, "
+            "evaluate frozen thresholds on held-out test for all four configs"
+        ),
+    )
+    p.add_argument(
+        "--seed",
+        type=int,
+        default=DEFAULT_SPLIT_SEED,
+        help=f"split seed (default: {DEFAULT_SPLIT_SEED})",
+    )
+    p.add_argument(
+        "--val-fraction",
+        type=float,
+        default=DEFAULT_VAL_FRACTION,
+        help=f"validation fraction per class (default: {DEFAULT_VAL_FRACTION})",
+    )
+    p.add_argument(
+        "--criteria",
+        nargs="+",
+        choices=list(SELECTION_CRITERIA),
+        default=list(SELECTION_CRITERIA),
+        help="validation selection criteria",
     )
     p.add_argument("--output-dir", type=Path, required=True)
     p.add_argument("--step", type=float, default=0.01)
@@ -93,6 +132,44 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         format="%(levelname)s %(message)s",
     )
     try:
+        if args.validation_protocol:
+            if args.labelled_aggregate is None:
+                raise ThresholdSweepError(
+                    "--validation-protocol requires --labelled-aggregate"
+                )
+            payload = json.loads(args.labelled_aggregate.read_text(encoding="utf-8"))
+            samples_by_run, meta = load_samples_by_run_from_labelled_aggregate(payload)
+            meta["input_path"] = str(args.labelled_aggregate.resolve())
+            result = run_validation_test_protocol(
+                samples_by_run,
+                seed=args.seed,
+                val_fraction=args.val_fraction,
+                criteria=args.criteria,
+                step=args.step,
+            )
+            written = write_validation_protocol_outputs(
+                result, args.output_dir, meta=meta
+            )
+            print(
+                json.dumps(
+                    {
+                        "mode": "validation_protocol",
+                        "output_dir": str(Path(args.output_dir).resolve()),
+                        "seed": args.seed,
+                        "val_fraction": args.val_fraction,
+                        "n_comparison_rows": len(result["comparison_table"]),
+                        "split": {
+                            "n_val": result["split"]["n_val"],
+                            "n_test": result["split"]["n_test"],
+                        },
+                        "score_semantics": result["score_semantics"],
+                        "written": written,
+                    },
+                    indent=2,
+                )
+            )
+            return EXIT_PASS
+
         if args.labelled_aggregate is not None:
             payload = json.loads(args.labelled_aggregate.read_text(encoding="utf-8"))
             samples, meta = load_samples_from_labelled_aggregate(
@@ -135,6 +212,7 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     print(
         json.dumps(
             {
+                "mode": "full_set_sweep",
                 "output_dir": str(Path(args.output_dir).resolve()),
                 "n_samples": result["n_samples"],
                 "roc_auc": result["roc"].get("roc_auc"),

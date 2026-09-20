@@ -17,11 +17,12 @@ from __future__ import annotations
 import csv
 import json
 import math
+import random
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
-from eval.experiment_configs import PRIMARY_ASSESSMENT_RUN
+from eval.experiment_configs import PRIMARY_ASSESSMENT_RUN, RUN_ORDER
 from eval.labelled_analysis import (
     AggregateAnalysisError,
     _roc_auc,
@@ -30,9 +31,11 @@ from eval.labelled_analysis import (
 )
 from eval.reproducibility import get_git_provenance, utc_timestamp
 
-SCRIPT_VERSION = "1.0.0"
+SCRIPT_VERSION = "1.1.0"
 DEFAULT_THRESHOLD_STEP = 0.01
 REFERENCE_THRESHOLD = 0.50
+DEFAULT_SPLIT_SEED = 4842
+DEFAULT_VAL_FRACTION = 0.5
 SCORE_FIELD = "fake_score"
 SCORE_SEMANTICS = (
     "Raw model fake_score from saved inference outputs. Not a calibrated "
@@ -40,6 +43,16 @@ SCORE_SEMANTICS = (
     "relatively more mass to the fake token versus real at the scored step."
 )
 DECISION_RULE = "predict_fake_if_fake_score_ge_threshold"
+SELECTION_CRITERIA: Tuple[str, ...] = (
+    "max_balanced_accuracy",
+    "max_f1_fake",
+    "closest_equal_sensitivity_specificity",
+)
+SELECTION_CRITERION_TO_OP_KEY: Dict[str, str] = {
+    "max_balanced_accuracy": "max_balanced_accuracy",
+    "max_f1_fake": "max_f1_fake",
+    "closest_equal_sensitivity_specificity": "closest_equal_sensitivity_specificity",
+}
 
 
 class ThresholdSweepError(ValueError):
@@ -271,6 +284,470 @@ def run_threshold_sweep(
         "thresholds": rows,
         "operating_points": descriptive_operating_points(rows),
         "roc": compute_roc_auc(samples),
+    }
+
+
+# ---------------------------------------------------------------------------
+# Validation / held-out test protocol (threshold selection without leakage)
+# ---------------------------------------------------------------------------
+
+
+def stratified_val_test_split(
+    samples: Sequence[ScoredSample],
+    *,
+    seed: int = DEFAULT_SPLIT_SEED,
+    val_fraction: float = DEFAULT_VAL_FRACTION,
+) -> Tuple[List[ScoredSample], List[ScoredSample], Dict[str, Any]]:
+    """Deterministic real/fake-stratified validation vs held-out test split.
+
+    Within each label class, samples are sorted by ``sample_id`` then shuffled
+    with ``random.Random(seed)`` so repeats are identical. Partitions are
+    disjoint; every input sample is assigned to exactly one side.
+    """
+
+    if not samples:
+        raise ThresholdSweepError("no samples to split")
+    if not (0.0 < float(val_fraction) < 1.0):
+        raise ThresholdSweepError("val_fraction must be in (0, 1)")
+
+    by_label: Dict[str, List[ScoredSample]] = {"real": [], "fake": []}
+    for sample in samples:
+        if sample.ground_truth not in by_label:
+            raise ThresholdSweepError(
+                f"sample {sample.sample_id}: ground_truth must be real|fake"
+            )
+        by_label[sample.ground_truth].append(sample)
+
+    rng = random.Random(int(seed))
+    val: List[ScoredSample] = []
+    test: List[ScoredSample] = []
+    per_label: Dict[str, Dict[str, int]] = {}
+    for label in ("real", "fake"):
+        pool = sorted(by_label[label], key=lambda s: s.sample_id)
+        rng.shuffle(pool)
+        n_val = int(round(len(pool) * float(val_fraction)))
+        # Keep both sides non-empty when the class has at least 2 samples.
+        if len(pool) >= 2:
+            n_val = min(max(n_val, 1), len(pool) - 1)
+        elif len(pool) == 1:
+            n_val = 1 if val_fraction >= 0.5 else 0
+        val.extend(pool[:n_val])
+        test.extend(pool[n_val:])
+        per_label[label] = {"n_total": len(pool), "n_val": n_val, "n_test": len(pool) - n_val}
+
+    val_sorted = sorted(val, key=lambda s: s.sample_id)
+    test_sorted = sorted(test, key=lambda s: s.sample_id)
+    val_ids = {s.sample_id for s in val_sorted}
+    test_ids = {s.sample_id for s in test_sorted}
+    if val_ids & test_ids:
+        raise ThresholdSweepError("split leakage: overlapping sample_ids")
+    if len(val_ids) + len(test_ids) != len({s.sample_id for s in samples}):
+        # Duplicate IDs are ambiguous for a clean protocol.
+        raise ThresholdSweepError("split requires unique sample_ids")
+
+    meta = {
+        "seed": int(seed),
+        "val_fraction": float(val_fraction),
+        "stratify_by": "ground_truth",
+        "n_val": len(val_sorted),
+        "n_test": len(test_sorted),
+        "per_label": per_label,
+        "val_sample_ids": [s.sample_id for s in val_sorted],
+        "test_sample_ids": [s.sample_id for s in test_sorted],
+        "no_leakage": True,
+    }
+    return val_sorted, test_sorted, meta
+
+
+def partition_by_ids(
+    samples: Sequence[ScoredSample],
+    *,
+    val_ids: Sequence[str],
+    test_ids: Sequence[str],
+) -> Tuple[List[ScoredSample], List[ScoredSample]]:
+    """Apply a shared ID partition to one config's scored samples."""
+
+    val_set = set(val_ids)
+    test_set = set(test_ids)
+    if val_set & test_set:
+        raise ThresholdSweepError("partition_by_ids: overlapping val/test ids")
+    val = sorted(
+        [s for s in samples if s.sample_id in val_set],
+        key=lambda s: s.sample_id,
+    )
+    test = sorted(
+        [s for s in samples if s.sample_id in test_set],
+        key=lambda s: s.sample_id,
+    )
+    return val, test
+
+
+def select_threshold_on_validation(
+    val_samples: Sequence[ScoredSample],
+    *,
+    criterion: str,
+    step: float = DEFAULT_THRESHOLD_STEP,
+) -> Dict[str, Any]:
+    """Select a frozen threshold using validation scores only."""
+
+    if criterion not in SELECTION_CRITERION_TO_OP_KEY:
+        raise ThresholdSweepError(
+            f"unsupported selection criterion: {criterion!r}; "
+            f"expected one of {list(SELECTION_CRITERIA)}"
+        )
+    if not val_samples:
+        raise ThresholdSweepError("validation set is empty")
+
+    sweep = run_threshold_sweep(val_samples, step=step)
+    op_key = SELECTION_CRITERION_TO_OP_KEY[criterion]
+    point = sweep["operating_points"].get(op_key)
+    if not isinstance(point, dict) or point.get("threshold") is None:
+        raise ThresholdSweepError(
+            f"could not select threshold for criterion={criterion!r} on validation"
+        )
+    frozen = float(point["threshold"])
+    val_metrics = confusion_at_threshold(val_samples, frozen)
+    return {
+        "criterion": criterion,
+        "selected_threshold": frozen,
+        "frozen": True,
+        "selection_split": "validation",
+        "selection_note": (
+            "Threshold chosen on the validation partition only; "
+            "held-out test scores were not used for selection."
+        ),
+        "score_field": SCORE_FIELD,
+        "score_semantics": SCORE_SEMANTICS,
+        "validation_metrics": val_metrics,
+        "validation_operating_point": point,
+        "validation_roc": sweep["roc"],
+        "not_an_approved_default": True,
+    }
+
+
+def evaluate_frozen_threshold(
+    test_samples: Sequence[ScoredSample],
+    threshold: float,
+) -> Dict[str, Any]:
+    """Evaluate a previously frozen threshold on held-out test scores."""
+
+    if not test_samples:
+        raise ThresholdSweepError("held-out test set is empty")
+    metrics = confusion_at_threshold(test_samples, float(threshold))
+    return {
+        "threshold": float(threshold),
+        "split": "held_out_test",
+        "metrics": metrics,
+        "roc": compute_roc_auc(test_samples),
+        "score_field": SCORE_FIELD,
+        "score_semantics": SCORE_SEMANTICS,
+    }
+
+
+def _comparison_row(
+    *,
+    run_name: str,
+    criterion: str,
+    selected_threshold: float,
+    validation_metrics: Dict[str, Any],
+    test_metrics: Dict[str, Any],
+    reference_test_metrics: Dict[str, Any],
+) -> Dict[str, Any]:
+    test_bal = test_metrics.get("balanced_accuracy")
+    ref_bal = reference_test_metrics.get("balanced_accuracy")
+    delta = None
+    if test_bal is not None and ref_bal is not None:
+        delta = float(test_bal) - float(ref_bal)
+    return {
+        "run_name": run_name,
+        "criterion": criterion,
+        "selected_threshold": selected_threshold,
+        "reference_threshold": REFERENCE_THRESHOLD,
+        "val_n": validation_metrics.get("n_samples"),
+        "val_accuracy": validation_metrics.get("accuracy"),
+        "val_balanced_accuracy": validation_metrics.get("balanced_accuracy"),
+        "val_f1_fake": validation_metrics.get("f1_fake"),
+        "val_sensitivity_fake": validation_metrics.get("sensitivity_fake"),
+        "val_specificity_real": validation_metrics.get("specificity_real"),
+        "test_n": test_metrics.get("n_samples"),
+        "test_accuracy": test_metrics.get("accuracy"),
+        "test_balanced_accuracy": test_metrics.get("balanced_accuracy"),
+        "test_f1_fake": test_metrics.get("f1_fake"),
+        "test_sensitivity_fake": test_metrics.get("sensitivity_fake"),
+        "test_specificity_real": test_metrics.get("specificity_real"),
+        "test_precision_fake": test_metrics.get("precision_fake"),
+        "ref_0_50_test_accuracy": reference_test_metrics.get("accuracy"),
+        "ref_0_50_test_balanced_accuracy": reference_test_metrics.get("balanced_accuracy"),
+        "ref_0_50_test_f1_fake": reference_test_metrics.get("f1_fake"),
+        "delta_test_balanced_accuracy_vs_0_50": delta,
+        "score_semantics": "raw_uncalibrated_fake_score",
+    }
+
+
+def run_validation_test_protocol(
+    samples_by_run: Dict[str, Sequence[ScoredSample]],
+    *,
+    seed: int = DEFAULT_SPLIT_SEED,
+    val_fraction: float = DEFAULT_VAL_FRACTION,
+    criteria: Sequence[str] = SELECTION_CRITERIA,
+    step: float = DEFAULT_THRESHOLD_STEP,
+    run_order: Sequence[str] = RUN_ORDER,
+) -> Dict[str, Any]:
+    """Select thresholds on validation; evaluate frozen thresholds on held-out test.
+
+    A single stratified ID split is shared across configs so comparisons use the
+    same images. Selection never sees held-out test scores.
+    """
+
+    if not samples_by_run:
+        raise ThresholdSweepError("samples_by_run is empty")
+
+    # Build a canonical labelled ID list from the union of runs (consistent GT).
+    gt_by_id: Dict[str, str] = {}
+    for run_name, samples in samples_by_run.items():
+        for sample in samples:
+            prev = gt_by_id.get(sample.sample_id)
+            if prev is not None and prev != sample.ground_truth:
+                raise ThresholdSweepError(
+                    f"inconsistent ground_truth for {sample.sample_id}: "
+                    f"{prev} vs {sample.ground_truth} ({run_name})"
+                )
+            gt_by_id[sample.sample_id] = sample.ground_truth
+
+    canonical = [
+        ScoredSample(sample_id=sid, ground_truth=gt, fake_score=0.0)
+        for sid, gt in sorted(gt_by_id.items())
+    ]
+    _, _, split_meta = stratified_val_test_split(
+        canonical, seed=seed, val_fraction=val_fraction
+    )
+    val_ids = list(split_meta["val_sample_ids"])
+    test_ids = list(split_meta["test_sample_ids"])
+
+    criteria_list = list(criteria)
+    for name in criteria_list:
+        if name not in SELECTION_CRITERION_TO_OP_KEY:
+            raise ThresholdSweepError(f"unsupported selection criterion: {name!r}")
+
+    results_by_run: Dict[str, Any] = {}
+    comparison_rows: List[Dict[str, Any]] = []
+
+    for run_name in run_order:
+        samples = list(samples_by_run.get(run_name) or [])
+        if not samples:
+            results_by_run[run_name] = {
+                "run_name": run_name,
+                "status": "skipped_no_scores",
+                "selections": {},
+            }
+            continue
+        val_samples, test_samples = partition_by_ids(
+            samples, val_ids=val_ids, test_ids=test_ids
+        )
+        if not val_samples or not test_samples:
+            results_by_run[run_name] = {
+                "run_name": run_name,
+                "status": "skipped_empty_split",
+                "n_val": len(val_samples),
+                "n_test": len(test_samples),
+                "selections": {},
+            }
+            continue
+
+        reference_test = evaluate_frozen_threshold(test_samples, REFERENCE_THRESHOLD)
+        selections: Dict[str, Any] = {}
+        for criterion in criteria_list:
+            selected = select_threshold_on_validation(
+                val_samples, criterion=criterion, step=step
+            )
+            frozen = float(selected["selected_threshold"])
+            held_out = evaluate_frozen_threshold(test_samples, frozen)
+            row = _comparison_row(
+                run_name=run_name,
+                criterion=criterion,
+                selected_threshold=frozen,
+                validation_metrics=selected["validation_metrics"],
+                test_metrics=held_out["metrics"],
+                reference_test_metrics=reference_test["metrics"],
+            )
+            comparison_rows.append(row)
+            selections[criterion] = {
+                "selection": selected,
+                "held_out_test": held_out,
+                "reference_0_50_held_out_test": reference_test,
+                "comparison": row,
+            }
+
+        results_by_run[run_name] = {
+            "run_name": run_name,
+            "status": "ok",
+            "n_val": len(val_samples),
+            "n_test": len(test_samples),
+            "n_real_val": sum(1 for s in val_samples if s.ground_truth == "real"),
+            "n_fake_val": sum(1 for s in val_samples if s.ground_truth == "fake"),
+            "n_real_test": sum(1 for s in test_samples if s.ground_truth == "real"),
+            "n_fake_test": sum(1 for s in test_samples if s.ground_truth == "fake"),
+            "reference_0_50_held_out_test": reference_test,
+            "selections": selections,
+        }
+
+    return {
+        "script_version": SCRIPT_VERSION,
+        "protocol": "validation_select_held_out_evaluate",
+        "score_field": SCORE_FIELD,
+        "score_semantics": SCORE_SEMANTICS,
+        "decision_rule": DECISION_RULE,
+        "reference_threshold": REFERENCE_THRESHOLD,
+        "split": split_meta,
+        "criteria": criteria_list,
+        "step": float(step),
+        "run_order": list(run_order),
+        "results_by_run": results_by_run,
+        "comparison_table": comparison_rows,
+        "notes": [
+            "Thresholds are selected on the validation partition only.",
+            "Held-out test metrics use the frozen validation-selected threshold.",
+            "Fixed 0.50 reference is evaluated on the same held-out test partition.",
+            "Scores are raw uncalibrated model fake_score values, not probabilities.",
+            "Selected thresholds are analysis outputs, not approved production defaults.",
+        ],
+    }
+
+
+def load_samples_by_run_from_labelled_aggregate(
+    payload: Any,
+    *,
+    run_order: Sequence[str] = RUN_ORDER,
+) -> Tuple[Dict[str, List[ScoredSample]], Dict[str, Any]]:
+    """Load scored samples for every config cell in a labelled aggregate."""
+
+    by_run: Dict[str, List[ScoredSample]] = {}
+    meta_by_run: Dict[str, Any] = {}
+    for run_name in run_order:
+        samples, meta = load_samples_from_labelled_aggregate(payload, run_name=run_name)
+        by_run[run_name] = samples
+        meta_by_run[run_name] = meta
+    return by_run, {
+        "loader": "labelled_aggregate_all_runs",
+        "run_order": list(run_order),
+        "per_run": meta_by_run,
+    }
+
+
+def format_comparison_table_markdown(rows: Sequence[Dict[str, Any]]) -> str:
+    """Concise markdown comparison table for validation-protocol results."""
+
+    headers = [
+        "run",
+        "criterion",
+        "thr",
+        "val_bAcc",
+        "test_bAcc",
+        "test_F1",
+        "ref0.50_bAcc",
+        "ΔbAcc",
+    ]
+    lines = [
+        "| " + " | ".join(headers) + " |",
+        "| " + " | ".join(["---"] * len(headers)) + " |",
+    ]
+
+    def _fmt(value: Any, digits: int = 3) -> str:
+        if value is None:
+            return "—"
+        if isinstance(value, float):
+            return f"{value:.{digits}f}"
+        return str(value)
+
+    for row in rows:
+        lines.append(
+            "| "
+            + " | ".join(
+                [
+                    str(row.get("run_name", "")),
+                    str(row.get("criterion", "")),
+                    _fmt(row.get("selected_threshold"), 2),
+                    _fmt(row.get("val_balanced_accuracy")),
+                    _fmt(row.get("test_balanced_accuracy")),
+                    _fmt(row.get("test_f1_fake")),
+                    _fmt(row.get("ref_0_50_test_balanced_accuracy")),
+                    _fmt(row.get("delta_test_balanced_accuracy_vs_0_50")),
+                ]
+            )
+            + " |"
+        )
+    lines.append("")
+    lines.append(
+        "_Scores are raw uncalibrated `fake_score` values. "
+        "Thresholds selected on validation only; metrics above include "
+        "held-out test evaluation of the frozen threshold vs fixed 0.50._"
+    )
+    return "\n".join(lines) + "\n"
+
+
+def write_validation_protocol_outputs(
+    result: Dict[str, Any],
+    output_dir: Path,
+    *,
+    meta: Optional[Dict[str, Any]] = None,
+) -> Dict[str, str]:
+    """Write validation-protocol JSON/CSV/markdown comparison artefacts."""
+
+    out = Path(output_dir)
+    out.mkdir(parents=True, exist_ok=True)
+    payload = {
+        "generated_at": utc_timestamp(),
+        "git": get_git_provenance(),
+        "meta": meta or {},
+        **result,
+    }
+    json_path = out / "validation_protocol.json"
+    json_path.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+
+    rows = list(result.get("comparison_table") or [])
+    csv_path = out / "comparison_table.csv"
+    fieldnames = [
+        "run_name",
+        "criterion",
+        "selected_threshold",
+        "reference_threshold",
+        "val_n",
+        "val_accuracy",
+        "val_balanced_accuracy",
+        "val_f1_fake",
+        "val_sensitivity_fake",
+        "val_specificity_real",
+        "test_n",
+        "test_accuracy",
+        "test_balanced_accuracy",
+        "test_f1_fake",
+        "test_sensitivity_fake",
+        "test_specificity_real",
+        "test_precision_fake",
+        "ref_0_50_test_accuracy",
+        "ref_0_50_test_balanced_accuracy",
+        "ref_0_50_test_f1_fake",
+        "delta_test_balanced_accuracy_vs_0_50",
+        "score_semantics",
+    ]
+    with csv_path.open("w", encoding="utf-8", newline="") as handle:
+        writer = csv.DictWriter(handle, fieldnames=fieldnames, extrasaction="ignore")
+        writer.writeheader()
+        for row in rows:
+            writer.writerow({k: row.get(k) for k in fieldnames})
+
+    md_path = out / "comparison_table.md"
+    md_path.write_text(format_comparison_table_markdown(rows), encoding="utf-8")
+
+    # Full protocol CSV alias for tooling that expects protocol-named files.
+    protocol_csv = out / "validation_protocol.csv"
+    protocol_csv.write_text(csv_path.read_text(encoding="utf-8"), encoding="utf-8")
+
+    return {
+        "validation_protocol.json": str(json_path.resolve()),
+        "validation_protocol.csv": str(protocol_csv.resolve()),
+        "comparison_table.csv": str(csv_path.resolve()),
+        "comparison_table.md": str(md_path.resolve()),
     }
 
 
