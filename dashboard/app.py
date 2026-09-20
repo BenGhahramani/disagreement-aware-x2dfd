@@ -43,6 +43,19 @@ from dashboard.view_model import (
     bar_fraction,
     detector_score_label,
 )
+from dashboard.operating_settings import (
+    ENV_VALIDATION_PROTOCOL,
+    PRESET_BALANCED,
+    PRESET_NAMES,
+    THRESHOLD_SOURCE_CUSTOM,
+    THRESHOLD_SOURCE_REFERENCE,
+    THRESHOLD_SOURCE_VALIDATION,
+    build_operating_settings_state,
+    config_display_label,
+    format_rate_percent,
+    load_validation_protocol,
+)
+from eval.experiment_configs import PRIMARY_ASSESSMENT_RUN, RUN_ORDER
 from proof_of_concept.schema import Status
 
 _STATUS_STYLE = {
@@ -146,17 +159,31 @@ def _score_bar(label: str, value: Optional[float], *, help_text: Optional[str] =
         st.caption(help_text)
 
 
-def _render_status(view: DashboardView) -> None:
+def _render_status(view: DashboardView, *, operating_state=None) -> None:
     accent, background = _STATUS_STYLE.get(view.status, ("#333", "#eee"))
     agreement = view.evidence_agreement
     agreement_label = (
         agreement.display_label if hasattr(agreement, "display_label") else str(agreement)
     )
+    prediction_html = ""
+    fake_score_html = ""
+    if operating_state is not None:
+        pred = operating_state.prediction
+        prediction_html = (
+            f"<h4>Current decision</h4>"
+            f'<p class="value">{pred.current_decision_word}</p>'
+        )
+        fake = pred.raw_fake_score
+        fake_txt = "unavailable" if fake is None else f"{fake:.3f}"
+        fake_score_html = (
+            f"<h4>Raw model fake score</h4>"
+            f'<p class="value">{fake_txt}</p>'
+        )
     st.markdown(
         f"""
         <div class="assessment-panel">
-          <h4>Model assessment</h4>
-          <p class="value">{view.model_assessment_text}</p>
+          {prediction_html}
+          {fake_score_html}
           <h4>Evidence agreement</h4>
           <p class="value">{agreement_label}</p>
           <h4>Prototype evidence status</h4>
@@ -169,17 +196,38 @@ def _render_status(view: DashboardView) -> None:
         """,
         unsafe_allow_html=True,
     )
+    if operating_state is not None:
+        st.caption(operating_state.evidence_separation_note)
+    else:
+        st.caption(
+            "Detection threshold changes the real/manipulated decision. "
+            "Evidence agreement describes whether the available detectors agree."
+        )
     st.caption(view.threshold_note or THRESHOLD_NOTE)
     st.caption(view.evidence_band_note or EVIDENCE_BAND_NOTE)
 
 
-def _render_card(card) -> None:
-    st.markdown(f"#### {card.title}")
+def _render_card(card, *, highlight: bool = False, predicted_label: Optional[str] = None, fake_score: Optional[float] = None) -> None:
+    title = card.title
+    if highlight:
+        st.markdown(f"#### {title} · active")
+    else:
+        st.markdown(f"#### {title}")
     if card.error:
         st.error(card.error)
         return
-    verdict = (card.label or "—").upper()
-    st.markdown(f"**Final verdict:** `{verdict}`")
+    if predicted_label is not None:
+        word = "MANIPULATED" if predicted_label == "fake" else (
+            "REAL" if predicted_label == "real" else "—"
+        )
+        st.markdown(f"**Current decision:** `{word}`")
+        shown_fake = fake_score if fake_score is not None else card.fake_score
+        if shown_fake is None:
+            st.caption("Raw model fake score: unavailable")
+        else:
+            st.caption(f"Raw model fake score: {shown_fake:.3f}")
+    else:
+        st.caption("Not the active configuration.")
     st.caption("Source: X2-DFD / LLaVA")
     _score_bar(LABEL_MODEL_REAL, card.real_score)
     _score_bar(LABEL_MODEL_FAKE, card.fake_score)
@@ -192,6 +240,254 @@ def _render_card(card) -> None:
         st.caption("No specialist detector score for this configuration.")
     if card.explanation:
         st.caption(f"Model text: {card.explanation}")
+
+
+def _init_operating_session(view: DashboardView) -> None:
+    """Initialise session keys for operating settings once per matrix view."""
+
+    matrix_key = str(view.matrix_dir)
+    if st.session_state.get("_ops_matrix_key") != matrix_key:
+        st.session_state._ops_matrix_key = matrix_key
+        st.session_state.ops_run_name = PRIMARY_ASSESSMENT_RUN
+        st.session_state.ops_threshold = 0.50
+        st.session_state.ops_threshold_source = THRESHOLD_SOURCE_REFERENCE
+        st.session_state.ops_preset = None
+
+
+def _render_operating_settings(view: DashboardView):
+    """Focused Detection settings panel (no inference)."""
+
+    _init_operating_session(view)
+
+    st.subheader("Detection settings")
+    st.caption(
+        "User-adjustable operating settings for already-saved raw scores. "
+        "Changing these controls does not rerun inference."
+    )
+
+    protocol_default = st.session_state.get("ops_validation_path", "") or ""
+    env_hint = f"Env override: `{ENV_VALIDATION_PROTOCOL}`"
+    protocol_path = st.text_input(
+        "Validation protocol path (optional)",
+        value=protocol_default,
+        help=(
+            "Path to validation_protocol.json from the threshold-sweep protocol. "
+            f"{env_hint}. Missing/malformed files are ignored safely."
+        ),
+        key="ops_validation_path_input",
+    )
+    st.session_state.ops_validation_path = protocol_path.strip()
+    validation = load_validation_protocol(
+        protocol_path.strip() or None,
+    )
+    if validation.error:
+        st.caption(f"Validation metadata: {validation.error}")
+    elif validation.available:
+        st.caption(
+            f"Validation metadata loaded"
+            + (f" · {validation.dataset_name}" if validation.dataset_name else "")
+            + f" · `{validation.path}`"
+        )
+    else:
+        st.caption(
+            "No validation metadata loaded. Presets stay unavailable until a "
+            f"validation_protocol.json path is set (or {ENV_VALIDATION_PROTOCOL})."
+        )
+
+    available = []
+    unavailable = []
+    for card in view.cards:
+        if card.error or card.fake_score is None:
+            unavailable.append(card.run_name)
+        else:
+            available.append(card.run_name)
+    # Keep RUN_ORDER for any missing cards.
+    for name in RUN_ORDER:
+        if name not in available and name not in unavailable:
+            unavailable.append(name)
+
+    if not available:
+        st.warning("No usable expert-configuration scores are available for threshold control.")
+        state = build_operating_settings_state(
+            cards=view.cards,
+            active_run_name=PRIMARY_ASSESSMENT_RUN,
+            decision_threshold=float(st.session_state.get("ops_threshold", 0.50)),
+            threshold_source=st.session_state.get(
+                "ops_threshold_source", THRESHOLD_SOURCE_REFERENCE
+            ),
+            validation=validation,
+        )
+        return state
+
+    current_run = st.session_state.get("ops_run_name", PRIMARY_ASSESSMENT_RUN)
+    if current_run not in available:
+        current_run = available[0]
+        st.session_state.ops_run_name = current_run
+
+    labels = [config_display_label(name) for name in available]
+    label_to_run = dict(zip(labels, available))
+    choice = st.selectbox(
+        "Active expert configuration",
+        labels,
+        index=labels.index(config_display_label(current_run)),
+        help="Switches which saved config cell is displayed. Does not run inference.",
+    )
+    selected_run = label_to_run[choice]
+    if selected_run != st.session_state.ops_run_name:
+        st.session_state.ops_run_name = selected_run
+        state_probe = build_operating_settings_state(
+            cards=view.cards,
+            active_run_name=selected_run,
+            threshold_source=THRESHOLD_SOURCE_VALIDATION,
+            validation=validation,
+        )
+        balanced = state_probe.presets.get(PRESET_BALANCED)
+        if state_probe.presets_available and balanced is not None:
+            st.session_state.ops_threshold = float(balanced)
+            st.session_state.ops_threshold_source = THRESHOLD_SOURCE_VALIDATION
+            st.session_state.ops_preset = PRESET_BALANCED
+        else:
+            st.session_state.ops_threshold = 0.50
+            st.session_state.ops_threshold_source = THRESHOLD_SOURCE_REFERENCE
+            st.session_state.ops_preset = None
+
+    if unavailable:
+        st.caption(
+            "Unavailable configurations (missing or failed scores): "
+            + ", ".join(config_display_label(n) for n in unavailable)
+        )
+
+    state = build_operating_settings_state(
+        cards=view.cards,
+        active_run_name=st.session_state.ops_run_name,
+        decision_threshold=float(st.session_state.get("ops_threshold", 0.50)),
+        threshold_source=st.session_state.get(
+            "ops_threshold_source", THRESHOLD_SOURCE_REFERENCE
+        ),
+        validation=validation,
+    )
+
+    st.markdown(f"**Threshold source:** {state.threshold_source_label}")
+    st.caption(state.raw_score_note)
+    st.caption(state.tradeoff_note)
+
+    preset_cols = st.columns(len(PRESET_NAMES))
+    if state.presets_available:
+        for col, name in zip(preset_cols, PRESET_NAMES):
+            info = state.preset_details.get(name)
+            thr = None if info is None else info.threshold
+            with col:
+                if thr is None:
+                    st.button(name, disabled=True, key=f"ops_preset_missing_{name}")
+                else:
+                    selected = (
+                        st.session_state.get("ops_preset") == name
+                        or (
+                            state.matched_preset == name
+                            and abs(float(st.session_state.get("ops_threshold", 0.5)) - thr) <= 1e-9
+                        )
+                    )
+                    label = f"{name} — {thr:.2f}"
+                    if selected:
+                        label = f"● {label}"
+                    if st.button(
+                        label,
+                        key=f"ops_preset_{name}",
+                        help=info.user_copy if info is not None else "",
+                    ):
+                        st.session_state.ops_threshold = float(thr)
+                        st.session_state.ops_threshold_source = THRESHOLD_SOURCE_VALIDATION
+                        st.session_state.ops_preset = name
+                        st.rerun()
+                    if info is not None:
+                        st.caption(info.user_copy)
+                        st.caption(
+                            f"Fake sensitivity: {format_rate_percent(info.validation_sensitivity_fake)}"
+                        )
+                        st.caption(
+                            f"Real specificity: {format_rate_percent(info.validation_specificity_real)}"
+                        )
+        if state.presets_collapsed and state.collapse_note:
+            st.info(state.collapse_note)
+        if state.unexpected_order and state.order_note:
+            st.caption(state.order_note)
+    else:
+        for col, name in zip(preset_cols, PRESET_NAMES):
+            with col:
+                st.button(name, disabled=True, key=f"ops_preset_disabled_{name}")
+        if state.presets_unavailable_reason:
+            st.caption(state.presets_unavailable_reason)
+
+    new_threshold = st.slider(
+        "Decision threshold (raw fake_score)",
+        min_value=0.0,
+        max_value=1.0,
+        value=float(st.session_state.get("ops_threshold", 0.50)),
+        step=0.01,
+        help="predict fake if fake_score >= threshold. Raw scores are unchanged.",
+    )
+    if abs(new_threshold - float(st.session_state.get("ops_threshold", 0.50))) > 1e-12:
+        st.session_state.ops_threshold = float(new_threshold)
+        matched_now = None
+        if state.presets_available:
+            for name, info in state.preset_details.items():
+                if info.threshold is not None and abs(info.threshold - new_threshold) <= 1e-9:
+                    matched_now = name
+                    break
+        st.session_state.ops_threshold_source = THRESHOLD_SOURCE_CUSTOM
+        st.session_state.ops_preset = matched_now
+        st.rerun()
+
+    # Rebuild after possible slider/preset updates already applied via session.
+    state = build_operating_settings_state(
+        cards=view.cards,
+        active_run_name=st.session_state.ops_run_name,
+        decision_threshold=float(st.session_state.ops_threshold),
+        threshold_source=st.session_state.ops_threshold_source,
+        validation=validation,
+    )
+    st.markdown(f"**Active decision threshold:** `{state.decision_threshold:.2f}`")
+    st.caption(state.lower_threshold_copy)
+    st.caption(state.higher_threshold_copy)
+
+    st.markdown("**Threshold provenance**")
+    for line in state.provenance_lines:
+        st.caption(line)
+
+    if state.presets_available:
+        with st.expander("Preset technical details", expanded=False):
+            dataset = (
+                state.validation.dataset_name
+                if state.validation is not None
+                else None
+            )
+            for name in PRESET_NAMES:
+                info = state.preset_details.get(name)
+                if info is None:
+                    continue
+                st.markdown(f"**{name}**")
+                st.caption(f"Raw threshold: {info.threshold if info.threshold is not None else 'unavailable'}")
+                if dataset:
+                    st.caption(f"Validation dataset: {dataset}")
+                st.caption(f"Validation criterion / target: {info.target or info.provenance}")
+                st.caption(
+                    f"Validation fake sensitivity: {format_rate_percent(info.validation_sensitivity_fake)}"
+                )
+                st.caption(
+                    f"Validation real specificity: {format_rate_percent(info.validation_specificity_real)}"
+                )
+                if info.held_out_balanced_accuracy is not None:
+                    st.caption(
+                        f"Held-out balanced accuracy (evaluation only, not used to choose the preset): "
+                        f"{info.held_out_balanced_accuracy:.3f}"
+                    )
+            if state.validation and state.validation.path:
+                st.caption(f"Metadata source: {state.validation.path}")
+            st.caption(state.raw_score_note)
+
+    # Keep view.decision_operating_settings aligned with interactive state.
+    view.decision_operating_settings = state.decision_operating_settings
+    return state
 
 
 def _render_conflicts(view: DashboardView) -> None:
@@ -234,22 +530,62 @@ def _render_provenance(view: DashboardView) -> None:
     )
 
 
-def _render_technical(view: DashboardView) -> None:
+def _render_technical(view: DashboardView, *, operating_state=None) -> None:
     with st.expander("Technical details", expanded=False):
         st.markdown(f"**Quantisation:** {view.quantisation}")
         st.caption(view.nf4_note)
         st.caption(view.threshold_note or THRESHOLD_NOTE)
-        settings = view.decision_operating_settings or {}
-        if settings:
+        settings = (
+            operating_state.decision_operating_settings
+            if operating_state is not None
+            else (view.decision_operating_settings or {})
+        )
+        if settings or operating_state is not None:
             st.markdown("**Decision operating settings** (user-adjustable; not calibrated)")
-            st.caption(
-                f"Active decision threshold on raw fake_score: "
-                f"{settings.get('decision_threshold', '—')}"
-            )
-            st.caption(
-                f"Active expert configuration: "
-                f"{settings.get('expert_configuration', '—')}"
-            )
+            if operating_state is not None:
+                st.caption(f"Active config: {operating_state.active_config_label}")
+                st.caption(
+                    f"Decision threshold: {operating_state.decision_threshold:.2f} "
+                    f"({operating_state.threshold_source_label})"
+                )
+                st.caption(operating_state.prediction.display_text)
+                st.caption(
+                    f"Raw model fake score: "
+                    f"{'unavailable' if operating_state.prediction.raw_fake_score is None else f'{operating_state.prediction.raw_fake_score:.3f}'}"
+                )
+                st.caption(operating_state.prediction.saved_decision_provenance)
+                st.caption(operating_state.raw_score_note)
+                st.caption(operating_state.evidence_separation_note)
+                if operating_state.matched_preset:
+                    info = operating_state.preset_details.get(operating_state.matched_preset)
+                    st.markdown(f"**Matching preset:** {operating_state.matched_preset}")
+                    if info is not None:
+                        st.caption(f"Raw threshold: {info.threshold}")
+                        if operating_state.validation and operating_state.validation.dataset_name:
+                            st.caption(f"Validation dataset: {operating_state.validation.dataset_name}")
+                        st.caption(f"Validation criterion / target: {info.target or info.provenance}")
+                        st.caption(
+                            f"Validation fake sensitivity: {format_rate_percent(info.validation_sensitivity_fake)}"
+                        )
+                        st.caption(
+                            f"Validation real specificity: {format_rate_percent(info.validation_specificity_real)}"
+                        )
+                        if info.held_out_balanced_accuracy is not None:
+                            st.caption(
+                                f"Held-out balanced accuracy (evaluation only): "
+                                f"{info.held_out_balanced_accuracy:.3f}"
+                            )
+                if operating_state.validation and operating_state.validation.path:
+                    st.caption(f"Metadata source: {operating_state.validation.path}")
+            else:
+                st.caption(
+                    f"Active decision threshold on raw fake_score: "
+                    f"{settings.get('decision_threshold', '—')}"
+                )
+                st.caption(
+                    f"Active expert configuration: "
+                    f"{settings.get('expert_configuration', '—')}"
+                )
             if settings.get("wording_lower_threshold"):
                 st.caption(settings["wording_lower_threshold"])
             if settings.get("wording_higher_threshold"):
@@ -287,6 +623,8 @@ def render_dashboard_view(view: DashboardView) -> None:
     if view.errors and not view.cards:
         return
 
+    operating_state = _render_operating_settings(view)
+
     left, right = st.columns([0.92, 2.08], gap="large")
     with left:
         st.subheader("Analysed image")
@@ -295,19 +633,34 @@ def render_dashboard_view(view: DashboardView) -> None:
             st.caption(view.image_path.name)
         else:
             st.error("Analysed image is not available on disk.")
-        _render_status(view)
+        _render_status(view, operating_state=operating_state)
         _render_conflicts(view)
 
     with right:
         st.subheader("Four expert configurations")
+        active_run = (
+            operating_state.active_run_name if operating_state else PRIMARY_ASSESSMENT_RUN
+        )
+        active_pred = (
+            operating_state.prediction.predicted_label if operating_state else None
+        )
         row1 = st.columns(2, gap="medium")
         row2 = st.columns(2, gap="medium")
         for column, card in zip(list(row1) + list(row2), view.cards):
             with column:
                 with st.container(border=True):
-                    _render_card(card)
+                    _render_card(
+                        card,
+                        highlight=card.run_name == active_run,
+                        predicted_label=active_pred if card.run_name == active_run else None,
+                        fake_score=(
+                            operating_state.prediction.raw_fake_score
+                            if operating_state and card.run_name == active_run
+                            else None
+                        ),
+                    )
 
-    _render_technical(view)
+    _render_technical(view, operating_state=operating_state)
 
 
 def _render_saved_example() -> None:

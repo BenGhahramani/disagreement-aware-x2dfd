@@ -20,7 +20,7 @@ import math
 import random
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Mapping, Optional, Sequence, Tuple
 
 from eval.experiment_configs import PRIMARY_ASSESSMENT_RUN, RUN_ORDER
 from eval.labelled_analysis import (
@@ -53,6 +53,21 @@ SELECTION_CRITERION_TO_OP_KEY: Dict[str, str] = {
     "max_f1_fake": "max_f1_fake",
     "closest_equal_sensitivity_specificity": "closest_equal_sensitivity_specificity",
 }
+
+# Prototype operating-target used only to form interpretable dashboard presets
+# from a validation sweep. Not a scientifically universal cut-off or calibrated
+# confidence level.
+PRESET_TARGET_RATE = 0.95
+PRESET_SENSITIVE = "Sensitive"
+PRESET_BALANCED = "Balanced"
+PRESET_CONSERVATIVE = "Conservative"
+PRESET_NAMES: Tuple[str, ...] = (PRESET_SENSITIVE, PRESET_BALANCED, PRESET_CONSERVATIVE)
+PRESET_TARGET_NOTE = (
+    "PRESET_TARGET_RATE is a prototype operating target used to create "
+    "interpretable Sensitive / Conservative presets from the validation sweep. "
+    "It is not a scientifically universal threshold, an optimal default, or a "
+    "calibrated confidence level."
+)
 
 
 class ThresholdSweepError(ValueError):
@@ -226,6 +241,219 @@ def descriptive_operating_points(
         "closest_equal_sensitivity_specificity": _point(
             equalish, role="closest_equal_sens_spec"
         ),
+    }
+
+
+def _row_metric(row: Mapping[str, Any], key: str) -> Optional[float]:
+    value = row.get(key)
+    if value is None or isinstance(value, bool):
+        return None
+    try:
+        number = float(value)
+    except (TypeError, ValueError):
+        return None
+    if number != number:
+        return None
+    return number
+
+
+def _better_fallback_row(
+    row: Dict[str, Any],
+    best: Optional[Dict[str, Any]],
+    *,
+    primary: str,
+    secondary: str,
+) -> bool:
+    """True if ``row`` should replace ``best`` for a max-primary then max-secondary fallback."""
+
+    if best is None:
+        return True
+    p = _row_metric(row, primary)
+    bp = _row_metric(best, primary)
+    if p is None:
+        return False
+    if bp is None or p > bp + 1e-15:
+        return True
+    if abs(p - bp) > 1e-15:
+        return False
+    s = _row_metric(row, secondary)
+    bs = _row_metric(best, secondary)
+    if s is None:
+        return False
+    if bs is None or s > bs + 1e-15:
+        return True
+    if abs(s - bs) > 1e-15:
+        return False
+    return abs(float(row["threshold"]) - REFERENCE_THRESHOLD) < abs(
+        float(best["threshold"]) - REFERENCE_THRESHOLD
+    )
+
+
+def _preset_payload(
+    *,
+    name: str,
+    row: Optional[Dict[str, Any]],
+    target: str,
+    target_met: bool,
+    used_fallback: bool,
+    provenance: str,
+) -> Dict[str, Any]:
+    metrics = dict(row) if row is not None else {}
+    threshold = _row_metric(metrics, "threshold") if metrics else None
+    return {
+        "name": name,
+        "threshold": threshold,
+        "validation_metrics": metrics,
+        "validation_sensitivity_fake": _row_metric(metrics, "sensitivity_fake"),
+        "validation_specificity_real": _row_metric(metrics, "specificity_real"),
+        "validation_balanced_accuracy": _row_metric(metrics, "balanced_accuracy"),
+        "target": target,
+        "target_rate": PRESET_TARGET_RATE,
+        "target_met": target_met,
+        "used_fallback": used_fallback,
+        "provenance": provenance,
+        "not_an_approved_default": True,
+        "selection_split": "validation",
+    }
+
+
+def select_operating_presets(
+    rows: Sequence[Dict[str, Any]],
+    *,
+    target_rate: float = PRESET_TARGET_RATE,
+) -> Dict[str, Any]:
+    """Derive Sensitive / Balanced / Conservative from validation sweep rows only.
+
+    Held-out test fields, if present on the rows, are ignored. These presets are
+    operating trade-offs on raw ``fake_score``, not calibrated confidence.
+    """
+
+    usable = [dict(r) for r in rows if _row_metric(r, "threshold") is not None]
+    balanced_row = _argmax_metric(usable, "balanced_accuracy")
+
+    qualifying_sens: List[Dict[str, Any]] = []
+    for row in usable:
+        sens = _row_metric(row, "sensitivity_fake")
+        if sens is not None and sens + 1e-15 >= float(target_rate):
+            qualifying_sens.append(row)
+    if qualifying_sens:
+        sensitive_row = max(qualifying_sens, key=lambda r: float(r["threshold"]))
+        sensitive_met, sensitive_fallback = True, False
+    else:
+        sensitive_row = None
+        for row in usable:
+            if _better_fallback_row(
+                row, sensitive_row, primary="sensitivity_fake", secondary="specificity_real"
+            ):
+                sensitive_row = row
+        sensitive_met, sensitive_fallback = False, True
+
+    qualifying_spec: List[Dict[str, Any]] = []
+    for row in usable:
+        spec = _row_metric(row, "specificity_real")
+        if spec is not None and spec + 1e-15 >= float(target_rate):
+            qualifying_spec.append(row)
+    if qualifying_spec:
+        conservative_row = min(qualifying_spec, key=lambda r: float(r["threshold"]))
+        conservative_met, conservative_fallback = True, False
+    else:
+        conservative_row = None
+        for row in usable:
+            if _better_fallback_row(
+                row,
+                conservative_row,
+                primary="specificity_real",
+                secondary="sensitivity_fake",
+            ):
+                conservative_row = row
+        conservative_met, conservative_fallback = False, True
+
+    presets = {
+        PRESET_SENSITIVE: _preset_payload(
+            name=PRESET_SENSITIVE,
+            row=sensitive_row,
+            target=f"fake_sensitivity_ge_{target_rate:.2f}",
+            target_met=sensitive_met,
+            used_fallback=sensitive_fallback,
+            provenance=(
+                "Highest validation threshold with fake sensitivity ≥ "
+                f"{target_rate:.0%} (prototype operating target). "
+                "Validation-only; not a calibrated confidence."
+                if not sensitive_fallback
+                else (
+                    f"No validation threshold reached fake sensitivity ≥ {target_rate:.0%}; "
+                    "using maximum validation fake sensitivity, then best specificity. "
+                    "Not a calibrated confidence."
+                )
+            ),
+        ),
+        PRESET_BALANCED: _preset_payload(
+            name=PRESET_BALANCED,
+            row=balanced_row,
+            target="max_validation_balanced_accuracy",
+            target_met=balanced_row is not None,
+            used_fallback=False,
+            provenance=(
+                "Validation-selected for balanced sensitivity/specificity performance"
+            ),
+        ),
+        PRESET_CONSERVATIVE: _preset_payload(
+            name=PRESET_CONSERVATIVE,
+            row=conservative_row,
+            target=f"real_specificity_ge_{target_rate:.2f}",
+            target_met=conservative_met,
+            used_fallback=conservative_fallback,
+            provenance=(
+                "Lowest validation threshold with real specificity ≥ "
+                f"{target_rate:.0%} (prototype operating target). "
+                "Validation-only; not a calibrated confidence."
+                if not conservative_fallback
+                else (
+                    f"No validation threshold reached real specificity ≥ {target_rate:.0%}; "
+                    "using maximum validation specificity, then best fake sensitivity. "
+                    "Not a calibrated confidence."
+                )
+            ),
+        ),
+    }
+
+    thresholds = [
+        presets[name]["threshold"]
+        for name in PRESET_NAMES
+        if presets[name]["threshold"] is not None
+    ]
+    unique = {round(float(t), 10) for t in thresholds}
+    collapsed = len(unique) < len(thresholds)
+    s_t = presets[PRESET_SENSITIVE]["threshold"]
+    b_t = presets[PRESET_BALANCED]["threshold"]
+    c_t = presets[PRESET_CONSERVATIVE]["threshold"]
+    unexpected_order = False
+    if s_t is not None and b_t is not None and c_t is not None:
+        unexpected_order = not (s_t - 1e-12 <= b_t <= c_t + 1e-12)
+
+    collapse_note = None
+    if collapsed:
+        collapse_note = (
+            "For this validation set, these operating goals resolve to the same threshold."
+        )
+    order_note = None
+    if unexpected_order:
+        order_note = (
+            "Unexpected preset order on this validation sweep "
+            "(Sensitive / Balanced / Conservative are not non-decreasing). "
+            "True selected thresholds are kept; they are not perturbed."
+        )
+
+    return {
+        "presets": presets,
+        "collapsed": collapsed,
+        "unexpected_order": unexpected_order,
+        "collapse_note": collapse_note,
+        "order_note": order_note,
+        "target_rate": float(target_rate),
+        "target_note": PRESET_TARGET_NOTE,
+        "selection_split": "validation",
+        "score_semantics": SCORE_SEMANTICS,
     }
 
 
@@ -555,12 +783,32 @@ def run_validation_test_protocol(
             continue
 
         reference_test = evaluate_frozen_threshold(test_samples, REFERENCE_THRESHOLD)
+        sweep = run_threshold_sweep(val_samples, step=step)
+        val_rows = list(sweep["thresholds"])
+        ops = sweep["operating_points"]
         selections: Dict[str, Any] = {}
         for criterion in criteria_list:
-            selected = select_threshold_on_validation(
-                val_samples, criterion=criterion, step=step
-            )
-            frozen = float(selected["selected_threshold"])
+            op_key = SELECTION_CRITERION_TO_OP_KEY[criterion]
+            point = ops.get(op_key)
+            if not isinstance(point, dict) or point.get("threshold") is None:
+                continue
+            frozen = float(point["threshold"])
+            selected = {
+                "criterion": criterion,
+                "selected_threshold": frozen,
+                "frozen": True,
+                "selection_split": "validation",
+                "selection_note": (
+                    "Threshold chosen on the validation partition only; "
+                    "held-out test scores were not used for selection."
+                ),
+                "score_field": SCORE_FIELD,
+                "score_semantics": SCORE_SEMANTICS,
+                "validation_metrics": confusion_at_threshold(val_samples, frozen),
+                "validation_operating_point": point,
+                "validation_roc": sweep["roc"],
+                "not_an_approved_default": True,
+            }
             held_out = evaluate_frozen_threshold(test_samples, frozen)
             row = _comparison_row(
                 run_name=run_name,
@@ -578,6 +826,15 @@ def run_validation_test_protocol(
                 "comparison": row,
             }
 
+        preset_pack = select_operating_presets(val_rows)
+        dashboard_presets: Dict[str, Any] = {}
+        for name, preset in preset_pack["presets"].items():
+            entry = dict(preset)
+            thr = preset.get("threshold")
+            if thr is not None:
+                entry["held_out_test"] = evaluate_frozen_threshold(test_samples, float(thr))
+            dashboard_presets[name] = entry
+
         results_by_run[run_name] = {
             "run_name": run_name,
             "status": "ok",
@@ -589,6 +846,16 @@ def run_validation_test_protocol(
             "n_fake_test": sum(1 for s in test_samples if s.ground_truth == "fake"),
             "reference_0_50_held_out_test": reference_test,
             "selections": selections,
+            "validation_sweep": val_rows,
+            "dashboard_presets": dashboard_presets,
+            "preset_notes": {
+                "collapsed": preset_pack["collapsed"],
+                "unexpected_order": preset_pack["unexpected_order"],
+                "collapse_note": preset_pack["collapse_note"],
+                "order_note": preset_pack["order_note"],
+                "target_rate": preset_pack["target_rate"],
+                "target_note": preset_pack["target_note"],
+            },
         }
 
     return {

@@ -385,6 +385,159 @@ def test_held_out_evaluation_and_reference_comparison(tmp_path: Path) -> None:
     assert "uncalibrated" in md.lower() or "raw" in md.lower()
     payload = json.loads(Path(written["validation_protocol.json"]).read_text(encoding="utf-8"))
     assert payload["protocol"] == "validation_select_held_out_evaluate"
+    for block in payload["results_by_run"].values():
+        if block.get("status") != "ok":
+            continue
+        assert isinstance(block.get("validation_sweep"), list)
+        assert block["validation_sweep"]
+        assert "dashboard_presets" in block
+        assert "Sensitive" in block["dashboard_presets"]
+        # Preset selection must come from validation rows, not held-out.
+        for preset in block["dashboard_presets"].values():
+            assert preset.get("selection_split") == "validation"
+            metrics = preset.get("validation_metrics") or {}
+            assert "test_balanced_accuracy" not in metrics
+
+
+def test_operating_preset_sensitive_highest_qualifying_threshold() -> None:
+    from eval.threshold_sweep import PRESET_TARGET_RATE, select_operating_presets
+
+    rows = [
+        {
+            "threshold": 0.50,
+            "sensitivity_fake": 1.00,
+            "specificity_real": 0.40,
+            "balanced_accuracy": 0.70,
+            "test_balanced_accuracy": 0.99,  # must be ignored
+        },
+        {
+            "threshold": 0.63,
+            "sensitivity_fake": 0.967,
+            "specificity_real": 0.517,
+            "balanced_accuracy": 0.742,
+            "test_balanced_accuracy": 0.11,
+        },
+        {
+            "threshold": 0.78,
+            "sensitivity_fake": 0.867,
+            "specificity_real": 0.833,
+            "balanced_accuracy": 0.850,
+            "test_balanced_accuracy": 0.01,
+        },
+        {
+            "threshold": 0.91,
+            "sensitivity_fake": 0.60,
+            "specificity_real": 0.967,
+            "balanced_accuracy": 0.7835,
+            "test_balanced_accuracy": 0.50,
+        },
+    ]
+    pack = select_operating_presets(rows)
+    sensitive = pack["presets"]["Sensitive"]
+    balanced = pack["presets"]["Balanced"]
+    conservative = pack["presets"]["Conservative"]
+    assert PRESET_TARGET_RATE == pytest.approx(0.95)
+    assert sensitive["threshold"] == pytest.approx(0.63)
+    assert sensitive["target_met"] is True
+    assert sensitive["validation_sensitivity_fake"] >= 0.95
+    assert balanced["threshold"] == pytest.approx(0.78)
+    assert conservative["threshold"] == pytest.approx(0.91)
+    assert conservative["target_met"] is True
+    assert conservative["validation_specificity_real"] >= 0.95
+    assert sensitive["threshold"] <= balanced["threshold"] <= conservative["threshold"]
+    assert pack["collapsed"] is False
+
+
+def test_operating_preset_fallback_when_targets_unmet() -> None:
+    from eval.threshold_sweep import select_operating_presets
+
+    rows = [
+        {
+            "threshold": 0.4,
+            "sensitivity_fake": 0.80,
+            "specificity_real": 0.50,
+            "balanced_accuracy": 0.65,
+        },
+        {
+            "threshold": 0.5,
+            "sensitivity_fake": 0.70,
+            "specificity_real": 0.70,
+            "balanced_accuracy": 0.70,
+        },
+        {
+            "threshold": 0.6,
+            "sensitivity_fake": 0.55,
+            "specificity_real": 0.80,
+            "balanced_accuracy": 0.675,
+        },
+    ]
+    pack = select_operating_presets(rows)
+    assert pack["presets"]["Sensitive"]["used_fallback"] is True
+    assert pack["presets"]["Sensitive"]["threshold"] == pytest.approx(0.4)
+    assert pack["presets"]["Conservative"]["used_fallback"] is True
+    assert pack["presets"]["Conservative"]["threshold"] == pytest.approx(0.6)
+    assert pack["presets"]["Balanced"]["threshold"] == pytest.approx(0.5)
+
+
+def test_operating_preset_legitimate_collapse() -> None:
+    from eval.threshold_sweep import select_operating_presets
+
+    rows = [
+        {
+            "threshold": 0.5,
+            "sensitivity_fake": 1.0,
+            "specificity_real": 1.0,
+            "balanced_accuracy": 1.0,
+        },
+        {
+            "threshold": 0.7,
+            "sensitivity_fake": 0.5,
+            "specificity_real": 1.0,
+            "balanced_accuracy": 0.75,
+        },
+    ]
+    pack = select_operating_presets(rows)
+    # Perfect separation at 0.5: sensitive (highest with sens>=0.95) is 0.5,
+    # balanced is 0.5, conservative (lowest with spec>=0.95) is also 0.5.
+    assert pack["presets"]["Sensitive"]["threshold"] == pytest.approx(0.5)
+    assert pack["presets"]["Balanced"]["threshold"] == pytest.approx(0.5)
+    assert pack["presets"]["Conservative"]["threshold"] == pytest.approx(0.5)
+    assert pack["collapsed"] is True
+    assert pack["collapse_note"] is not None
+    assert "same threshold" in pack["collapse_note"].lower()
+
+
+def test_operating_preset_deterministic_tie_break() -> None:
+    from eval.threshold_sweep import select_operating_presets
+
+    rows = [
+        {
+            "threshold": 0.4,
+            "sensitivity_fake": 0.9,
+            "specificity_real": 0.9,
+            "balanced_accuracy": 0.9,
+        },
+        {
+            "threshold": 0.5,
+            "sensitivity_fake": 0.9,
+            "specificity_real": 0.9,
+            "balanced_accuracy": 0.9,
+        },
+        {
+            "threshold": 0.6,
+            "sensitivity_fake": 0.9,
+            "specificity_real": 0.9,
+            "balanced_accuracy": 0.9,
+        },
+    ]
+    pack = select_operating_presets(rows)
+    # Balanced ties → closer to reference 0.50
+    assert pack["presets"]["Balanced"]["threshold"] == pytest.approx(0.5)
+    # Sensitive fallback: max sens (all 0.9), then best spec (all 0.9), then closer to 0.50
+    assert pack["presets"]["Sensitive"]["used_fallback"] is True
+    assert pack["presets"]["Sensitive"]["threshold"] == pytest.approx(0.5)
+    assert pack["collapsed"] is True
+
 
 
 def test_selection_criteria_include_required_modes() -> None:
