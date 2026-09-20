@@ -89,8 +89,7 @@ nvidia-smi || fail "nvidia-smi failed"
   --project-root "${PROJECT_DIR}" \
   --config "${CONFIG}" \
   --experts blending,diffusion_detector \
-  --chunk-size 64 \
-  --resume
+  --chunk-size 64
 
 echo "=== FF++ source-domain inference complete ==="
 echo "scores: ${OUTPUT_DIR}/frame_scores.jsonl"

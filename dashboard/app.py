@@ -239,6 +239,23 @@ def _render_technical(view: DashboardView) -> None:
         st.markdown(f"**Quantisation:** {view.quantisation}")
         st.caption(view.nf4_note)
         st.caption(view.threshold_note or THRESHOLD_NOTE)
+        settings = view.decision_operating_settings or {}
+        if settings:
+            st.markdown("**Decision operating settings** (user-adjustable; not calibrated)")
+            st.caption(
+                f"Active decision threshold on raw fake_score: "
+                f"{settings.get('decision_threshold', '—')}"
+            )
+            st.caption(
+                f"Active expert configuration: "
+                f"{settings.get('expert_configuration', '—')}"
+            )
+            if settings.get("wording_lower_threshold"):
+                st.caption(settings["wording_lower_threshold"])
+            if settings.get("wording_higher_threshold"):
+                st.caption(settings["wording_higher_threshold"])
+            if settings.get("wording_not_confidence"):
+                st.caption(settings["wording_not_confidence"])
         rows = []
         for card in view.cards:
             rows.append(

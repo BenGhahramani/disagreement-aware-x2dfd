@@ -236,10 +236,10 @@ def run_source_domain(
             ]
             LOGGER.info("running chunk %s (%s frames)", chunk_idx, len(chunk_frames))
             proc = run_process(cmd, cwd=project_root, env=env, timeout_s=timeout_s)
-            if proc.returncode != 0:
+            if proc.exit_code != 0:
                 LOGGER.error("chunk %s failed: %s", chunk_idx, proc.stderr[-2000:])
                 raise RuntimeError(
-                    f"runner failed on chunk {chunk_idx} (rc={proc.returncode})"
+                    f"runner failed on chunk {chunk_idx} (rc={proc.exit_code})"
                 )
 
         payload = json.loads(out_path.read_text(encoding="utf-8"))

@@ -94,6 +94,14 @@ EVIDENCE_PROVENANCE: tuple[str, ...] = (
 )
 
 
+def _default_decision_operating_settings() -> Dict[str, Any]:
+    """Lazy import avoids circular dependency with eval.labelled_analysis."""
+
+    from eval.threshold_sweep import default_decision_operating_settings
+
+    return default_decision_operating_settings().to_dict()
+
+
 def detector_score_label(name: str) -> str:
     """User-facing label for a specialist detector score key."""
 
@@ -183,6 +191,9 @@ class DashboardView:
     threshold_note: str = THRESHOLD_NOTE
     evidence_band_note: str = EVIDENCE_BAND_NOTE
     evidence_provenance: List[str] = field(default_factory=lambda: list(EVIDENCE_PROVENANCE))
+    decision_operating_settings: Dict[str, Any] = field(
+        default_factory=_default_decision_operating_settings
+    )
     errors: List[str] = field(default_factory=list)
     warnings: List[str] = field(default_factory=list)
 
@@ -210,6 +221,7 @@ class DashboardView:
             "threshold_note": self.threshold_note,
             "evidence_band_note": self.evidence_band_note,
             "evidence_provenance": list(self.evidence_provenance),
+            "decision_operating_settings": dict(self.decision_operating_settings),
             "errors": list(self.errors),
             "warnings": list(self.warnings),
         }
@@ -624,6 +636,11 @@ def build_dashboard_view(
     conflicts = describe_evidence_conflicts(cards)
     assessment_label, assessment_score, assessment_text = build_model_assessment(cards)
     agreement = derive_evidence_agreement(cards, conflicts=conflicts)
+    from eval.threshold_sweep import default_decision_operating_settings
+
+    operating = default_decision_operating_settings(
+        expert_configuration=PRIMARY_ASSESSMENT_RUN,
+    )
 
     return DashboardView(
         image_path=image_path,
@@ -638,6 +655,7 @@ def build_dashboard_view(
         model_assessment_score=assessment_score,
         model_assessment_text=assessment_text,
         evidence_agreement=agreement,
+        decision_operating_settings=operating.to_dict(),
         errors=errors,
         warnings=warnings,
     )
