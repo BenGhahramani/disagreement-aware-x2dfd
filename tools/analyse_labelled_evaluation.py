@@ -132,7 +132,7 @@ def write_figures(
                 fake_vals.append(float(value))
         fig, ax = plt.subplots()
         data = [real_vals, fake_vals]
-        ax.boxplot(data, tick_labels=["real GT", "fake GT"])
+        ax.boxplot(data, labels=["real GT", "fake GT"])
         ax.set_ylabel(f"{detector} detector score")
         ax.set_title(f"{detector.capitalize()} detector scores by ground truth")
         _annotate_pilot(ax, n_images)
