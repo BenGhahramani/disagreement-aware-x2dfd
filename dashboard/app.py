@@ -242,22 +242,40 @@ def _render_card(card, *, highlight: bool = False, predicted_label: Optional[str
         st.caption(f"Model text: {card.explanation}")
 
 
-def _init_operating_session(view: DashboardView) -> None:
+DEFAULT_VIEW_KEY_PREFIX = "saved"
+LIVE_VIEW_KEY_PREFIX = "live"
+
+
+def _ops_key(key_prefix: str, name: str) -> str:
+    """Namespace a Streamlit widget/session key to one rendered dashboard instance.
+
+    The saved-example tab and the live-analysis tab both render the shared
+    dashboard view in the same Streamlit run, so every explicit key reachable
+    from ``render_dashboard_view`` must be prefixed to avoid collisions and
+    cross-view state contamination. Prefixes are stable across reruns.
+    """
+
+    return f"{key_prefix}_{name}"
+
+
+def _init_operating_session(view: DashboardView, *, key_prefix: str) -> None:
     """Initialise session keys for operating settings once per matrix view."""
 
+    k = lambda name: _ops_key(key_prefix, name)  # noqa: E731
     matrix_key = str(view.matrix_dir)
-    if st.session_state.get("_ops_matrix_key") != matrix_key:
-        st.session_state._ops_matrix_key = matrix_key
-        st.session_state.ops_run_name = PRIMARY_ASSESSMENT_RUN
-        st.session_state.ops_threshold = 0.50
-        st.session_state.ops_threshold_source = THRESHOLD_SOURCE_REFERENCE
-        st.session_state.ops_preset = None
+    if st.session_state.get(k("_ops_matrix_key")) != matrix_key:
+        st.session_state[k("_ops_matrix_key")] = matrix_key
+        st.session_state[k("ops_run_name")] = PRIMARY_ASSESSMENT_RUN
+        st.session_state[k("ops_threshold")] = 0.50
+        st.session_state[k("ops_threshold_source")] = THRESHOLD_SOURCE_REFERENCE
+        st.session_state[k("ops_preset")] = None
 
 
-def _render_operating_settings(view: DashboardView):
+def _render_operating_settings(view: DashboardView, *, key_prefix: str = DEFAULT_VIEW_KEY_PREFIX):
     """Focused Detection settings panel (no inference)."""
 
-    _init_operating_session(view)
+    k = lambda name: _ops_key(key_prefix, name)  # noqa: E731
+    _init_operating_session(view, key_prefix=key_prefix)
 
     st.subheader("Detection settings")
     st.caption(
@@ -265,7 +283,7 @@ def _render_operating_settings(view: DashboardView):
         "Changing these controls does not rerun inference."
     )
 
-    protocol_default = st.session_state.get("ops_validation_path", "") or ""
+    protocol_default = st.session_state.get(k("ops_validation_path"), "") or ""
     env_hint = f"Env override: `{ENV_VALIDATION_PROTOCOL}`"
     protocol_path = st.text_input(
         "Validation protocol path (optional)",
@@ -274,9 +292,9 @@ def _render_operating_settings(view: DashboardView):
             "Path to validation_protocol.json from the threshold-sweep protocol. "
             f"{env_hint}. Missing/malformed files are ignored safely."
         ),
-        key="ops_validation_path_input",
+        key=k("ops_validation_path_input"),
     )
-    st.session_state.ops_validation_path = protocol_path.strip()
+    st.session_state[k("ops_validation_path")] = protocol_path.strip()
     validation = load_validation_protocol(
         protocol_path.strip() or None,
     )
@@ -311,18 +329,18 @@ def _render_operating_settings(view: DashboardView):
         state = build_operating_settings_state(
             cards=view.cards,
             active_run_name=PRIMARY_ASSESSMENT_RUN,
-            decision_threshold=float(st.session_state.get("ops_threshold", 0.50)),
+            decision_threshold=float(st.session_state.get(k("ops_threshold"), 0.50)),
             threshold_source=st.session_state.get(
-                "ops_threshold_source", THRESHOLD_SOURCE_REFERENCE
+                k("ops_threshold_source"), THRESHOLD_SOURCE_REFERENCE
             ),
             validation=validation,
         )
         return state
 
-    current_run = st.session_state.get("ops_run_name", PRIMARY_ASSESSMENT_RUN)
+    current_run = st.session_state.get(k("ops_run_name"), PRIMARY_ASSESSMENT_RUN)
     if current_run not in available:
         current_run = available[0]
-        st.session_state.ops_run_name = current_run
+        st.session_state[k("ops_run_name")] = current_run
 
     labels = [config_display_label(name) for name in available]
     label_to_run = dict(zip(labels, available))
@@ -331,10 +349,11 @@ def _render_operating_settings(view: DashboardView):
         labels,
         index=labels.index(config_display_label(current_run)),
         help="Switches which saved config cell is displayed. Does not run inference.",
+        key=k("ops_run_select"),
     )
     selected_run = label_to_run[choice]
-    if selected_run != st.session_state.ops_run_name:
-        st.session_state.ops_run_name = selected_run
+    if selected_run != st.session_state[k("ops_run_name")]:
+        st.session_state[k("ops_run_name")] = selected_run
         state_probe = build_operating_settings_state(
             cards=view.cards,
             active_run_name=selected_run,
@@ -343,13 +362,13 @@ def _render_operating_settings(view: DashboardView):
         )
         balanced = state_probe.presets.get(PRESET_BALANCED)
         if state_probe.presets_available and balanced is not None:
-            st.session_state.ops_threshold = float(balanced)
-            st.session_state.ops_threshold_source = THRESHOLD_SOURCE_VALIDATION
-            st.session_state.ops_preset = PRESET_BALANCED
+            st.session_state[k("ops_threshold")] = float(balanced)
+            st.session_state[k("ops_threshold_source")] = THRESHOLD_SOURCE_VALIDATION
+            st.session_state[k("ops_preset")] = PRESET_BALANCED
         else:
-            st.session_state.ops_threshold = 0.50
-            st.session_state.ops_threshold_source = THRESHOLD_SOURCE_REFERENCE
-            st.session_state.ops_preset = None
+            st.session_state[k("ops_threshold")] = 0.50
+            st.session_state[k("ops_threshold_source")] = THRESHOLD_SOURCE_REFERENCE
+            st.session_state[k("ops_preset")] = None
 
     if unavailable:
         st.caption(
@@ -359,10 +378,10 @@ def _render_operating_settings(view: DashboardView):
 
     state = build_operating_settings_state(
         cards=view.cards,
-        active_run_name=st.session_state.ops_run_name,
-        decision_threshold=float(st.session_state.get("ops_threshold", 0.50)),
+        active_run_name=st.session_state[k("ops_run_name")],
+        decision_threshold=float(st.session_state.get(k("ops_threshold"), 0.50)),
         threshold_source=st.session_state.get(
-            "ops_threshold_source", THRESHOLD_SOURCE_REFERENCE
+            k("ops_threshold_source"), THRESHOLD_SOURCE_REFERENCE
         ),
         validation=validation,
     )
@@ -378,13 +397,13 @@ def _render_operating_settings(view: DashboardView):
             thr = None if info is None else info.threshold
             with col:
                 if thr is None:
-                    st.button(name, disabled=True, key=f"ops_preset_missing_{name}")
+                    st.button(name, disabled=True, key=k(f"ops_preset_missing_{name}"))
                 else:
                     selected = (
-                        st.session_state.get("ops_preset") == name
+                        st.session_state.get(k("ops_preset")) == name
                         or (
                             state.matched_preset == name
-                            and abs(float(st.session_state.get("ops_threshold", 0.5)) - thr) <= 1e-9
+                            and abs(float(st.session_state.get(k("ops_threshold"), 0.5)) - thr) <= 1e-9
                         )
                     )
                     label = f"{name} — {thr:.2f}"
@@ -392,12 +411,12 @@ def _render_operating_settings(view: DashboardView):
                         label = f"● {label}"
                     if st.button(
                         label,
-                        key=f"ops_preset_{name}",
+                        key=k(f"ops_preset_{name}"),
                         help=info.user_copy if info is not None else "",
                     ):
-                        st.session_state.ops_threshold = float(thr)
-                        st.session_state.ops_threshold_source = THRESHOLD_SOURCE_VALIDATION
-                        st.session_state.ops_preset = name
+                        st.session_state[k("ops_threshold")] = float(thr)
+                        st.session_state[k("ops_threshold_source")] = THRESHOLD_SOURCE_VALIDATION
+                        st.session_state[k("ops_preset")] = name
                         st.rerun()
                     if info is not None:
                         st.caption(info.user_copy)
@@ -414,7 +433,7 @@ def _render_operating_settings(view: DashboardView):
     else:
         for col, name in zip(preset_cols, PRESET_NAMES):
             with col:
-                st.button(name, disabled=True, key=f"ops_preset_disabled_{name}")
+                st.button(name, disabled=True, key=k(f"ops_preset_disabled_{name}"))
         if state.presets_unavailable_reason:
             st.caption(state.presets_unavailable_reason)
 
@@ -422,28 +441,29 @@ def _render_operating_settings(view: DashboardView):
         "Decision threshold (raw fake_score)",
         min_value=0.0,
         max_value=1.0,
-        value=float(st.session_state.get("ops_threshold", 0.50)),
+        value=float(st.session_state.get(k("ops_threshold"), 0.50)),
         step=0.01,
         help="predict fake if fake_score >= threshold. Raw scores are unchanged.",
+        key=k("ops_threshold_slider"),
     )
-    if abs(new_threshold - float(st.session_state.get("ops_threshold", 0.50))) > 1e-12:
-        st.session_state.ops_threshold = float(new_threshold)
+    if abs(new_threshold - float(st.session_state.get(k("ops_threshold"), 0.50))) > 1e-12:
+        st.session_state[k("ops_threshold")] = float(new_threshold)
         matched_now = None
         if state.presets_available:
             for name, info in state.preset_details.items():
                 if info.threshold is not None and abs(info.threshold - new_threshold) <= 1e-9:
                     matched_now = name
                     break
-        st.session_state.ops_threshold_source = THRESHOLD_SOURCE_CUSTOM
-        st.session_state.ops_preset = matched_now
+        st.session_state[k("ops_threshold_source")] = THRESHOLD_SOURCE_CUSTOM
+        st.session_state[k("ops_preset")] = matched_now
         st.rerun()
 
     # Rebuild after possible slider/preset updates already applied via session.
     state = build_operating_settings_state(
         cards=view.cards,
-        active_run_name=st.session_state.ops_run_name,
-        decision_threshold=float(st.session_state.ops_threshold),
-        threshold_source=st.session_state.ops_threshold_source,
+        active_run_name=st.session_state[k("ops_run_name")],
+        decision_threshold=float(st.session_state[k("ops_threshold")]),
+        threshold_source=st.session_state[k("ops_threshold_source")],
         validation=validation,
     )
     st.markdown(f"**Active decision threshold:** `{state.decision_threshold:.2f}`")
@@ -609,8 +629,12 @@ def _render_technical(view: DashboardView, *, operating_state=None) -> None:
             st.markdown(f"**Summary JSON:** `{view.summary_path}`")
 
 
-def render_dashboard_view(view: DashboardView) -> None:
-    """Shared result UI for the saved Stage 3 example and a live run."""
+def render_dashboard_view(view: DashboardView, *, key_prefix: str = DEFAULT_VIEW_KEY_PREFIX) -> None:
+    """Shared result UI for the saved Stage 3 example and a live run.
+
+    ``key_prefix`` namespaces every explicit Streamlit widget/session key so the
+    saved and live tabs can both render this view in one run.
+    """
 
     st.markdown(f'<div class="disclaimer">{view.disclaimer}</div>', unsafe_allow_html=True)
     _render_provenance(view)
@@ -623,7 +647,7 @@ def render_dashboard_view(view: DashboardView) -> None:
     if view.errors and not view.cards:
         return
 
-    operating_state = _render_operating_settings(view)
+    operating_state = _render_operating_settings(view, key_prefix=key_prefix)
 
     left, right = st.columns([0.92, 2.08], gap="large")
     with left:
@@ -688,7 +712,7 @@ def _render_saved_example() -> None:
     except Exception as exc:
         st.error(unexpected_error_message(exc))
         return
-    render_dashboard_view(view)
+    render_dashboard_view(view, key_prefix=DEFAULT_VIEW_KEY_PREFIX)
 
 
 def _render_live_errors(result: LiveAnalysisResult) -> None:
@@ -713,7 +737,7 @@ def _render_live_tab() -> None:
         if isinstance(result, LiveAnalysisResult):
             _render_live_errors(result)
             if result.view is not None:
-                render_dashboard_view(result.view)
+                render_dashboard_view(result.view, key_prefix=LIVE_VIEW_KEY_PREFIX)
             if result.work_dir is not None:
                 st.caption(f"Results preserved at `{result.work_dir}`")
         return
@@ -753,7 +777,7 @@ def _render_live_tab() -> None:
 
     _render_live_errors(result)
     if result.view is not None:
-        render_dashboard_view(result.view)
+        render_dashboard_view(result.view, key_prefix=LIVE_VIEW_KEY_PREFIX)
     if result.work_dir is not None:
         st.caption(f"Results preserved at `{result.work_dir}`")
 

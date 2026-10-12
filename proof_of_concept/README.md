@@ -81,6 +81,25 @@ python -m proof_of_concept.run_demo --all \
 Open `proof_of_concept/outputs/report.md` in any Markdown viewer (the Cursor
 preview pane works well for the supervisor demo).
 
+### Streamlit dashboard (saved Stage 3 outputs)
+
+Requires Streamlit in the project venv. The default **Saved example** tab
+loads the existing expert-matrix directory only. Preferred launch:
+
+```powershell
+.\run_demo.ps1
+```
+
+Manual equivalent:
+
+```powershell
+.venv\Scripts\python.exe -m streamlit run dashboard/app.py
+```
+
+Official status still comes from `evaluator.evaluate`. The dashboard adds a
+descriptive “Evidence conflict” note when specialist scores sit opposite the
+LM label; it does not invent a new status bucket.
+
 ---
 
 ## Folder layout
@@ -94,6 +113,8 @@ proof_of_concept/
 ├── normaliser.py             # parse X2DFD result JSONs -> RunRecord
 ├── evaluator.py              # rule-based status + rationale
 ├── report.py                 # Markdown rendering
+├── dashboard_data.py         # compatibility re-export of dashboard.view_model
+├── dashboard_app.py          # compatibility launcher → dashboard/app.py
 ├── run_demo.py               # CLI: render a report from existing result JSONs
 ├── launcher.py               # CLI: run the four X2DFD invocations + write runtimes.json
 └── fixtures/
