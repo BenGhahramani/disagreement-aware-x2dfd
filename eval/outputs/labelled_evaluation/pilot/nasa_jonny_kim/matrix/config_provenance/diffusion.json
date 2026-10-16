@@ -1,0 +1,77 @@
+{
+  "run_name": "diffusion",
+  "experts_arg": "diffusion",
+  "material": {
+    "source_sha256": "4807d6ff31c34867ab51319a7787ba6f616edd7e7d1d10921716d856715bcc9f",
+    "crop_sha256": "e8bd4ea46bd95e8cf7ac82eaabf0a8ab4adb55506d7ea8b7ca9420cc75142fd8",
+    "inference_config_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+    "inference_config_sha256": "c1d2776c4f88ce07016d0038f737c719a98edf3069a97b00c9793a3c1a8105db",
+    "load_4bit": true,
+    "run_name": "diffusion",
+    "experts_arg": "diffusion",
+    "already_cropped": false,
+    "model_artefacts_fingerprint": "20ad7c892bfa2137d4936f3383358420c8f525a3ecc7e186fb76c32e80ae2f5d"
+  },
+  "interpretation_thresholds": {
+    "prototype_stable_uncertain": 0.7,
+    "evidence_expert_lo": 0.3,
+    "evidence_expert_hi": 0.7
+  },
+  "git_commit": "694c2cb4f51c94ef3484101d1d96198aae8b2720",
+  "git_dirty": true,
+  "timestamp": "2026-08-23T06:37:26+00:00",
+  "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\nasa_jonny_kim\\matrix\\demo_diffusion.json",
+  "model_artefacts": {
+    "inference_config_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+    "inference_config_sha256": "c1d2776c4f88ce07016d0038f737c719a98edf3069a97b00c9793a3c1a8105db",
+    "artefacts": [
+      {
+        "role": "llava_base",
+        "path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\base\\llava-v1.5-7b",
+        "fingerprint_kind": "base_model_metadata",
+        "note": "LLaVA base weights are not fully hashed; identity is the model path plus SHA-256 of config/index/tokenizer metadata files.",
+        "exists": true,
+        "files": {
+          "config.json": "f112de882e31171a105f0d3f69d9e6e8700a40149f0944f4b507d3a41789e492",
+          "generation_config.json": "e453057ea6a89d902d7326b3addbe312a7a6c8faabf777a521c9f2d563f79b8d",
+          "tokenizer_config.json": "cf01145c6de57f061991ff871e85d0402c38481f968daea8874c431cd0c7740f",
+          "special_tokens_map.json": "719833ff26ac897a3ec8ed946028a135de2a351470af59b4008744ab1f0ee9b7",
+          "pytorch_model.bin.index.json": "487578d3f7ec21c057596d0f9dc71084acc349eb8f13bd8b5af86c26460f2d31"
+        },
+        "sha256": "f8a98d1894559a5ab01da1cec25a557570c921066e193f0c495edbbac4d5ddea"
+      },
+      {
+        "role": "lora_adapter",
+        "path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\checkpoints\\ckpt\\llava-v1.5-7b-lora-[ble-diff]",
+        "fingerprint_kind": "adapter_directory",
+        "exists": true,
+        "files": {
+          "adapter_config.json": "e1c3f08aeaf137fafc0c64298639a5dd40386f1ba00bc13b14ed782d28133b07",
+          "adapter_model.safetensors": "04aa74a83b8bb39ceb2caf433ffa6a6ad0246511b51f4cde0fd28d009dcb159c"
+        },
+        "sha256": "5d5b1970b1d03885df971ce3312f1c496b53a9d774e77d5ac52c9bd95194d6db"
+      },
+      {
+        "role": "blending_checkpoint",
+        "path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\blending_models\\best_gf.pth",
+        "fingerprint_kind": "full_file_sha256",
+        "exists": true,
+        "sha256": "1390334be29c11562f3b333b00f10ef30ba849186215cf88f3f0902daed3e473"
+      },
+      {
+        "role": "diffusion_checkpoint",
+        "path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\ours-sync",
+        "model": "ours-sync",
+        "weights_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights",
+        "fingerprint_kind": "diffusion_model_dir",
+        "exists": true,
+        "files": {
+          "config.yaml": "5d4bc81feb85d08571656f49ea18899e86774a8fd502e1a59f2430f64ffe8a13",
+          "ours-sync.pth": "2bc17f976862b28c93c97b82a8e19c71c287151465a6ce0ad1c98f41551cdba7"
+        },
+        "sha256": "7052aef608bf188d3a63965d297966f42b1ced1dff800c45ca2d38258ecc29e7"
+      }
+    ],
+    "artefacts_fingerprint": "20ad7c892bfa2137d4936f3383358420c8f525a3ecc7e186fb76c32e80ae2f5d"
+  }
+}

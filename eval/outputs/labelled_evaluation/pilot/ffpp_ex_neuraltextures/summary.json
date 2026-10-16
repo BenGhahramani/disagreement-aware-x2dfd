@@ -1,0 +1,143 @@
+{
+  "status": "pass",
+  "manifest": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\manifest.json",
+  "images": [
+    "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\face_crop.jpg"
+  ],
+  "config": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+  "output_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\matrix",
+  "quantisation": "4-bit",
+  "started_at": "2026-08-23T06:44:34+00:00",
+  "finished_at": "2026-08-23T06:44:34+00:00",
+  "totals": {
+    "configurations": 4,
+    "passed": 4,
+    "failed": 0,
+    "total_runtime_s": 87.437,
+    "max_peak_vram_mib": null,
+    "distinct_labels": [
+      "fake"
+    ],
+    "labels_agree": true
+  },
+  "runs": [
+    {
+      "run_name": "none",
+      "experts": [],
+      "experts_arg": "none",
+      "status": "pass",
+      "validation": "valid",
+      "prediction_text": "This image is fake",
+      "label": "fake",
+      "real_score": 0.4883,
+      "fake_score": 0.5117,
+      "expert_scores": {},
+      "exit_code": null,
+      "timed_out": false,
+      "cuda_oom": false,
+      "runtime_s": 20.531,
+      "peak_vram_mib": null,
+      "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\matrix\\demo_none.json",
+      "log_path": null,
+      "prompt": "<image>\nIs this image real or fake?",
+      "warnings": [],
+      "failures": [],
+      "stderr_tail": "",
+      "command": []
+    },
+    {
+      "run_name": "blending",
+      "experts": [
+        "blending"
+      ],
+      "experts_arg": "blending",
+      "status": "pass",
+      "validation": "valid",
+      "prediction_text": "This image is fake",
+      "label": "fake",
+      "real_score": 0.4688,
+      "fake_score": 0.5312,
+      "expert_scores": {
+        "blending": 0.009
+      },
+      "exit_code": null,
+      "timed_out": false,
+      "cuda_oom": false,
+      "runtime_s": 21.828,
+      "peak_vram_mib": null,
+      "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\matrix\\demo_blending.json",
+      "log_path": null,
+      "prompt": "<image>\nIs this image real or fake? And the blending score is 0.009.",
+      "warnings": [],
+      "failures": [],
+      "stderr_tail": "",
+      "command": []
+    },
+    {
+      "run_name": "diffusion",
+      "experts": [
+        "diffusion"
+      ],
+      "experts_arg": "diffusion",
+      "status": "pass",
+      "validation": "valid",
+      "prediction_text": "This image is fake",
+      "label": "fake",
+      "real_score": 0.1128,
+      "fake_score": 0.8872,
+      "expert_scores": {
+        "diffusion": 0.804
+      },
+      "exit_code": null,
+      "timed_out": false,
+      "cuda_oom": false,
+      "runtime_s": 21.664,
+      "peak_vram_mib": null,
+      "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\matrix\\demo_diffusion.json",
+      "log_path": null,
+      "prompt": "<image>\nIs this image real or fake? And the diffusion score is 0.804.",
+      "warnings": [],
+      "failures": [],
+      "stderr_tail": "",
+      "command": []
+    },
+    {
+      "run_name": "blending_diffusion",
+      "experts": [
+        "blending",
+        "diffusion"
+      ],
+      "experts_arg": "blending,diffusion",
+      "status": "pass",
+      "validation": "valid",
+      "prediction_text": "This image is fake",
+      "label": "fake",
+      "real_score": 0.2942,
+      "fake_score": 0.7058,
+      "expert_scores": {
+        "blending": 0.009,
+        "diffusion": 0.804
+      },
+      "exit_code": null,
+      "timed_out": false,
+      "cuda_oom": false,
+      "runtime_s": 23.414,
+      "peak_vram_mib": null,
+      "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\matrix\\demo_blending_diffusion.json",
+      "log_path": null,
+      "prompt": "<image>\nIs this image real or fake? And the blending score is 0.009, and the diffusion score is 0.804.",
+      "warnings": [],
+      "failures": [],
+      "stderr_tail": "",
+      "command": []
+    }
+  ],
+  "git_commit": "694c2cb4f51c94ef3484101d1d96198aae8b2720",
+  "interpretation_thresholds": {
+    "prototype_stable_uncertain": 0.7,
+    "evidence_expert_lo": 0.3,
+    "evidence_expert_hi": 0.7
+  },
+  "source_sha256": "9260ee4ce1325184e64dd642fadd4acbdf3371937c6e8bd21ddf46756a92a6c2",
+  "crop_sha256": "4f51b1081e218ca6200df7819879ab527df3157f288c374292b8f2b9b55249fe"
+}

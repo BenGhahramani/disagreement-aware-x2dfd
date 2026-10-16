@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-08-23T06:41:30",
+  "run_id": "infer_20260823T064112Z",
+  "model_base": "weights/base/llava-v1.5-7b",
+  "model_path": "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[ble-diff]",
+  "question_template": "<image>\nIs this image real or fake? And the {alias} score is {score}.",
+  "params": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "num_beams": 1,
+    "max_new_tokens": 4
+  },
+  "inputs": [
+    "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\manifest.json"
+  ],
+  "outputs": [
+    "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\ffpp_ex_neuraltextures\\matrix\\demo_blending.json"
+  ],
+  "artefacts": {
+    "run_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval/outputs\\infer\\runs\\infer_20260823T064112Z",
+    "datasets_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval/outputs\\infer\\runs\\infer_20260823T064112Z\\datasets"
+  }
+}

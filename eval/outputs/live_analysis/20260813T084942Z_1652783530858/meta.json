@@ -1,0 +1,13 @@
+{
+  "ok": true,
+  "source_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_uploads\\20260813T084942Z_1652783530858\\1652783530858.jpg",
+  "crop_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\face_crop.jpg",
+  "manifest_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\manifest.json",
+  "matrix_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix",
+  "summary_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\summary.json",
+  "errors": [],
+  "warnings": [],
+  "infer_config": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+  "load_4bit": true,
+  "stage3_matrix_untouched": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\expert_matrix\\demo_one_crop"
+}

@@ -1,0 +1,15 @@
+{
+  "ok": false,
+  "source_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_uploads\\20260808T094401Z_UQ_Logo\\UQ_Logo.png",
+  "crop_path": null,
+  "manifest_path": null,
+  "matrix_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260808T094401Z_UQ_Logo\\matrix",
+  "summary_path": null,
+  "errors": [
+    "no face detected in C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_uploads\\20260808T094401Z_UQ_Logo\\UQ_Logo.png"
+  ],
+  "warnings": [],
+  "infer_config": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+  "load_4bit": true,
+  "stage3_matrix_untouched": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\expert_matrix\\demo_one_crop"
+}

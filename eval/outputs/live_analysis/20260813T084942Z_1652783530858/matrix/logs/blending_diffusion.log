@@ -1,0 +1,31 @@
+$ C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\.venv\Scripts\python.exe -m eval.infer.runner --config C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval\configs\infer_config.windows.yaml --json C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval\outputs\live_analysis\20260813T084942Z_1652783530858\manifest.json --output C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval\outputs\live_analysis\20260813T084942Z_1652783530858\matrix\demo_blending_diffusion.json --experts blending,diffusion
+
+--- stdout ---
+--- Initializing BlendingDetector: Loading Model from weights/blending_models/best_gf.pth ---
+--- BlendingDetector Initialized Successfully ---
+normalize RESNET
+Loading LLaVA from base model...
+Loading additional LLaVA weights...
+Loading LoRA weights...
+Merging LoRA weights...
+Model is loaded...
+Saved conversation-style results: C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval\outputs\live_analysis\20260813T084942Z_1652783530858\matrix\demo_blending_diffusion.json
+Run info saved to: C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval/outputs\infer\runs\infer_20260813T085130Z\infer_info.json
+
+--- stderr ---
+C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\.venv\lib\site-packages\torch\functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ..\aten\src\ATen\native\TensorShape.cpp:3527.)
+  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]
+
+Blending Detector Inference (bs=128):   0%|          | 0/1 [00:00<?, ?it/s]
+Blending Detector Inference (bs=128): 100%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ| 1/1 [00:00<00:00,  2.35it/s]
+Blending Detector Inference (bs=128): 100%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ| 1/1 [00:00<00:00,  2.35it/s]
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards:  50%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆ     | 1/2 [00:09<00:09,  9.92s/it]
+Loading checkpoint shards: 100%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ| 2/2 [00:14<00:00,  6.91s/it]
+Loading checkpoint shards: 100%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ| 2/2 [00:14<00:00,  7.37s/it]
+C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\.venv\lib\site-packages\peft\tuners\lora\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\.venv\lib\site-packages\transformers\generation\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+  warnings.warn(
+

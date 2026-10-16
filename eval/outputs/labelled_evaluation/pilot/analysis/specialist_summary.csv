@@ -1,0 +1,3 @@
+detector,score_kind,n_usable,n_real,n_fake,mean_real,median_real,mean_fake,median_fake,min,max,stdev,roc_auc,roc_auc_unavailable_reason
+blending,detector_score_not_calibrated_probability,4,2,2,0.004999999999999999,0.004999999999999999,0.5045,0.5045,0.001,1.0,0.49684764599757675,0.875,
+diffusion,detector_score_not_calibrated_probability,4,2,2,0.0505,0.0505,0.8865000000000001,0.8865000000000001,0.048,0.969,0.4873468990359947,1.0,

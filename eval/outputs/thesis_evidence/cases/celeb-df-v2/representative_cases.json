@@ -1,0 +1,1607 @@
+{
+  "cases": [
+    {
+      "active_correct": true,
+      "active_prediction": "fake",
+      "active_threshold": 0.77,
+      "case_key": "strongest_correct_fake",
+      "config": "blending",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.22999999999999998,
+      "evidence_agreement": "conflict",
+      "fake_score": 1.0,
+      "ground_truth": "fake",
+      "outcome": "TP",
+      "prototype_status": "Stable",
+      "real_score": 0.0,
+      "run_name": "blending",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id10_id13_0007",
+      "selection_rule": "Among TP, maximise fake_score; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id13_0007.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": 1.0,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.77,
+      "case_key": "strongest_correct_real",
+      "config": "blending",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.7108,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.0592,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Contested",
+      "real_score": 0.9408,
+      "run_name": "blending",
+      "sample_id": "celebdf_v2_real_Celeb-real__id11_0006",
+      "selection_rule": "Among TN, minimise fake_score; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": 0.0,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "fake",
+      "active_threshold": 0.77,
+      "case_key": "false_positive",
+      "config": "blending",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.22970000000000002,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9997,
+      "ground_truth": "real",
+      "outcome": "FP",
+      "prototype_status": "Stable",
+      "real_score": 0.0003,
+      "run_name": "blending",
+      "sample_id": "celebdf_v2_real_YouTube-real__00259",
+      "selection_rule": "Among FP, maximise fake_score (most extreme false alarm); tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/YouTube-real__00259.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": 0.998,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.77,
+      "case_key": "false_negative",
+      "config": "blending",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.4142,
+      "evidence_agreement": "insufficient evidence",
+      "fake_score": 0.3558,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Contested",
+      "real_score": 0.6442,
+      "run_name": "blending",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id9_id3_0009",
+      "selection_rule": "Among FN, minimise fake_score (most extreme miss); tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id3_0009.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": 0.004,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.77,
+      "case_key": "closest_to_threshold_correct",
+      "config": "blending",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.0037000000000000366,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.7663,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Stable",
+      "real_score": 0.2337,
+      "run_name": "blending",
+      "sample_id": "celebdf_v2_real_Celeb-real__id21_0009",
+      "selection_rule": "Among correct predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id21_0009.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": 0.005,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.77,
+      "case_key": "closest_to_threshold_incorrect",
+      "config": "blending",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.009299999999999975,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.7607,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Stable",
+      "real_score": 0.2393,
+      "run_name": "blending",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id55_id57_0002",
+      "selection_rule": "Among incorrect predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id55_id57_0002.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": 0.007,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.77,
+      "case_key": "detector_agreement",
+      "config": "blending",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.7108,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.0592,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Contested",
+      "real_score": 0.9408,
+      "run_name": "blending",
+      "sample_id": "celebdf_v2_real_Celeb-real__id11_0006",
+      "selection_rule": "Optional: available specialists unanimously agree with active prediction; prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": 0.0,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "fake",
+      "active_threshold": 0.77,
+      "case_key": "detector_conflict",
+      "config": "blending",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.22709999999999997,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9971,
+      "ground_truth": "fake",
+      "outcome": "TP",
+      "prototype_status": "Stable",
+      "real_score": 0.0029,
+      "run_name": "blending",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id13_id7_0000",
+      "selection_rule": "Optional: available specialists disagree with active prediction (or mixed); prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id13_id7_0000.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": 0.021,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "fake",
+      "active_threshold": 0.78,
+      "case_key": "strongest_correct_fake",
+      "config": "blending_diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.21999999999999997,
+      "evidence_agreement": "conflict",
+      "fake_score": 1.0,
+      "ground_truth": "fake",
+      "outcome": "TP",
+      "prototype_status": "Stable",
+      "real_score": 0.0,
+      "run_name": "blending_diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id10_id13_0007",
+      "selection_rule": "Among TP, maximise fake_score; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id13_0007.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": 1.0,
+        "diffusion": 0.004
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.78,
+      "case_key": "strongest_correct_real",
+      "config": "blending_diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.628,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.152,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Contested",
+      "real_score": 0.848,
+      "run_name": "blending_diffusion",
+      "sample_id": "celebdf_v2_real_Celeb-real__id11_0006",
+      "selection_rule": "Among TN, minimise fake_score; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": 0.0,
+        "diffusion": 0.065
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "fake",
+      "active_threshold": 0.78,
+      "case_key": "false_positive",
+      "config": "blending_diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.2198,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9998,
+      "ground_truth": "real",
+      "outcome": "FP",
+      "prototype_status": "Stable",
+      "real_score": 0.0002,
+      "run_name": "blending_diffusion",
+      "sample_id": "celebdf_v2_real_YouTube-real__00259",
+      "selection_rule": "Among FP, maximise fake_score (most extreme false alarm); tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/YouTube-real__00259.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": 0.998,
+        "diffusion": 0.289
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.78,
+      "case_key": "false_negative",
+      "config": "blending_diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.34600000000000003,
+      "evidence_agreement": "insufficient evidence",
+      "fake_score": 0.434,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Contested",
+      "real_score": 0.566,
+      "run_name": "blending_diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id9_id3_0009",
+      "selection_rule": "Among FN, minimise fake_score (most extreme miss); tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id3_0009.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": 0.004,
+        "diffusion": 0.432
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "fake",
+      "active_threshold": 0.78,
+      "case_key": "closest_to_threshold_correct",
+      "config": "blending_diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.0026999999999999247,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.7827,
+      "ground_truth": "fake",
+      "outcome": "TP",
+      "prototype_status": "Stable",
+      "real_score": 0.2173,
+      "run_name": "blending_diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id23_id3_0004",
+      "selection_rule": "Among correct predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id23_id3_0004.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": 0.016,
+        "diffusion": 0.084
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.78,
+      "case_key": "closest_to_threshold_incorrect",
+      "config": "blending_diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.0027000000000000357,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.7773,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Stable",
+      "real_score": 0.2227,
+      "run_name": "blending_diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id55_id57_0002",
+      "selection_rule": "Among incorrect predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id55_id57_0002.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": 0.007,
+        "diffusion": 0.516
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.78,
+      "case_key": "detector_agreement",
+      "config": "blending_diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.628,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.152,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Contested",
+      "real_score": 0.848,
+      "run_name": "blending_diffusion",
+      "sample_id": "celebdf_v2_real_Celeb-real__id11_0006",
+      "selection_rule": "Optional: available specialists unanimously agree with active prediction; prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": 0.0,
+        "diffusion": 0.065
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.78,
+      "case_key": "detector_conflict",
+      "config": "blending_diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.4454,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.3346,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Contested",
+      "real_score": 0.6654,
+      "run_name": "blending_diffusion",
+      "sample_id": "celebdf_v2_real_YouTube-real__00047",
+      "selection_rule": "Optional: available specialists disagree with active prediction (or mixed); prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/YouTube-real__00047.png",
+      "specialist_availability": {
+        "blending": true,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": 0.001,
+        "diffusion": 0.998
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "fake",
+      "active_threshold": 0.98,
+      "case_key": "strongest_correct_fake",
+      "config": "diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.01990000000000003,
+      "evidence_agreement": "agreement",
+      "fake_score": 0.9999,
+      "ground_truth": "fake",
+      "outcome": "TP",
+      "prototype_status": "Stable",
+      "real_score": 0.0001,
+      "run_name": "diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id46_id41_0000",
+      "selection_rule": "Among TP, maximise fake_score; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id46_id41_0000.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": 0.934
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.98,
+      "case_key": "strongest_correct_real",
+      "config": "diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.7202,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.2598,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Contested",
+      "real_score": 0.7402,
+      "run_name": "diffusion",
+      "sample_id": "celebdf_v2_real_Celeb-real__id56_0009",
+      "selection_rule": "Among TN, minimise fake_score; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id56_0009.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": 0.002
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "fake",
+      "active_threshold": 0.98,
+      "case_key": "false_positive",
+      "config": "diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.01990000000000003,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9999,
+      "ground_truth": "real",
+      "outcome": "FP",
+      "prototype_status": "Stable",
+      "real_score": 0.0001,
+      "run_name": "diffusion",
+      "sample_id": "celebdf_v2_real_Celeb-real__id46_0000",
+      "selection_rule": "Among FP, maximise fake_score (most extreme false alarm); tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id46_0000.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": 0.998
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.98,
+      "case_key": "false_negative",
+      "config": "diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.5306,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.4494,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Contested",
+      "real_score": 0.5506,
+      "run_name": "diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id1_id16_0007",
+      "selection_rule": "Among FN, minimise fake_score (most extreme miss); tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id1_id16_0007.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": 0.001
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "fake",
+      "active_threshold": 0.98,
+      "case_key": "closest_to_threshold_correct",
+      "config": "diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.0,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.98,
+      "ground_truth": "fake",
+      "outcome": "TP",
+      "prototype_status": "Stable",
+      "real_score": 0.02,
+      "run_name": "diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id34_id32_0007",
+      "selection_rule": "Among correct predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id34_id32_0007.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": 0.668
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.98,
+      "case_key": "closest_to_threshold_incorrect",
+      "config": "diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.00029999999999996696,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9797,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Stable",
+      "real_score": 0.0203,
+      "run_name": "diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id1_id2_0002",
+      "selection_rule": "Among incorrect predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id1_id2_0002.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": 0.564
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.98,
+      "case_key": "detector_agreement",
+      "config": "diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.7202,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.2598,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Contested",
+      "real_score": 0.7402,
+      "run_name": "diffusion",
+      "sample_id": "celebdf_v2_real_Celeb-real__id56_0009",
+      "selection_rule": "Optional: available specialists unanimously agree with active prediction; prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id56_0009.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": 0.002
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.98,
+      "case_key": "detector_conflict",
+      "config": "diffusion",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.06269999999999998,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9173,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Stable",
+      "real_score": 0.0827,
+      "run_name": "diffusion",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id6_id23_0001",
+      "selection_rule": "Optional: available specialists disagree with active prediction (or mixed); prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id6_id23_0001.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": true
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": 0.57
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "fake",
+      "active_threshold": 0.99,
+      "case_key": "strongest_correct_fake",
+      "config": "none",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.009800000000000031,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9998,
+      "ground_truth": "fake",
+      "outcome": "TP",
+      "prototype_status": "Stable",
+      "real_score": 0.0002,
+      "run_name": "none",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id10_id13_0007",
+      "selection_rule": "Among TP, maximise fake_score; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id13_0007.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "real",
+      "active_threshold": 0.99,
+      "case_key": "strongest_correct_real",
+      "config": "none",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.4666,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.5234,
+      "ground_truth": "real",
+      "outcome": "TN",
+      "prototype_status": "Contested",
+      "real_score": 0.4766,
+      "run_name": "none",
+      "sample_id": "celebdf_v2_real_YouTube-real__00274",
+      "selection_rule": "Among TN, minimise fake_score; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/YouTube-real__00274.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "fake",
+      "active_threshold": 0.99,
+      "case_key": "false_positive",
+      "config": "none",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.0037000000000000366,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9937,
+      "ground_truth": "real",
+      "outcome": "FP",
+      "prototype_status": "Stable",
+      "real_score": 0.0063,
+      "run_name": "none",
+      "sample_id": "celebdf_v2_real_Celeb-real__id46_0000",
+      "selection_rule": "Among FP, maximise fake_score (most extreme false alarm); tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id46_0000.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.99,
+      "case_key": "false_negative",
+      "config": "none",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.4355,
+      "evidence_agreement": "insufficient evidence",
+      "fake_score": 0.5545,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Contested",
+      "real_score": 0.4455,
+      "run_name": "none",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id9_id3_0009",
+      "selection_rule": "Among FN, minimise fake_score (most extreme miss); tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id3_0009.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": true,
+      "active_prediction": "fake",
+      "active_threshold": 0.99,
+      "case_key": "closest_to_threshold_correct",
+      "config": "none",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.00039999999999995595,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9904,
+      "ground_truth": "fake",
+      "outcome": "TP",
+      "prototype_status": "Stable",
+      "real_score": 0.0096,
+      "run_name": "none",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id53_id58_0005",
+      "selection_rule": "Among correct predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id53_id58_0005.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": null
+      }
+    },
+    {
+      "active_correct": false,
+      "active_prediction": "real",
+      "active_threshold": 0.99,
+      "case_key": "closest_to_threshold_incorrect",
+      "config": "none",
+      "dataset": "Celeb-DF-v2",
+      "distance_from_active_threshold": 0.0033999999999999586,
+      "evidence_agreement": "conflict",
+      "fake_score": 0.9866,
+      "ground_truth": "fake",
+      "outcome": "FN",
+      "prototype_status": "Stable",
+      "real_score": 0.0134,
+      "run_name": "none",
+      "sample_id": "celebdf_v2_fake_Celeb-synthesis__id9_id16_0007",
+      "selection_rule": "Among incorrect predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+      "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id16_0007.png",
+      "specialist_availability": {
+        "blending": false,
+        "diffusion": false
+      },
+      "specialist_scores": {
+        "blending": null,
+        "diffusion": null
+      }
+    }
+  ],
+  "cases_by_run": {
+    "blending": [
+      {
+        "active_correct": true,
+        "active_prediction": "fake",
+        "active_threshold": 0.77,
+        "case_key": "strongest_correct_fake",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.22999999999999998,
+        "evidence_agreement": "conflict",
+        "fake_score": 1.0,
+        "ground_truth": "fake",
+        "outcome": "TP",
+        "prototype_status": "Stable",
+        "real_score": 0.0,
+        "run_name": "blending",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id10_id13_0007",
+        "selection_rule": "Among TP, maximise fake_score; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id13_0007.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": 1.0,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.77,
+        "case_key": "strongest_correct_real",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.7108,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.0592,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Contested",
+        "real_score": 0.9408,
+        "run_name": "blending",
+        "sample_id": "celebdf_v2_real_Celeb-real__id11_0006",
+        "selection_rule": "Among TN, minimise fake_score; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": 0.0,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "fake",
+        "active_threshold": 0.77,
+        "case_key": "false_positive",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.22970000000000002,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9997,
+        "ground_truth": "real",
+        "outcome": "FP",
+        "prototype_status": "Stable",
+        "real_score": 0.0003,
+        "run_name": "blending",
+        "sample_id": "celebdf_v2_real_YouTube-real__00259",
+        "selection_rule": "Among FP, maximise fake_score (most extreme false alarm); tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/YouTube-real__00259.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": 0.998,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.77,
+        "case_key": "false_negative",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.4142,
+        "evidence_agreement": "insufficient evidence",
+        "fake_score": 0.3558,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Contested",
+        "real_score": 0.6442,
+        "run_name": "blending",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id9_id3_0009",
+        "selection_rule": "Among FN, minimise fake_score (most extreme miss); tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id3_0009.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": 0.004,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.77,
+        "case_key": "closest_to_threshold_correct",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.0037000000000000366,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.7663,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Stable",
+        "real_score": 0.2337,
+        "run_name": "blending",
+        "sample_id": "celebdf_v2_real_Celeb-real__id21_0009",
+        "selection_rule": "Among correct predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id21_0009.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": 0.005,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.77,
+        "case_key": "closest_to_threshold_incorrect",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.009299999999999975,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.7607,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Stable",
+        "real_score": 0.2393,
+        "run_name": "blending",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id55_id57_0002",
+        "selection_rule": "Among incorrect predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id55_id57_0002.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": 0.007,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.77,
+        "case_key": "detector_agreement",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.7108,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.0592,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Contested",
+        "real_score": 0.9408,
+        "run_name": "blending",
+        "sample_id": "celebdf_v2_real_Celeb-real__id11_0006",
+        "selection_rule": "Optional: available specialists unanimously agree with active prediction; prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": 0.0,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "fake",
+        "active_threshold": 0.77,
+        "case_key": "detector_conflict",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.22709999999999997,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9971,
+        "ground_truth": "fake",
+        "outcome": "TP",
+        "prototype_status": "Stable",
+        "real_score": 0.0029,
+        "run_name": "blending",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id13_id7_0000",
+        "selection_rule": "Optional: available specialists disagree with active prediction (or mixed); prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id13_id7_0000.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": 0.021,
+          "diffusion": null
+        }
+      }
+    ],
+    "blending_diffusion": [
+      {
+        "active_correct": true,
+        "active_prediction": "fake",
+        "active_threshold": 0.78,
+        "case_key": "strongest_correct_fake",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.21999999999999997,
+        "evidence_agreement": "conflict",
+        "fake_score": 1.0,
+        "ground_truth": "fake",
+        "outcome": "TP",
+        "prototype_status": "Stable",
+        "real_score": 0.0,
+        "run_name": "blending_diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id10_id13_0007",
+        "selection_rule": "Among TP, maximise fake_score; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id13_0007.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": 1.0,
+          "diffusion": 0.004
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.78,
+        "case_key": "strongest_correct_real",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.628,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.152,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Contested",
+        "real_score": 0.848,
+        "run_name": "blending_diffusion",
+        "sample_id": "celebdf_v2_real_Celeb-real__id11_0006",
+        "selection_rule": "Among TN, minimise fake_score; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": 0.0,
+          "diffusion": 0.065
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "fake",
+        "active_threshold": 0.78,
+        "case_key": "false_positive",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.2198,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9998,
+        "ground_truth": "real",
+        "outcome": "FP",
+        "prototype_status": "Stable",
+        "real_score": 0.0002,
+        "run_name": "blending_diffusion",
+        "sample_id": "celebdf_v2_real_YouTube-real__00259",
+        "selection_rule": "Among FP, maximise fake_score (most extreme false alarm); tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/YouTube-real__00259.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": 0.998,
+          "diffusion": 0.289
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.78,
+        "case_key": "false_negative",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.34600000000000003,
+        "evidence_agreement": "insufficient evidence",
+        "fake_score": 0.434,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Contested",
+        "real_score": 0.566,
+        "run_name": "blending_diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id9_id3_0009",
+        "selection_rule": "Among FN, minimise fake_score (most extreme miss); tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id3_0009.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": 0.004,
+          "diffusion": 0.432
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "fake",
+        "active_threshold": 0.78,
+        "case_key": "closest_to_threshold_correct",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.0026999999999999247,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.7827,
+        "ground_truth": "fake",
+        "outcome": "TP",
+        "prototype_status": "Stable",
+        "real_score": 0.2173,
+        "run_name": "blending_diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id23_id3_0004",
+        "selection_rule": "Among correct predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id23_id3_0004.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": 0.016,
+          "diffusion": 0.084
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.78,
+        "case_key": "closest_to_threshold_incorrect",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.0027000000000000357,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.7773,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Stable",
+        "real_score": 0.2227,
+        "run_name": "blending_diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id55_id57_0002",
+        "selection_rule": "Among incorrect predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id55_id57_0002.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": 0.007,
+          "diffusion": 0.516
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.78,
+        "case_key": "detector_agreement",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.628,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.152,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Contested",
+        "real_score": 0.848,
+        "run_name": "blending_diffusion",
+        "sample_id": "celebdf_v2_real_Celeb-real__id11_0006",
+        "selection_rule": "Optional: available specialists unanimously agree with active prediction; prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": 0.0,
+          "diffusion": 0.065
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.78,
+        "case_key": "detector_conflict",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.4454,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.3346,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Contested",
+        "real_score": 0.6654,
+        "run_name": "blending_diffusion",
+        "sample_id": "celebdf_v2_real_YouTube-real__00047",
+        "selection_rule": "Optional: available specialists disagree with active prediction (or mixed); prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/YouTube-real__00047.png",
+        "specialist_availability": {
+          "blending": true,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": 0.001,
+          "diffusion": 0.998
+        }
+      }
+    ],
+    "diffusion": [
+      {
+        "active_correct": true,
+        "active_prediction": "fake",
+        "active_threshold": 0.98,
+        "case_key": "strongest_correct_fake",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.01990000000000003,
+        "evidence_agreement": "agreement",
+        "fake_score": 0.9999,
+        "ground_truth": "fake",
+        "outcome": "TP",
+        "prototype_status": "Stable",
+        "real_score": 0.0001,
+        "run_name": "diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id46_id41_0000",
+        "selection_rule": "Among TP, maximise fake_score; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id46_id41_0000.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": 0.934
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.98,
+        "case_key": "strongest_correct_real",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.7202,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.2598,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Contested",
+        "real_score": 0.7402,
+        "run_name": "diffusion",
+        "sample_id": "celebdf_v2_real_Celeb-real__id56_0009",
+        "selection_rule": "Among TN, minimise fake_score; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id56_0009.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": 0.002
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "fake",
+        "active_threshold": 0.98,
+        "case_key": "false_positive",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.01990000000000003,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9999,
+        "ground_truth": "real",
+        "outcome": "FP",
+        "prototype_status": "Stable",
+        "real_score": 0.0001,
+        "run_name": "diffusion",
+        "sample_id": "celebdf_v2_real_Celeb-real__id46_0000",
+        "selection_rule": "Among FP, maximise fake_score (most extreme false alarm); tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id46_0000.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": 0.998
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.98,
+        "case_key": "false_negative",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.5306,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.4494,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Contested",
+        "real_score": 0.5506,
+        "run_name": "diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id1_id16_0007",
+        "selection_rule": "Among FN, minimise fake_score (most extreme miss); tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id1_id16_0007.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": 0.001
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "fake",
+        "active_threshold": 0.98,
+        "case_key": "closest_to_threshold_correct",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.0,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.98,
+        "ground_truth": "fake",
+        "outcome": "TP",
+        "prototype_status": "Stable",
+        "real_score": 0.02,
+        "run_name": "diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id34_id32_0007",
+        "selection_rule": "Among correct predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id34_id32_0007.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": 0.668
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.98,
+        "case_key": "closest_to_threshold_incorrect",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.00029999999999996696,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9797,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Stable",
+        "real_score": 0.0203,
+        "run_name": "diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id1_id2_0002",
+        "selection_rule": "Among incorrect predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id1_id2_0002.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": 0.564
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.98,
+        "case_key": "detector_agreement",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.7202,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.2598,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Contested",
+        "real_score": 0.7402,
+        "run_name": "diffusion",
+        "sample_id": "celebdf_v2_real_Celeb-real__id56_0009",
+        "selection_rule": "Optional: available specialists unanimously agree with active prediction; prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id56_0009.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": 0.002
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.98,
+        "case_key": "detector_conflict",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.06269999999999998,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9173,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Stable",
+        "real_score": 0.0827,
+        "run_name": "diffusion",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id6_id23_0001",
+        "selection_rule": "Optional: available specialists disagree with active prediction (or mixed); prefer largest |fake_score \u2212 threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id6_id23_0001.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": true
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": 0.57
+        }
+      }
+    ],
+    "none": [
+      {
+        "active_correct": true,
+        "active_prediction": "fake",
+        "active_threshold": 0.99,
+        "case_key": "strongest_correct_fake",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.009800000000000031,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9998,
+        "ground_truth": "fake",
+        "outcome": "TP",
+        "prototype_status": "Stable",
+        "real_score": 0.0002,
+        "run_name": "none",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id10_id13_0007",
+        "selection_rule": "Among TP, maximise fake_score; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id13_0007.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "real",
+        "active_threshold": 0.99,
+        "case_key": "strongest_correct_real",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.4666,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.5234,
+        "ground_truth": "real",
+        "outcome": "TN",
+        "prototype_status": "Contested",
+        "real_score": 0.4766,
+        "run_name": "none",
+        "sample_id": "celebdf_v2_real_YouTube-real__00274",
+        "selection_rule": "Among TN, minimise fake_score; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/YouTube-real__00274.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "fake",
+        "active_threshold": 0.99,
+        "case_key": "false_positive",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.0037000000000000366,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9937,
+        "ground_truth": "real",
+        "outcome": "FP",
+        "prototype_status": "Stable",
+        "real_score": 0.0063,
+        "run_name": "none",
+        "sample_id": "celebdf_v2_real_Celeb-real__id46_0000",
+        "selection_rule": "Among FP, maximise fake_score (most extreme false alarm); tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/real/Celeb-real__id46_0000.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.99,
+        "case_key": "false_negative",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.4355,
+        "evidence_agreement": "insufficient evidence",
+        "fake_score": 0.5545,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Contested",
+        "real_score": 0.4455,
+        "run_name": "none",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id9_id3_0009",
+        "selection_rule": "Among FN, minimise fake_score (most extreme miss); tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id3_0009.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": true,
+        "active_prediction": "fake",
+        "active_threshold": 0.99,
+        "case_key": "closest_to_threshold_correct",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.00039999999999995595,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9904,
+        "ground_truth": "fake",
+        "outcome": "TP",
+        "prototype_status": "Stable",
+        "real_score": 0.0096,
+        "run_name": "none",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id53_id58_0005",
+        "selection_rule": "Among correct predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id53_id58_0005.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": null
+        }
+      },
+      {
+        "active_correct": false,
+        "active_prediction": "real",
+        "active_threshold": 0.99,
+        "case_key": "closest_to_threshold_incorrect",
+        "dataset": "Celeb-DF-v2",
+        "distance_from_active_threshold": 0.0033999999999999586,
+        "evidence_agreement": "conflict",
+        "fake_score": 0.9866,
+        "ground_truth": "fake",
+        "outcome": "FN",
+        "prototype_status": "Stable",
+        "real_score": 0.0134,
+        "run_name": "none",
+        "sample_id": "celebdf_v2_fake_Celeb-synthesis__id9_id16_0007",
+        "selection_rule": "Among incorrect predictions, minimise |fake_score \u2212 active_threshold|; tie-break smallest sample_id.",
+        "source_path": "/scratch/user/s4749229/datasets/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id16_0007.png",
+        "specialist_availability": {
+          "blending": false,
+          "diffusion": false
+        },
+        "specialist_scores": {
+          "blending": null,
+          "diffusion": null
+        }
+      }
+    ]
+  },
+  "generated_at": "2026-09-27T01:39:27+00:00",
+  "script_version": "1.0.0",
+  "selection_notes": "Cases are selected deterministically from audit rows. They are not cherry-picked for visual drama and do not constitute completed manual verification."
+}

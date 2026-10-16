@@ -1,0 +1,202 @@
+{
+  "status": "pass",
+  "manifest": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\manifest.json",
+  "images": [
+    "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\face_crop.jpg"
+  ],
+  "config": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+  "output_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix",
+  "quantisation": "4-bit",
+  "started_at": "2026-08-13T08:49:42+00:00",
+  "finished_at": "2026-08-13T08:51:59+00:00",
+  "totals": {
+    "configurations": 4,
+    "passed": 4,
+    "failed": 0,
+    "total_runtime_s": 136.878,
+    "max_peak_vram_mib": 9067,
+    "distinct_labels": [
+      "fake",
+      "real"
+    ],
+    "labels_agree": false
+  },
+  "runs": [
+    {
+      "run_name": "none",
+      "experts": [],
+      "experts_arg": "none",
+      "status": "pass",
+      "validation": "valid",
+      "prediction_text": "This image is real",
+      "label": "real",
+      "real_score": 0.5039,
+      "fake_score": 0.4961,
+      "expert_scores": {},
+      "exit_code": 0,
+      "timed_out": false,
+      "cuda_oom": false,
+      "runtime_s": 41.77,
+      "peak_vram_mib": 9067,
+      "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\demo_none.json",
+      "log_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\logs\\none.log",
+      "prompt": "<image>\nIs this image real or fake?",
+      "warnings": [
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\peft\\tuners\\lora\\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.",
+        "warnings.warn(",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\transformers\\generation\\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`."
+      ],
+      "failures": [],
+      "stderr_tail": "Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]\nLoading checkpoint shards:  50%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6     | 1/2 [00:14<00:14, 14.94s/it]\nLoading checkpoint shards: 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 2/2 [00:19<00:00,  9.02s/it]\nLoading checkpoint shards: 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 2/2 [00:19<00:00,  9.90s/it]\nC:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\peft\\tuners\\lora\\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.\n  warnings.warn(\nC:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\transformers\\generation\\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.\n  warnings.warn(",
+      "command": [
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\Scripts\\python.exe",
+        "-m",
+        "eval.infer.runner",
+        "--config",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+        "--json",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\manifest.json",
+        "--output",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\demo_none.json",
+        "--experts",
+        "none"
+      ]
+    },
+    {
+      "run_name": "blending",
+      "experts": [
+        "blending"
+      ],
+      "experts_arg": "blending",
+      "status": "pass",
+      "validation": "valid",
+      "prediction_text": "This image is real",
+      "label": "real",
+      "real_score": 0.637,
+      "fake_score": 0.363,
+      "expert_scores": {
+        "blending": 0.001
+      },
+      "exit_code": 0,
+      "timed_out": false,
+      "cuda_oom": false,
+      "runtime_s": 31.795,
+      "peak_vram_mib": 8732,
+      "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\demo_blending.json",
+      "log_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\logs\\blending.log",
+      "prompt": "<image>\nIs this image real or fake? And the blending score is 0.001.",
+      "warnings": [
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\torch\\functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ..\\aten\\src\\ATen\\native\\TensorShape.cpp:3527.)",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\peft\\tuners\\lora\\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.",
+        "warnings.warn(",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\transformers\\generation\\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`."
+      ],
+      "failures": [],
+      "stderr_tail": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\torch\\functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ..\\aten\\src\\ATen\\native\\TensorShape.cpp:3527.)\n  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]\n\nBlending Detector Inference (bs=128):   0%|          | 0/1 [00:00<?, ?it/s]\nBlending Detector Inference (bs=128): 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 1/1 [00:00<00:00,  2.38it/s]\nBlending Detector Inference (bs=128): 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 1/1 [00:00<00:00,  2.38it/s]\n\nLoading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]\nLoading checkpoint shards:  50%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6     | 1/2 [00:09<00:09,  9.98s/it]\nLoading checkpoint shards: 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 2/2 [00:14<00:00,  6.96s/it]\nLoading checkpoint shards: 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 2/2 [00:14<00:00,  7.41s/it]\nC:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\peft\\tuners\\lora\\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.\n  warnings.warn(\nC:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\transformers\\generation\\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.\n  warnings.warn(",
+      "command": [
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\Scripts\\python.exe",
+        "-m",
+        "eval.infer.runner",
+        "--config",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+        "--json",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\manifest.json",
+        "--output",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\demo_blending.json",
+        "--experts",
+        "blending"
+      ]
+    },
+    {
+      "run_name": "diffusion",
+      "experts": [
+        "diffusion"
+      ],
+      "experts_arg": "diffusion",
+      "status": "pass",
+      "validation": "valid",
+      "prediction_text": "This image is fake",
+      "label": "fake",
+      "real_score": 0.1441,
+      "fake_score": 0.8559,
+      "expert_scores": {
+        "diffusion": 0.466
+      },
+      "exit_code": 0,
+      "timed_out": false,
+      "cuda_oom": false,
+      "runtime_s": 30.971,
+      "peak_vram_mib": 8174,
+      "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\demo_diffusion.json",
+      "log_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\logs\\diffusion.log",
+      "prompt": "<image>\nIs this image real or fake? And the diffusion score is 0.466.",
+      "warnings": [
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\peft\\tuners\\lora\\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.",
+        "warnings.warn(",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\transformers\\generation\\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`."
+      ],
+      "failures": [],
+      "stderr_tail": "Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]\nLoading checkpoint shards:  50%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6     | 1/2 [00:10<00:10, 10.09s/it]\nLoading checkpoint shards: 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 2/2 [00:14<00:00,  6.99s/it]\nLoading checkpoint shards: 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 2/2 [00:14<00:00,  7.46s/it]\nC:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\peft\\tuners\\lora\\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.\n  warnings.warn(\nC:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\transformers\\generation\\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.\n  warnings.warn(",
+      "command": [
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\Scripts\\python.exe",
+        "-m",
+        "eval.infer.runner",
+        "--config",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+        "--json",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\manifest.json",
+        "--output",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\demo_diffusion.json",
+        "--experts",
+        "diffusion"
+      ]
+    },
+    {
+      "run_name": "blending_diffusion",
+      "experts": [
+        "blending",
+        "diffusion"
+      ],
+      "experts_arg": "blending,diffusion",
+      "status": "pass",
+      "validation": "valid",
+      "prediction_text": "This image is fake",
+      "label": "fake",
+      "real_score": 0.3416,
+      "fake_score": 0.6584,
+      "expert_scores": {
+        "blending": 0.001,
+        "diffusion": 0.465
+      },
+      "exit_code": 0,
+      "timed_out": false,
+      "cuda_oom": false,
+      "runtime_s": 32.342,
+      "peak_vram_mib": 8186,
+      "output_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\demo_blending_diffusion.json",
+      "log_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\logs\\blending_diffusion.log",
+      "prompt": "<image>\nIs this image real or fake? And the blending score is 0.001, and the diffusion score is 0.465.",
+      "warnings": [
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\torch\\functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ..\\aten\\src\\ATen\\native\\TensorShape.cpp:3527.)",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\peft\\tuners\\lora\\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.",
+        "warnings.warn(",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\transformers\\generation\\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`."
+      ],
+      "failures": [],
+      "stderr_tail": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\torch\\functional.py:504: UserWarning: torch.meshgrid: in an upcoming release, it will be required to pass the indexing argument. (Triggered internally at ..\\aten\\src\\ATen\\native\\TensorShape.cpp:3527.)\n  return _VF.meshgrid(tensors, **kwargs)  # type: ignore[attr-defined]\n\nBlending Detector Inference (bs=128):   0%|          | 0/1 [00:00<?, ?it/s]\nBlending Detector Inference (bs=128): 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 1/1 [00:00<00:00,  2.35it/s]\nBlending Detector Inference (bs=128): 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 1/1 [00:00<00:00,  2.35it/s]\n\nLoading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]\nLoading checkpoint shards:  50%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6     | 1/2 [00:09<00:09,  9.92s/it]\nLoading checkpoint shards: 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 2/2 [00:14<00:00,  6.91s/it]\nLoading checkpoint shards: 100%|\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6\u00e2\u2013\u02c6| 2/2 [00:14<00:00,  7.37s/it]\nC:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\peft\\tuners\\lora\\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.\n  warnings.warn(\nC:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\lib\\site-packages\\transformers\\generation\\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.\n  warnings.warn(",
+      "command": [
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\.venv\\Scripts\\python.exe",
+        "-m",
+        "eval.infer.runner",
+        "--config",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+        "--json",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\manifest.json",
+        "--output",
+        "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260813T084942Z_1652783530858\\matrix\\demo_blending_diffusion.json",
+        "--experts",
+        "blending,diffusion"
+      ]
+    }
+  ]
+}

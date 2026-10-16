@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-08-08T08:58:33",
+  "run_id": "infer_20260808T085816Z",
+  "model_base": "weights/base/llava-v1.5-7b",
+  "model_path": "weights/checkpoints/ckpt/llava-v1.5-7b-lora-[ble-diff]",
+  "question_template": "<image>\nIs this image real or fake? And the {alias} score is {score}.",
+  "params": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "num_beams": 1,
+    "max_new_tokens": 4
+  },
+  "inputs": [
+    "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260808T085812Z_ffpp_ex_deepfakes\\manifest.json"
+  ],
+  "outputs": [
+    "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260808T085812Z_ffpp_ex_deepfakes\\matrix\\demo_none.json"
+  ],
+  "artefacts": {
+    "run_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval/outputs\\infer\\runs\\infer_20260808T085816Z",
+    "datasets_dir": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval/outputs\\infer\\runs\\infer_20260808T085816Z\\datasets"
+  }
+}

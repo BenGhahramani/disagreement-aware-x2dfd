@@ -1,0 +1,457 @@
+{
+  "checks": [
+    {
+      "name": "exactly_120_png",
+      "ok": true,
+      "detail": "n=120"
+    },
+    {
+      "name": "60_real_60_fake",
+      "ok": true,
+      "detail": "real=60 fake=60"
+    },
+    {
+      "name": "unique_ids",
+      "ok": true,
+      "detail": "n=120"
+    },
+    {
+      "name": "unique_videos",
+      "ok": true,
+      "detail": "n=120"
+    },
+    {
+      "name": "all_from_official_test",
+      "ok": true,
+      "detail": "outside=[]"
+    },
+    {
+      "name": "all_manifest_paths_exist",
+      "ok": true,
+      "detail": "missing=0"
+    },
+    {
+      "name": "frame_hashes_populated",
+      "ok": true,
+      "detail": "n=0"
+    },
+    {
+      "name": "video_hashes_populated",
+      "ok": true,
+      "detail": "n=0"
+    },
+    {
+      "name": "frame_hashes_match_disk",
+      "ok": true,
+      "detail": "n=0"
+    },
+    {
+      "name": "video_hashes_match_disk",
+      "ok": true,
+      "detail": "n=0"
+    },
+    {
+      "name": "pngs_decode",
+      "ok": true,
+      "detail": "n=0"
+    },
+    {
+      "name": "nonzero_dims",
+      "ok": true,
+      "detail": "n=0"
+    },
+    {
+      "name": "already_cropped_false",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "dataset_celebdf",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "gt_real_or_fake",
+      "ok": true,
+      "detail": ""
+    },
+    {
+      "name": "candidate_fractions_allowed",
+      "ok": true,
+      "detail": "bad=[]"
+    },
+    {
+      "name": "label_blind_policy_documented",
+      "ok": true,
+      "detail": "label_blind=True"
+    },
+    {
+      "name": "labelled_manifest_parse",
+      "ok": true,
+      "detail": "n=120"
+    },
+    {
+      "name": "labelled_eval_dry_run",
+      "ok": true,
+      "detail": "results=120 ok=120 errors=[]"
+    },
+    {
+      "name": "contact_sheet_written",
+      "ok": true,
+      "detail": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\datasets\\evaluation\\celebdf_v2_final\\contact_sheet.jpg"
+    }
+  ],
+  "pass": true,
+  "warnings": [],
+  "anomalies": [],
+  "n_real": 60,
+  "n_fake": 60,
+  "candidate_fraction_counts": {
+    "0.3": 1,
+    "0.4": 3,
+    "0.5": 112,
+    "0.6": 4
+  },
+  "n_unsuitable_videos": 59,
+  "n_replacements": 39,
+  "replacements": [
+    {
+      "rejected_video": "Celeb-real/id10_0001.mp4",
+      "replacement_video": "Celeb-real/id10_0007.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id12_0005.mp4",
+      "replacement_video": "Celeb-real/id11_0006.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id13_0013.mp4",
+      "replacement_video": "Celeb-real/id11_0008.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id16_0010.mp4",
+      "replacement_video": "Celeb-real/id12_0000.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id1_0001.mp4",
+      "replacement_video": "Celeb-real/id13_0011.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id28_0009.mp4",
+      "replacement_video": "Celeb-real/id16_0007.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id2_0001.mp4",
+      "replacement_video": "Celeb-real/id17_0000.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id33_0005.mp4",
+      "replacement_video": "Celeb-real/id17_0002.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id34_0006.mp4",
+      "replacement_video": "Celeb-real/id19_0005.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id43_0001.mp4",
+      "replacement_video": "Celeb-real/id19_0007.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id48_0003.mp4",
+      "replacement_video": "Celeb-real/id1_0006.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-real/id6_0002.mp4",
+      "replacement_video": "Celeb-real/id20_0008.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "YouTube-real/00254.mp4",
+      "replacement_video": "Celeb-real/id21_0009.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "YouTube-real/00268.mp4",
+      "replacement_video": "Celeb-real/id22_0000.mp4",
+      "ground_truth": "real"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id0_id21_0000.mp4",
+      "replacement_video": "Celeb-synthesis/id0_id16_0003.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id10_id11_0001.mp4",
+      "replacement_video": "Celeb-synthesis/id0_id16_0004.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id12_id10_0002.mp4",
+      "replacement_video": "Celeb-synthesis/id0_id1_0001.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id16_id20_0012.mp4",
+      "replacement_video": "Celeb-synthesis/id0_id1_0005.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id16_id21_0002.mp4",
+      "replacement_video": "Celeb-synthesis/id10_id11_0004.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id16_id28_0005.mp4",
+      "replacement_video": "Celeb-synthesis/id10_id12_0004.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id16_id3_0009.mp4",
+      "replacement_video": "Celeb-synthesis/id10_id13_0004.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id1_id20_0001.mp4",
+      "replacement_video": "Celeb-synthesis/id10_id13_0007.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id21_id28_0001.mp4",
+      "replacement_video": "Celeb-synthesis/id10_id7_0004.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id21_id4_0002.mp4",
+      "replacement_video": "Celeb-synthesis/id11_id7_0008.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id21_id9_0008.mp4",
+      "replacement_video": "Celeb-synthesis/id12_id7_0006.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id24_id21_0006.mp4",
+      "replacement_video": "Celeb-synthesis/id13_id10_0005.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id27_id26_0006.mp4",
+      "replacement_video": "Celeb-synthesis/id13_id10_0008.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id29_id32_0003.mp4",
+      "replacement_video": "Celeb-synthesis/id16_id1_0011.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id30_id21_0005.mp4",
+      "replacement_video": "Celeb-synthesis/id16_id2_0011.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id32_id33_0004.mp4",
+      "replacement_video": "Celeb-synthesis/id16_id3_0011.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id35_id26_0003.mp4",
+      "replacement_video": "Celeb-synthesis/id16_id6_0011.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id38_id34_0004.mp4",
+      "replacement_video": "Celeb-synthesis/id17_id0_0000.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id4_id37_0006.mp4",
+      "replacement_video": "Celeb-synthesis/id17_id16_0000.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id6_id1_0007.mp4",
+      "replacement_video": "Celeb-synthesis/id17_id16_0007.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id6_id23_0006.mp4",
+      "replacement_video": "Celeb-synthesis/id17_id1_0000.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id6_id9_0006.mp4",
+      "replacement_video": "Celeb-synthesis/id17_id21_0000.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id7_id10_0009.mp4",
+      "replacement_video": "Celeb-synthesis/id17_id23_0000.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id7_id11_0009.mp4",
+      "replacement_video": "Celeb-synthesis/id17_id28_0001.mp4",
+      "ground_truth": "fake"
+    },
+    {
+      "rejected_video": "Celeb-synthesis/id9_id2_0000.mp4",
+      "replacement_video": "Celeb-synthesis/id17_id2_0000.mp4",
+      "ground_truth": "fake"
+    }
+  ],
+  "rejection_reason_counts": {
+    "no_face": 8,
+    "severe_blur": 6,
+    "unsuitable_severe_blur": 272,
+    "unsuitable_no_face": 22,
+    "unsuitable_face_near_border": 1
+  },
+  "accepted_laplacian": {
+    "min": 25.233538222679112,
+    "median": 65.32585618083685,
+    "max": 213.02539397533855,
+    "n": 120
+  },
+  "duplicate_frame_hashes": {},
+  "min_laplacian_variance_policy": 25.0,
+  "script_version": "1.1.1",
+  "generated_files": [
+    "datasets/evaluation/celebdf_v2_final/celebdf_v2_manifest.json",
+    "datasets/evaluation/celebdf_v2_final/celebdf_v2_summary.csv",
+    "datasets/evaluation/celebdf_v2_final/contact_sheet.jpg",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id0_id16_0003.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id0_id16_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id0_id1_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id0_id1_0005.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id0_id26_0009.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id11_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id12_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id13_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id13_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id10_id7_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id11_id7_0008.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id12_id7_0006.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id13_id10_0005.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id13_id10_0008.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id13_id7_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id13_id7_0012.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id16_id0_0011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id16_id1_0011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id16_id23_0011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id16_id2_0011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id16_id3_0011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id16_id6_0011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id0_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id16_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id16_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id1_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id21_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id23_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id28_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id2_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id2_0003.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id17_id6_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id19_id23_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id1_id16_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id1_id2_0002.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id20_id0_0006.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id20_id37_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id23_id3_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id28_id4_0006.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id29_id38_0008.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id2_id3_0008.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id34_id32_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id37_id34_0008.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id37_id3_0006.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id3_id1_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id3_id6_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id43_id39_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id44_id42_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id46_id41_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id49_id52_0005.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id4_id1_0002.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id4_id1_0003.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id4_id21_0009.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id53_id58_0005.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id55_id57_0002.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id56_id54_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id6_id0_0005.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id6_id23_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id16_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/fake/Celeb-synthesis__id9_id3_0009.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id0_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id10_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id11_0006.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id11_0008.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id12_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id13_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id13_0011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id16_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id16_0011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id17_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id17_0002.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id19_0005.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id19_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id1_0006.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id1_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id20_0008.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id21_0009.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id22_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id27_0008.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id28_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id29_0009.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id31_0003.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id31_0004.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id33_0002.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id36_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id40_0003.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id43_0002.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id43_0006.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id44_0001.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id44_0003.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id45_0003.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id46_0000.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id50_0006.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id54_0007.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id56_0009.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id58_0002.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/Celeb-real__id6_0005.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00011.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00021.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00024.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00047.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00061.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00063.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00095.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00106.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00119.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00213.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00252.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00259.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00262.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00271.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00274.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00276.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00278.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00279.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00281.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00282.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00283.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00287.png",
+    "datasets/evaluation/celebdf_v2_final/frames/real/YouTube-real__00289.png",
+    "datasets/evaluation/celebdf_v2_final/sampling_provenance.json",
+    "datasets/evaluation/celebdf_v2_final/validation_report.json"
+  ]
+}

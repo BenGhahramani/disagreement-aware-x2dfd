@@ -1,0 +1,22 @@
+{
+  "detection_xywh": [
+    283,
+    58,
+    132,
+    132
+  ],
+  "crop_xywh": [
+    263,
+    38,
+    172,
+    172
+  ],
+  "source": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\datasets\\raw\\images\\live\\ffpp_ex_deepfakes.png",
+  "output": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260808T085812Z_ffpp_ex_deepfakes\\face_crop.jpg",
+  "size": 256,
+  "margin": 1.3,
+  "detect_width": 1024,
+  "scale_factor": 1.1,
+  "min_neighbours": 5,
+  "quality": 95
+}

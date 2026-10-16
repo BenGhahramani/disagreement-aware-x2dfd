@@ -1,0 +1,9 @@
+{
+  "Description": "C:/Users/Ben/Desktop/UNI/REIT/root/disagreement-aware-x2dfd/datasets/raw/images/poc",
+  "images": [
+    {
+      "image_path": "real_face_01_crop.jpg",
+      "label": "real"
+    }
+  ]
+}

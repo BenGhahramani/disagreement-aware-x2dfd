@@ -1,0 +1,439 @@
+{
+  "generated_at": "2026-08-23T07:18:03+00:00",
+  "source_aggregate_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\aggregate.json",
+  "source_aggregate_sha256": "d907c3b90e1c5fb07489a132dc20c63adbf1a64c4708f4ccbbb01afe73a5fc33",
+  "git_commit": "694c2cb4f51c94ef3484101d1d96198aae8b2720",
+  "git_dirty": true,
+  "canonical_configs": [
+    "none",
+    "blending",
+    "diffusion",
+    "blending,diffusion"
+  ],
+  "run_order": [
+    "none",
+    "blending",
+    "diffusion",
+    "blending_diffusion"
+  ],
+  "interpretation_thresholds": {
+    "prototype_stable_uncertain": 0.7,
+    "evidence_expert_lo": 0.3,
+    "evidence_expert_hi": 0.7
+  },
+  "warning": "Pilot contains 4 images and is for pipeline validation only; results are not sufficient for statistical conclusions.",
+  "pipeline_validation_only": true,
+  "analysis": {
+    "n_images": 4,
+    "pipeline_validation_only": true,
+    "warning": "Pilot contains 4 images and is for pipeline validation only; results are not sufficient for statistical conclusions.",
+    "configuration_metrics": [
+      {
+        "n_usable": 4,
+        "n_correct": 2,
+        "accuracy": 0.5,
+        "tp": 2,
+        "tn": 0,
+        "fp": 2,
+        "fn": 0,
+        "sensitivity_fake": 1.0,
+        "recall_fake": 1.0,
+        "specificity_real": 0.0,
+        "balanced_accuracy": 0.5,
+        "precision_fake": 0.5,
+        "f1_fake": 0.6666666666666666,
+        "run_name": "none",
+        "n_missing_or_unusable": 0
+      },
+      {
+        "n_usable": 4,
+        "n_correct": 2,
+        "accuracy": 0.5,
+        "tp": 2,
+        "tn": 0,
+        "fp": 2,
+        "fn": 0,
+        "sensitivity_fake": 1.0,
+        "recall_fake": 1.0,
+        "specificity_real": 0.0,
+        "balanced_accuracy": 0.5,
+        "precision_fake": 0.5,
+        "f1_fake": 0.6666666666666666,
+        "run_name": "blending",
+        "n_missing_or_unusable": 0
+      },
+      {
+        "n_usable": 4,
+        "n_correct": 2,
+        "accuracy": 0.5,
+        "tp": 2,
+        "tn": 0,
+        "fp": 2,
+        "fn": 0,
+        "sensitivity_fake": 1.0,
+        "recall_fake": 1.0,
+        "specificity_real": 0.0,
+        "balanced_accuracy": 0.5,
+        "precision_fake": 0.5,
+        "f1_fake": 0.6666666666666666,
+        "run_name": "diffusion",
+        "n_missing_or_unusable": 0
+      },
+      {
+        "n_usable": 4,
+        "n_correct": 2,
+        "accuracy": 0.5,
+        "tp": 2,
+        "tn": 0,
+        "fp": 2,
+        "fn": 0,
+        "sensitivity_fake": 1.0,
+        "recall_fake": 1.0,
+        "specificity_real": 0.0,
+        "balanced_accuracy": 0.5,
+        "precision_fake": 0.5,
+        "f1_fake": 0.6666666666666666,
+        "run_name": "blending_diffusion",
+        "n_missing_or_unusable": 0
+      }
+    ],
+    "baseline_contrasts": [
+      {
+        "baseline_run": "none",
+        "comparison_run": "blending",
+        "n_compared": 4,
+        "n_label_changed": 0,
+        "n_wrong_to_correct": 0,
+        "n_correct_to_wrong": 0,
+        "mean_fake_score_delta": -0.08225000000000005,
+        "median_fake_score_delta": -0.05030000000000007,
+        "note": "Observed contrast relative to the no-expert baseline; not a causal effect estimate."
+      },
+      {
+        "baseline_run": "none",
+        "comparison_run": "diffusion",
+        "n_compared": 4,
+        "n_label_changed": 0,
+        "n_wrong_to_correct": 0,
+        "n_correct_to_wrong": 0,
+        "mean_fake_score_delta": 0.09242499999999995,
+        "median_fake_score_delta": 0.021349999999999925,
+        "note": "Observed contrast relative to the no-expert baseline; not a causal effect estimate."
+      },
+      {
+        "baseline_run": "none",
+        "comparison_run": "blending_diffusion",
+        "n_compared": 4,
+        "n_label_changed": 0,
+        "n_wrong_to_correct": 0,
+        "n_correct_to_wrong": 0,
+        "mean_fake_score_delta": -0.02322500000000005,
+        "median_fake_score_delta": -0.007000000000000062,
+        "note": "Observed contrast relative to the no-expert baseline; not a causal effect estimate."
+      }
+    ],
+    "score_deltas": [
+      {
+        "image_id": "nasa_jonny_kim",
+        "ground_truth": "real",
+        "dataset": "NASA",
+        "manipulation": null,
+        "baseline_run": "none",
+        "comparison_run": "blending",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.7607,
+        "comparison_fake_score": 0.6406,
+        "fake_score_delta": -0.1201000000000001
+      },
+      {
+        "image_id": "nasa_mae_jemison",
+        "ground_truth": "real",
+        "dataset": "NASA",
+        "manipulation": null,
+        "baseline_run": "none",
+        "comparison_run": "blending",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.8918,
+        "comparison_fake_score": 0.6077,
+        "fake_score_delta": -0.2841
+      },
+      {
+        "image_id": "ffpp_ex_deepfakes",
+        "ground_truth": "fake",
+        "dataset": "FaceForensics++",
+        "manipulation": "Deepfakes",
+        "baseline_run": "none",
+        "comparison_run": "blending",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.9353,
+        "comparison_fake_score": 0.991,
+        "fake_score_delta": 0.05569999999999997
+      },
+      {
+        "image_id": "ffpp_ex_neuraltextures",
+        "ground_truth": "fake",
+        "dataset": "FaceForensics++",
+        "manipulation": "NeuralTextures",
+        "baseline_run": "none",
+        "comparison_run": "blending",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.5117,
+        "comparison_fake_score": 0.5312,
+        "fake_score_delta": 0.019499999999999962
+      },
+      {
+        "image_id": "nasa_jonny_kim",
+        "ground_truth": "real",
+        "dataset": "NASA",
+        "manipulation": null,
+        "baseline_run": "none",
+        "comparison_run": "diffusion",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.7607,
+        "comparison_fake_score": 0.7122,
+        "fake_score_delta": -0.04849999999999999
+      },
+      {
+        "image_id": "nasa_mae_jemison",
+        "ground_truth": "real",
+        "dataset": "NASA",
+        "manipulation": null,
+        "baseline_run": "none",
+        "comparison_run": "diffusion",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.8918,
+        "comparison_fake_score": 0.8775,
+        "fake_score_delta": -0.01430000000000009
+      },
+      {
+        "image_id": "ffpp_ex_deepfakes",
+        "ground_truth": "fake",
+        "dataset": "FaceForensics++",
+        "manipulation": "Deepfakes",
+        "baseline_run": "none",
+        "comparison_run": "diffusion",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.9353,
+        "comparison_fake_score": 0.9923,
+        "fake_score_delta": 0.05699999999999994
+      },
+      {
+        "image_id": "ffpp_ex_neuraltextures",
+        "ground_truth": "fake",
+        "dataset": "FaceForensics++",
+        "manipulation": "NeuralTextures",
+        "baseline_run": "none",
+        "comparison_run": "diffusion",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.5117,
+        "comparison_fake_score": 0.8872,
+        "fake_score_delta": 0.37549999999999994
+      },
+      {
+        "image_id": "nasa_jonny_kim",
+        "ground_truth": "real",
+        "dataset": "NASA",
+        "manipulation": null,
+        "baseline_run": "none",
+        "comparison_run": "blending_diffusion",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.7607,
+        "comparison_fake_score": 0.6859,
+        "fake_score_delta": -0.07480000000000009
+      },
+      {
+        "image_id": "nasa_mae_jemison",
+        "ground_truth": "real",
+        "dataset": "NASA",
+        "manipulation": null,
+        "baseline_run": "none",
+        "comparison_run": "blending_diffusion",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.8918,
+        "comparison_fake_score": 0.6188,
+        "fake_score_delta": -0.273
+      },
+      {
+        "image_id": "ffpp_ex_deepfakes",
+        "ground_truth": "fake",
+        "dataset": "FaceForensics++",
+        "manipulation": "Deepfakes",
+        "baseline_run": "none",
+        "comparison_run": "blending_diffusion",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.9353,
+        "comparison_fake_score": 0.9961,
+        "fake_score_delta": 0.060799999999999965
+      },
+      {
+        "image_id": "ffpp_ex_neuraltextures",
+        "ground_truth": "fake",
+        "dataset": "FaceForensics++",
+        "manipulation": "NeuralTextures",
+        "baseline_run": "none",
+        "comparison_run": "blending_diffusion",
+        "baseline_label": "fake",
+        "comparison_label": "fake",
+        "label_changed": false,
+        "transition": "unchanged",
+        "baseline_fake_score": 0.5117,
+        "comparison_fake_score": 0.7058,
+        "fake_score_delta": 0.19409999999999994
+      }
+    ],
+    "specialist_summaries": [
+      {
+        "detector": "blending",
+        "score_kind": "detector_score_not_calibrated_probability",
+        "n_usable": 4,
+        "n_real": 2,
+        "n_fake": 2,
+        "mean_real": 0.004999999999999999,
+        "median_real": 0.004999999999999999,
+        "mean_fake": 0.5045,
+        "median_fake": 0.5045,
+        "min": 0.001,
+        "max": 1.0,
+        "stdev": 0.49684764599757675,
+        "roc_auc": 0.875,
+        "roc_auc_unavailable_reason": null
+      },
+      {
+        "detector": "diffusion",
+        "score_kind": "detector_score_not_calibrated_probability",
+        "n_usable": 4,
+        "n_real": 2,
+        "n_fake": 2,
+        "mean_real": 0.0505,
+        "median_real": 0.0505,
+        "mean_fake": 0.8865000000000001,
+        "median_fake": 0.8865000000000001,
+        "min": 0.048,
+        "max": 0.969,
+        "stdev": 0.4873468990359947,
+        "roc_auc": 1.0,
+        "roc_auc_unavailable_reason": null
+      }
+    ],
+    "agreement": {
+      "counts": {
+        "agreement": 1,
+        "conflict": 3,
+        "insufficient evidence": 0,
+        "missing": 0
+      },
+      "rates": {
+        "agreement": 0.25,
+        "conflict": 0.75,
+        "insufficient evidence": 0.0,
+        "missing": 0.0
+      },
+      "ground_truth_x_evidence_agreement": {
+        "real": {
+          "agreement": 0,
+          "conflict": 2,
+          "insufficient evidence": 0
+        },
+        "fake": {
+          "agreement": 1,
+          "conflict": 1,
+          "insufficient evidence": 0
+        }
+      },
+      "prototype_status_x_evidence_agreement": {
+        "Uncertain": {
+          "agreement": 0,
+          "conflict": 2,
+          "insufficient evidence": 0
+        },
+        "Stable": {
+          "agreement": 1,
+          "conflict": 1,
+          "insufficient evidence": 0
+        }
+      },
+      "pairwise_specialist_relations": {
+        "model_vs_blending": {
+          "support": 1,
+          "conflict": 3,
+          "inconclusive": 0,
+          "missing": 0
+        },
+        "model_vs_diffusion": {
+          "support": 2,
+          "conflict": 2,
+          "inconclusive": 0,
+          "missing": 0
+        },
+        "blending_vs_diffusion_direction": {
+          "same_support_direction": 3,
+          "disagree_support_direction": 1,
+          "either_inconclusive": 0,
+          "missing": 0
+        }
+      },
+      "interpretation_thresholds": {
+        "evidence_expert_lo": 0.3,
+        "evidence_expert_hi": 0.7
+      },
+      "n_images": 4
+    },
+    "calibration": {
+      "score_kind": "raw_uncalibrated_model_fake_score",
+      "run_name_preference": "blending_diffusion",
+      "n_samples": 4,
+      "min_samples_required": 30,
+      "n_bins": 10,
+      "sufficient_sample": false,
+      "brier_score": 0.234985275,
+      "ece": null,
+      "reliability_bins": [],
+      "unavailable_reason": "insufficient sample size for calibration summaries (n=4 < min_samples=30)",
+      "brier_note": "Brier computed for infrastructure checks only; sample size is below the configured calibration floor."
+    },
+    "interpretation_thresholds": {
+      "prototype_stable_uncertain": 0.7,
+      "evidence_expert_lo": 0.3,
+      "evidence_expert_hi": 0.7
+    },
+    "run_order": [
+      "none",
+      "blending",
+      "diffusion",
+      "blending_diffusion"
+    ]
+  }
+}

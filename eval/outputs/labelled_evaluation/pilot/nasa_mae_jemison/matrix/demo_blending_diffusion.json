@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "image": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\nasa_mae_jemison\\face_crop.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nIs this image real or fake? And the blending score is 0.001, and the diffusion score is 0.053."
+      },
+      {
+        "from": "gpt",
+        "value": "This image is fake"
+      },
+      {
+        "from": "real score",
+        "value": "0.3812"
+      },
+      {
+        "from": "fake score",
+        "value": "0.6188"
+      }
+    ]
+  }
+]

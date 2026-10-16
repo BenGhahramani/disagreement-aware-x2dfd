@@ -1,0 +1,13 @@
+table,row_key,column_key,count
+ground_truth_x_evidence_agreement,real,agreement,0
+ground_truth_x_evidence_agreement,real,conflict,2
+ground_truth_x_evidence_agreement,real,insufficient evidence,0
+ground_truth_x_evidence_agreement,fake,agreement,1
+ground_truth_x_evidence_agreement,fake,conflict,1
+ground_truth_x_evidence_agreement,fake,insufficient evidence,0
+prototype_status_x_evidence_agreement,Uncertain,agreement,0
+prototype_status_x_evidence_agreement,Uncertain,conflict,2
+prototype_status_x_evidence_agreement,Uncertain,insufficient evidence,0
+prototype_status_x_evidence_agreement,Stable,agreement,1
+prototype_status_x_evidence_agreement,Stable,conflict,1
+prototype_status_x_evidence_agreement,Stable,insufficient evidence,0

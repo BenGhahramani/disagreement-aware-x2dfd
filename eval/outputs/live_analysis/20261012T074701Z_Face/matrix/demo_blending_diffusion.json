@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "image": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20261012T074701Z_Face\\face_crop.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nIs this image real or fake? And the blending score is 0.010, and the diffusion score is 0.000."
+      },
+      {
+        "from": "gpt",
+        "value": "This image is real"
+      },
+      {
+        "from": "real score",
+        "value": "0.8670"
+      },
+      {
+        "from": "fake score",
+        "value": "0.1330"
+      }
+    ]
+  }
+]

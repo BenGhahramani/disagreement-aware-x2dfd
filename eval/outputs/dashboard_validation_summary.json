@@ -1,0 +1,887 @@
+{
+  "generated_at": "2026-09-06T07:47:05+00:00",
+  "git_commit": "40b954ce740272fe70a5b3178b4575bc147299e5",
+  "git_dirty": true,
+  "total_checks": 115,
+  "passed": 115,
+  "failed": 0,
+  "skipped": 0,
+  "ok": true,
+  "categories": {
+    "score_semantics": {
+      "total": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0
+    },
+    "evidence_agreement": {
+      "total": 17,
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    },
+    "prototype_status": {
+      "total": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0
+    },
+    "evidence_provenance": {
+      "total": 26,
+      "passed": 26,
+      "failed": 0,
+      "skipped": 0
+    },
+    "representative_cases": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    "score_fidelity": {
+      "total": 36,
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0
+    },
+    "saved_live_consistency": {
+      "total": 3,
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0
+    },
+    "malformed_robustness": {
+      "total": 11,
+      "passed": 11,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "threshold_constants": {
+    "evidence_expert_lo": 0.3,
+    "evidence_expert_hi": 0.7,
+    "prototype_stable_uncertain": 0.7
+  },
+  "boundary_cases_tested": [
+    0.2999,
+    0.3,
+    0.5,
+    0.7,
+    0.7001,
+    0.699999999,
+    0.7,
+    0.7000000009999999
+  ],
+  "representative_cases": {
+    "nasa_jonny_kim": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\expert_matrix\\demo_one_crop",
+    "nasa_mae_jemison": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\nasa_mae_jemison\\matrix",
+    "ffpp_ex_deepfakes": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260808T085812Z_ffpp_ex_deepfakes\\matrix"
+  },
+  "checks": [
+    {
+      "category": "score_semantics",
+      "name": "label_ok:Model real score",
+      "passed": true,
+      "detail": "Model real score",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "label_ok:Model fake score",
+      "passed": true,
+      "detail": "Model fake score",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "label_ok:Blending detector score",
+      "passed": true,
+      "detail": "Blending detector score",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "label_ok:Diffusion detector score",
+      "passed": true,
+      "detail": "Diffusion detector score",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "label_ok:Blending detector score",
+      "passed": true,
+      "detail": "Blending detector score",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "label_ok:Diffusion detector score",
+      "passed": true,
+      "detail": "Diffusion detector score",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "label_ok:combined-experts model score 0.69 is below 0.70",
+      "passed": true,
+      "detail": "combined-experts model score 0.69 is below 0.70",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "label_ok:combined-experts model score 0.80",
+      "passed": true,
+      "detail": "combined-experts model score 0.80",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "calibration_note_present",
+      "passed": true,
+      "detail": "Scores are model outputs and are not currently calibrated probabilities.",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "model_labels_are_scores",
+      "passed": true,
+      "detail": "'Model real score' / 'Model fake score'",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "specialist_labels_are_detector_scores",
+      "passed": true,
+      "detail": "'Blending detector score' / 'Diffusion detector score'",
+      "skipped": false
+    },
+    {
+      "category": "score_semantics",
+      "name": "display_rationale_softens_confidence_word",
+      "passed": true,
+      "detail": "combined-experts model score 0.69",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "thresholds_unchanged",
+      "passed": true,
+      "detail": "lo=0.3 hi=0.7",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "fake_label_score_0.2999",
+      "passed": true,
+      "detail": "got conflict, expected conflict",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "fake_label_score_0.3",
+      "passed": true,
+      "detail": "got inconclusive, expected inconclusive",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "fake_label_score_0.5",
+      "passed": true,
+      "detail": "got inconclusive, expected inconclusive",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "fake_label_score_0.7",
+      "passed": true,
+      "detail": "got inconclusive, expected inconclusive",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "fake_label_score_0.7001",
+      "passed": true,
+      "detail": "got support, expected support",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "real_label_score_0.2999",
+      "passed": true,
+      "detail": "got support, expected support",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "real_label_score_0.3",
+      "passed": true,
+      "detail": "got inconclusive, expected inconclusive",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "real_label_score_0.5",
+      "passed": true,
+      "detail": "got inconclusive, expected inconclusive",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "real_label_score_0.7",
+      "passed": true,
+      "detail": "got inconclusive, expected inconclusive",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "real_label_score_0.7001",
+      "passed": true,
+      "detail": "got conflict, expected conflict",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "agreement_case",
+      "passed": true,
+      "detail": "agreement",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "conflict_case",
+      "passed": true,
+      "detail": "conflict",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "insufficient_middling",
+      "passed": true,
+      "detail": "insufficient evidence",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "insufficient_missing_specialists",
+      "passed": true,
+      "detail": "insufficient evidence",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "insufficient_null_specialists",
+      "passed": true,
+      "detail": "insufficient evidence",
+      "skipped": false
+    },
+    {
+      "category": "evidence_agreement",
+      "name": "conflicts_notes_align_with_agreement",
+      "passed": true,
+      "detail": "notes=['Both specialist detectors assign very low detector scores (blending 0.010, diffusion 0.020) while the X2-DFD / LLaVA verdict is fake.'] agreement=conflict",
+      "skipped": false
+    },
+    {
+      "category": "prototype_status",
+      "name": "conf_high_unchanged",
+      "passed": true,
+      "detail": "CONF_HIGH=0.7",
+      "skipped": false
+    },
+    {
+      "category": "prototype_status",
+      "name": "agree_fake_0.6999",
+      "passed": true,
+      "detail": "got Uncertain; All four runs agree on 'fake' but combined-experts confidence 0.70 is below 0.70; treat as borderline.",
+      "skipped": false
+    },
+    {
+      "category": "prototype_status",
+      "name": "agree_fake_0.7",
+      "passed": true,
+      "detail": "got Stable; All four runs agree on 'fake'; combined-experts confidence 0.70 >= 0.70.",
+      "skipped": false
+    },
+    {
+      "category": "prototype_status",
+      "name": "agree_fake_0.7001",
+      "passed": true,
+      "detail": "got Stable; All four runs agree on 'fake'; combined-experts confidence 0.70 >= 0.70.",
+      "skipped": false
+    },
+    {
+      "category": "prototype_status",
+      "name": "disagreement_is_contested",
+      "passed": true,
+      "detail": "Disagreement across runs (none=real, blending=fake, diffusion=fake, blending_diffusion=fake). Sources of disagreement: adding experts flips bare-LLaVA verdict.",
+      "skipped": false
+    },
+    {
+      "category": "prototype_status",
+      "name": "missing_combined_not_stable",
+      "passed": true,
+      "detail": "Insufficient signal: 1/4 runs failed and/or required scores are missing for ['blending_diffusion'].",
+      "skipped": false
+    },
+    {
+      "category": "prototype_status",
+      "name": "deterministic",
+      "passed": true,
+      "detail": "Stable: All four runs agree on 'fake'; combined-experts confidence 0.91 >= 0.70.",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "blending_identified",
+      "passed": true,
+      "detail": "Blending specialist detector",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "diffusion_identified",
+      "passed": true,
+      "detail": "Diffusion specialist detector",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "model_identified",
+      "passed": true,
+      "detail": "X2-DFD / LLaVA (main model score)",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "detector_score_label_blending",
+      "passed": true,
+      "detail": "Blending detector score",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "detector_score_label_diffusion",
+      "passed": true,
+      "detail": "Diffusion detector score",
+      "skipped": false
+    },
+    {
+      "category": "representative_cases",
+      "name": "nasa_mae_jemison_conflict",
+      "passed": true,
+      "detail": "agreement=conflict status=Uncertain label=fake score=0.6188",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.1082 fake=0.8918 vs view label=fake real=0.1082 fake=0.8918",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:blending_absent",
+      "passed": true,
+      "detail": "view expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:diffusion_absent",
+      "passed": true,
+      "detail": "view expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.3923 fake=0.6077 vs view label=fake real=0.3923 fake=0.6077",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:blending_score",
+      "passed": true,
+      "detail": "json=0.001 view=0.001",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:diffusion_absent",
+      "passed": true,
+      "detail": "view expert_scores={'blending': 0.001}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.1225 fake=0.8775 vs view label=fake real=0.1225 fake=0.8775",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:blending_absent",
+      "passed": true,
+      "detail": "view expert_scores={'diffusion': 0.053}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:diffusion_score",
+      "passed": true,
+      "detail": "json=0.053 view=0.053",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.3812 fake=0.6188 vs view label=fake real=0.3812 fake=0.6188",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:blending_score",
+      "passed": true,
+      "detail": "json=0.001 view=0.001",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:diffusion_score",
+      "passed": true,
+      "detail": "json=0.053 view=0.053",
+      "skipped": false
+    },
+    {
+      "category": "saved_live_consistency",
+      "name": "snapshot_identical:matrix",
+      "passed": true,
+      "detail": "identical dashboard-facing snapshot",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "blending_identified",
+      "passed": true,
+      "detail": "Blending specialist detector",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "diffusion_identified",
+      "passed": true,
+      "detail": "Diffusion specialist detector",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "model_identified",
+      "passed": true,
+      "detail": "X2-DFD / LLaVA (main model score)",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "detector_score_label_blending",
+      "passed": true,
+      "detail": "Blending detector score",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "detector_score_label_diffusion",
+      "passed": true,
+      "detail": "Diffusion detector score",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "view_preserves_provenance_tuple",
+      "passed": true,
+      "detail": "['X2-DFD / LLaVA (main model score)', 'Blending specialist detector', 'Diffusion specialist detector']",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "none_config_no_fabricated_zero_specialists",
+      "passed": true,
+      "detail": "expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "representative_cases",
+      "name": "nasa_jonny_kim_conflict",
+      "passed": true,
+      "detail": "agreement=conflict status=Uncertain label=fake score=0.6859",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.2393 fake=0.7607 vs view label=fake real=0.2393 fake=0.7607",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:blending_absent",
+      "passed": true,
+      "detail": "view expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:diffusion_absent",
+      "passed": true,
+      "detail": "view expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.3594 fake=0.6406 vs view label=fake real=0.3594 fake=0.6406",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:blending_score",
+      "passed": true,
+      "detail": "json=0.009 view=0.009",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:diffusion_absent",
+      "passed": true,
+      "detail": "view expert_scores={'blending': 0.009}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.2878 fake=0.7122 vs view label=fake real=0.2878 fake=0.7122",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:blending_absent",
+      "passed": true,
+      "detail": "view expert_scores={'diffusion': 0.048}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:diffusion_score",
+      "passed": true,
+      "detail": "json=0.048 view=0.048",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.3141 fake=0.6859 vs view label=fake real=0.3141 fake=0.6859",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:blending_score",
+      "passed": true,
+      "detail": "json=0.009 view=0.009",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:diffusion_score",
+      "passed": true,
+      "detail": "json=0.048 view=0.048",
+      "skipped": false
+    },
+    {
+      "category": "saved_live_consistency",
+      "name": "snapshot_identical:demo_one_crop",
+      "passed": true,
+      "detail": "identical dashboard-facing snapshot",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "blending_identified",
+      "passed": true,
+      "detail": "Blending specialist detector",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "diffusion_identified",
+      "passed": true,
+      "detail": "Diffusion specialist detector",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "model_identified",
+      "passed": true,
+      "detail": "X2-DFD / LLaVA (main model score)",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "detector_score_label_blending",
+      "passed": true,
+      "detail": "Blending detector score",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "detector_score_label_diffusion",
+      "passed": true,
+      "detail": "Diffusion detector score",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "view_preserves_provenance_tuple",
+      "passed": true,
+      "detail": "['X2-DFD / LLaVA (main model score)', 'Blending specialist detector', 'Diffusion specialist detector']",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "none_config_no_fabricated_zero_specialists",
+      "passed": true,
+      "detail": "expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "representative_cases",
+      "name": "ffpp_deepfakes_agreement",
+      "passed": true,
+      "detail": "agreement=agreement status=Stable label=fake score=0.9961",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.0647 fake=0.9353 vs view label=fake real=0.0647 fake=0.9353",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:blending_absent",
+      "passed": true,
+      "detail": "view expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "none:diffusion_absent",
+      "passed": true,
+      "detail": "view expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.009 fake=0.991 vs view label=fake real=0.009 fake=0.991",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:blending_score",
+      "passed": true,
+      "detail": "json=1.0 view=1.0",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending:diffusion_absent",
+      "passed": true,
+      "detail": "view expert_scores={'blending': 1.0}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.0077 fake=0.9923 vs view label=fake real=0.0077 fake=0.9923",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:blending_absent",
+      "passed": true,
+      "detail": "view expert_scores={'diffusion': 0.969}",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "diffusion:diffusion_score",
+      "passed": true,
+      "detail": "json=0.969 view=0.969",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:model_scores",
+      "passed": true,
+      "detail": "json label=fake real=0.0039 fake=0.9961 vs view label=fake real=0.0039 fake=0.9961",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:blending_score",
+      "passed": true,
+      "detail": "json=1.0 view=1.0",
+      "skipped": false
+    },
+    {
+      "category": "score_fidelity",
+      "name": "blending_diffusion:diffusion_score",
+      "passed": true,
+      "detail": "json=0.969 view=0.969",
+      "skipped": false
+    },
+    {
+      "category": "saved_live_consistency",
+      "name": "snapshot_identical:matrix",
+      "passed": true,
+      "detail": "identical dashboard-facing snapshot",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "blending_identified",
+      "passed": true,
+      "detail": "Blending specialist detector",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "diffusion_identified",
+      "passed": true,
+      "detail": "Diffusion specialist detector",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "model_identified",
+      "passed": true,
+      "detail": "X2-DFD / LLaVA (main model score)",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "detector_score_label_blending",
+      "passed": true,
+      "detail": "Blending detector score",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "detector_score_label_diffusion",
+      "passed": true,
+      "detail": "Diffusion detector score",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "view_preserves_provenance_tuple",
+      "passed": true,
+      "detail": "['X2-DFD / LLaVA (main model score)', 'Blending specialist detector', 'Diffusion specialist detector']",
+      "skipped": false
+    },
+    {
+      "category": "evidence_provenance",
+      "name": "none_config_no_fabricated_zero_specialists",
+      "passed": true,
+      "detail": "expert_scores={}",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "malformed_json_no_crash",
+      "passed": true,
+      "detail": "status=Failed/insufficient errors=[]",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "malformed_no_fabricated_scores",
+      "passed": true,
+      "detail": "real=None fake=None",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "partial_configs_failed_status",
+      "passed": true,
+      "detail": "Insufficient signal: 3/4 runs failed and/or required scores are missing for ['blending', 'diffusion', 'blending_diffusion'].",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "missing_specialist_not_zero",
+      "passed": true,
+      "detail": "{}",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "missing_run_blending_has_error",
+      "passed": true,
+      "detail": "file missing: demo_blending.json",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "missing_run_diffusion_has_error",
+      "passed": true,
+      "detail": "file missing: demo_diffusion.json",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "missing_run_blending_diffusion_has_error",
+      "passed": true,
+      "detail": "file missing: demo_blending_diffusion.json",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "na_specialist_is_none_not_zero",
+      "passed": true,
+      "detail": "{'blending': None, 'diffusion': None}",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "na_specialist_insufficient_evidence",
+      "passed": true,
+      "detail": "insufficient evidence",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "missing_main_scores_not_valid_stable",
+      "passed": true,
+      "detail": "Insufficient signal: 0/4 runs failed and/or required scores are missing for ['none', 'blending', 'diffusion', 'blending_diffusion'].",
+      "skipped": false
+    },
+    {
+      "category": "malformed_robustness",
+      "name": "canonical_four_cards",
+      "passed": true,
+      "detail": "['none', 'blending', 'diffusion', 'blending_diffusion']",
+      "skipped": false
+    }
+  ]
+}

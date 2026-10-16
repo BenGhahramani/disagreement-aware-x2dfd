@@ -1,0 +1,218 @@
+{
+  "claim_boundary_notes": [
+    "Raw fake_score is an uncalibrated model score, not a probability or confidence.",
+    "Decision rule: predict fake/manipulated if fake_score >= threshold.",
+    "Reference threshold 0.50 is the existing post-hoc convention, not an optimal default.",
+    "Validation-selected Balanced thresholds come from the validation partition only.",
+    "Held-out metrics evaluate a frozen threshold; they never select the threshold.",
+    "Stable / Uncertain / Contested (prototype status) is separate from the threshold decision.",
+    "This audit does not claim a participant study or manual verification completion."
+  ],
+  "configs": [
+    "none",
+    "blending",
+    "diffusion",
+    "blending_diffusion"
+  ],
+  "dataset_sizes": {
+    "Celeb-DF-v2": {
+      "n_audit_rows": 480,
+      "n_images_estimate": 120,
+      "per_run": {
+        "blending": {
+          "active_threshold": 0.77,
+          "active_threshold_source": "dashboard_presets.Balanced",
+          "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+          "n_images_in_aggregate": 120,
+          "n_skipped": 0,
+          "n_usable_rows": 120,
+          "reference_threshold": 0.5,
+          "run_name": "blending",
+          "score_field": "fake_score",
+          "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step."
+        },
+        "blending_diffusion": {
+          "active_threshold": 0.78,
+          "active_threshold_source": "dashboard_presets.Balanced",
+          "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+          "n_images_in_aggregate": 120,
+          "n_skipped": 0,
+          "n_usable_rows": 120,
+          "reference_threshold": 0.5,
+          "run_name": "blending_diffusion",
+          "score_field": "fake_score",
+          "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step."
+        },
+        "diffusion": {
+          "active_threshold": 0.98,
+          "active_threshold_source": "dashboard_presets.Balanced",
+          "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+          "n_images_in_aggregate": 120,
+          "n_skipped": 0,
+          "n_usable_rows": 120,
+          "reference_threshold": 0.5,
+          "run_name": "diffusion",
+          "score_field": "fake_score",
+          "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step."
+        },
+        "none": {
+          "active_threshold": 0.99,
+          "active_threshold_source": "dashboard_presets.Balanced",
+          "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+          "n_images_in_aggregate": 120,
+          "n_skipped": 0,
+          "n_usable_rows": 120,
+          "reference_threshold": 0.5,
+          "run_name": "none",
+          "score_field": "fake_score",
+          "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step."
+        }
+      }
+    },
+    "DeepFakeFace": {
+      "n_audit_rows": 960,
+      "n_images_estimate": 240,
+      "per_run": {
+        "blending": {
+          "active_threshold": 0.76,
+          "active_threshold_source": "dashboard_presets.Balanced",
+          "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+          "n_images_in_aggregate": 240,
+          "n_skipped": 0,
+          "n_usable_rows": 240,
+          "reference_threshold": 0.5,
+          "run_name": "blending",
+          "score_field": "fake_score",
+          "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step."
+        },
+        "blending_diffusion": {
+          "active_threshold": 0.77,
+          "active_threshold_source": "dashboard_presets.Balanced",
+          "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+          "n_images_in_aggregate": 240,
+          "n_skipped": 0,
+          "n_usable_rows": 240,
+          "reference_threshold": 0.5,
+          "run_name": "blending_diffusion",
+          "score_field": "fake_score",
+          "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step."
+        },
+        "diffusion": {
+          "active_threshold": 0.99,
+          "active_threshold_source": "dashboard_presets.Balanced",
+          "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+          "n_images_in_aggregate": 240,
+          "n_skipped": 0,
+          "n_usable_rows": 240,
+          "reference_threshold": 0.5,
+          "run_name": "diffusion",
+          "score_field": "fake_score",
+          "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step."
+        },
+        "none": {
+          "active_threshold": 0.99,
+          "active_threshold_source": "dashboard_presets.Balanced",
+          "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+          "n_images_in_aggregate": 240,
+          "n_skipped": 0,
+          "n_usable_rows": 240,
+          "reference_threshold": 0.5,
+          "run_name": "none",
+          "score_field": "fake_score",
+          "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step."
+        }
+      }
+    }
+  },
+  "discrimination_wording": "Threshold-independent discrimination is reported using ROC-AUC. Threshold-dependent operating performance is reported separately using held-out balanced accuracy, sensitivity and specificity.",
+  "generated_at": "2026-09-27T01:39:33+00:00",
+  "generated_outputs": {
+    "cases/celeb-df-v2/ground_truth_audit.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/celeb-df-v2/ground_truth_audit.csv",
+    "cases/celeb-df-v2/ground_truth_audit.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/celeb-df-v2/ground_truth_audit.json",
+    "cases/celeb-df-v2/representative_cases.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/celeb-df-v2/representative_cases.csv",
+    "cases/celeb-df-v2/representative_cases.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/celeb-df-v2/representative_cases.json",
+    "cases/celeb-df-v2/representative_cases.md": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/celeb-df-v2/representative_cases.md",
+    "cases/deepfakeface/ground_truth_audit.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/deepfakeface/ground_truth_audit.csv",
+    "cases/deepfakeface/ground_truth_audit.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/deepfakeface/ground_truth_audit.json",
+    "cases/deepfakeface/representative_cases.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/deepfakeface/representative_cases.csv",
+    "cases/deepfakeface/representative_cases.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/deepfakeface/representative_cases.json",
+    "cases/deepfakeface/representative_cases.md": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/deepfakeface/representative_cases.md",
+    "cases/manual_ground_truth_verification.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/manual_ground_truth_verification.csv",
+    "cases/manual_ground_truth_verification.md": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/manual_ground_truth_verification.md",
+    "cases/representative_cases.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/representative_cases.csv",
+    "cases/representative_cases.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/representative_cases.json",
+    "cases/representative_cases.md": "/scratch/user/s4749229/eval_outputs/thesis_evidence/cases/representative_cases.md",
+    "figures/score_distribution_celeb-df-v2_blending.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_distribution_celeb-df-v2_blending.png",
+    "figures/score_distribution_celeb-df-v2_blending_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_distribution_celeb-df-v2_blending_diffusion.png",
+    "figures/score_distribution_celeb-df-v2_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_distribution_celeb-df-v2_diffusion.png",
+    "figures/score_distribution_celeb-df-v2_none.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_distribution_celeb-df-v2_none.png",
+    "figures/score_distribution_deepfakeface_blending.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_distribution_deepfakeface_blending.png",
+    "figures/score_distribution_deepfakeface_blending_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_distribution_deepfakeface_blending_diffusion.png",
+    "figures/score_distribution_deepfakeface_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_distribution_deepfakeface_diffusion.png",
+    "figures/score_distribution_deepfakeface_none.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_distribution_deepfakeface_none.png",
+    "figures/score_ecdf_celeb-df-v2_blending.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_ecdf_celeb-df-v2_blending.png",
+    "figures/score_ecdf_celeb-df-v2_blending_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_ecdf_celeb-df-v2_blending_diffusion.png",
+    "figures/score_ecdf_celeb-df-v2_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_ecdf_celeb-df-v2_diffusion.png",
+    "figures/score_ecdf_celeb-df-v2_none.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_ecdf_celeb-df-v2_none.png",
+    "figures/score_ecdf_deepfakeface_blending.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_ecdf_deepfakeface_blending.png",
+    "figures/score_ecdf_deepfakeface_blending_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_ecdf_deepfakeface_blending_diffusion.png",
+    "figures/score_ecdf_deepfakeface_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_ecdf_deepfakeface_diffusion.png",
+    "figures/score_ecdf_deepfakeface_none.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/score_ecdf_deepfakeface_none.png",
+    "figures/threshold_tradeoff_celeb-df-v2_blending.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/threshold_tradeoff_celeb-df-v2_blending.png",
+    "figures/threshold_tradeoff_celeb-df-v2_blending_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/threshold_tradeoff_celeb-df-v2_blending_diffusion.png",
+    "figures/threshold_tradeoff_celeb-df-v2_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/threshold_tradeoff_celeb-df-v2_diffusion.png",
+    "figures/threshold_tradeoff_celeb-df-v2_none.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/threshold_tradeoff_celeb-df-v2_none.png",
+    "figures/threshold_tradeoff_deepfakeface_blending.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/threshold_tradeoff_deepfakeface_blending.png",
+    "figures/threshold_tradeoff_deepfakeface_blending_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/threshold_tradeoff_deepfakeface_blending_diffusion.png",
+    "figures/threshold_tradeoff_deepfakeface_diffusion.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/threshold_tradeoff_deepfakeface_diffusion.png",
+    "figures/threshold_tradeoff_deepfakeface_none.png": "/scratch/user/s4749229/eval_outputs/thesis_evidence/figures/threshold_tradeoff_deepfakeface_none.png",
+    "tables/ground_truth_audit.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/ground_truth_audit.csv",
+    "tables/ground_truth_audit.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/ground_truth_audit.json",
+    "tables/score_distribution_summary.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/score_distribution_summary.csv",
+    "tables/score_distribution_summary.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/score_distribution_summary.json",
+    "tables/thesis_performance_summary.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/thesis_performance_summary.csv",
+    "tables/thesis_performance_summary.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/thesis_performance_summary.json",
+    "tables/thesis_performance_summary.md": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/thesis_performance_summary.md",
+    "tables/threshold_justification.csv": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/threshold_justification.csv",
+    "tables/threshold_justification.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/threshold_justification.json",
+    "tables/threshold_justification.md": "/scratch/user/s4749229/eval_outputs/thesis_evidence/tables/threshold_justification.md",
+    "thesis_evidence_manifest.json": "/scratch/user/s4749229/eval_outputs/thesis_evidence/thesis_evidence_manifest.json"
+  },
+  "git": {
+    "git_commit": "35af0baa5aa721975a679f330441023e34077570",
+    "git_dirty": true
+  },
+  "input_files": [
+    {
+      "aggregate": "/scratch/user/s4749229/eval_outputs/deepfakeface_fp16/aggregate.json",
+      "dataset": "DeepFakeFace",
+      "validation_protocol": "/scratch/user/s4749229/eval_outputs/threshold_sweep/deepfakeface_valtest/validation_protocol.json",
+      "validation_protocol_error": null,
+      "validation_protocol_loaded": true
+    },
+    {
+      "aggregate": "/scratch/user/s4749229/eval_outputs/celebdf_v2_fp16/aggregate.json",
+      "dataset": "Celeb-DF-v2",
+      "validation_protocol": "/scratch/user/s4749229/eval_outputs/threshold_sweep/celebdf_v2_valtest/validation_protocol.json",
+      "validation_protocol_error": null,
+      "validation_protocol_loaded": true
+    }
+  ],
+  "manual_steps_remaining": [
+    "Fill human columns in cases/manual_ground_truth_verification.csv",
+    "Visually inspect representative cases against source media where available",
+    "Confirm ground-truth labels against dataset provenance documentation",
+    "Do not claim manual verification complete until human fields are filled"
+  ],
+  "score_field": "fake_score",
+  "score_semantics": "Raw model fake_score from saved inference outputs. Not a calibrated probability or confidence. Higher values indicate the model assigned relatively more mass to the fake token versus real at the scored step.",
+  "script_version": "1.0.0",
+  "threshold_semantics": {
+    "balanced_preset": "Balanced",
+    "decision_rule": "predict_fake_if_fake_score_ge_threshold",
+    "reference_threshold": 0.5,
+    "selection_note": "Balanced thresholds are taken from validation_protocol validation data only; held-out metrics are evaluation information."
+  },
+  "unavailable_information": [],
+  "validation_seed": 4842
+}

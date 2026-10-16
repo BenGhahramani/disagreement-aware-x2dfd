@@ -1,0 +1,24 @@
+{
+  "image_id": "nasa_jonny_kim",
+  "source_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\datasets\\raw\\images\\poc\\real_face_01.jpg",
+  "source_sha256": "4807d6ff31c34867ab51319a7787ba6f616edd7e7d1d10921716d856715bcc9f",
+  "crop_sha256": "e8bd4ea46bd95e8cf7ac82eaabf0a8ab4adb55506d7ea8b7ca9420cc75142fd8",
+  "ground_truth": "real",
+  "dataset": "NASA",
+  "manipulation": null,
+  "source": "NASA Johnson Space Center photo jsc2024e052605_alt (astronaut Jonny Kim official portrait)",
+  "already_cropped": false,
+  "notes": "Known authentic. Stage 3 demo source. Public-domain USGov/NASA material used previously as real_face_01.jpg.",
+  "inference_config_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+  "inference_config_sha256": "c1d2776c4f88ce07016d0038f737c719a98edf3069a97b00c9793a3c1a8105db",
+  "load_4bit": true,
+  "interpretation_thresholds": {
+    "prototype_stable_uncertain": 0.7,
+    "evidence_expert_lo": 0.3,
+    "evidence_expert_hi": 0.7
+  },
+  "git_commit": "694c2cb4f51c94ef3484101d1d96198aae8b2720",
+  "git_dirty": true,
+  "model_artefacts_fingerprint": "20ad7c892bfa2137d4936f3383358420c8f525a3ecc7e186fb76c32e80ae2f5d",
+  "timestamp": "2026-08-23T06:44:32+00:00"
+}

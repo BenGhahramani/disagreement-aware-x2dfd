@@ -1,0 +1,5 @@
+run_name,n_usable,n_missing_or_unusable,n_correct,accuracy,tp,tn,fp,fn,sensitivity_fake,recall_fake,specificity_real,balanced_accuracy,precision_fake,f1_fake
+none,4,0,2,0.5,2,0,2,0,1.0,1.0,0.0,0.5,0.5,0.6666666666666666
+blending,4,0,2,0.5,2,0,2,0,1.0,1.0,0.0,0.5,0.5,0.6666666666666666
+diffusion,4,0,2,0.5,2,0,2,0,1.0,1.0,0.0,0.5,0.5,0.6666666666666666
+blending_diffusion,4,0,2,0.5,2,0,2,0,1.0,1.0,0.0,0.5,0.5,0.6666666666666666

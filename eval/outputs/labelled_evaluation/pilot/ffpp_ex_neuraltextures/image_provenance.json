@@ -1,0 +1,24 @@
+{
+  "image_id": "ffpp_ex_neuraltextures",
+  "source_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\datasets\\raw\\images\\live\\ffpp_ex_neuraltextures.png",
+  "source_sha256": "9260ee4ce1325184e64dd642fadd4acbdf3371937c6e8bd21ddf46756a92a6c2",
+  "crop_sha256": "4f51b1081e218ca6200df7819879ab527df3157f288c374292b8f2b9b55249fe",
+  "ground_truth": "fake",
+  "dataset": "FaceForensics++",
+  "manipulation": "NeuralTextures",
+  "source": "ondyari/FaceForensics official repo images/ex_neuraltextures.png",
+  "already_cropped": false,
+  "notes": "Known manipulated. Official FaceForensics++ NeuralTextures example with paired mask. See datasets/raw/data/live/FFPP_EX_NEURALTEXTURES_PROVENANCE.md. Not FF++ blind benchmark.",
+  "inference_config_path": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.windows.yaml",
+  "inference_config_sha256": "c1d2776c4f88ce07016d0038f737c719a98edf3069a97b00c9793a3c1a8105db",
+  "load_4bit": true,
+  "interpretation_thresholds": {
+    "prototype_stable_uncertain": 0.7,
+    "evidence_expert_lo": 0.3,
+    "evidence_expert_hi": 0.7
+  },
+  "git_commit": "694c2cb4f51c94ef3484101d1d96198aae8b2720",
+  "git_dirty": true,
+  "model_artefacts_fingerprint": "20ad7c892bfa2137d4936f3383358420c8f525a3ecc7e186fb76c32e80ae2f5d",
+  "timestamp": "2026-08-23T06:44:34+00:00"
+}

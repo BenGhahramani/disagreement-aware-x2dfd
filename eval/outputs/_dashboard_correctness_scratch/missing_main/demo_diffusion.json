@@ -1,0 +1,1 @@
+[{"id": "1", "image": "x.jpg", "conversations": [{"from": "human", "value": "<image>\nIs this image real or fake?"}, {"from": "gpt", "value": "This image is fake"}]}]

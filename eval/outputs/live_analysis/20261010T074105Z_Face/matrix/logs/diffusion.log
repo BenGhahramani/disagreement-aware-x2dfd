@@ -1,0 +1,23 @@
+$ C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\.venv\Scripts\python.exe -m eval.infer.runner --config C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval\configs\infer_config.windows.yaml --json C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval\outputs\live_analysis\20261010T074105Z_Face\manifest.json --output C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval\outputs\live_analysis\20261010T074105Z_Face\matrix\demo_diffusion.json --experts diffusion
+
+--- stdout ---
+normalize RESNET
+Loading LLaVA from base model...
+Loading additional LLaVA weights...
+Loading LoRA weights...
+Merging LoRA weights...
+Model is loaded...
+Saved conversation-style results: C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval\outputs\live_analysis\20261010T074105Z_Face\matrix\demo_diffusion.json
+Run info saved to: C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\eval/outputs\infer\runs\infer_20261010T074209Z\infer_info.json
+
+--- stderr ---
+
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]
+Loading checkpoint shards:  50%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆ     | 1/2 [00:04<00:04,  4.84s/it]
+Loading checkpoint shards: 100%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ| 2/2 [00:06<00:00,  3.02s/it]
+Loading checkpoint shards: 100%|â–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆâ–ˆ| 2/2 [00:06<00:00,  3.29s/it]
+C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\.venv\lib\site-packages\peft\tuners\lora\bnb.py:325: UserWarning: Merge lora module to 4-bit linear may get different generations due to rounding errors.
+  warnings.warn(
+C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd\.venv\lib\site-packages\transformers\generation\configuration_utils.py:392: UserWarning: `do_sample` is set to `False`. However, `temperature` is set to `0.0` -- this flag is only used in sample-based generation modes. You should set `do_sample=True` or unset `temperature`.
+  warnings.warn(
+

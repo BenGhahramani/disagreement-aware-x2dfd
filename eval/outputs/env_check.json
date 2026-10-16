@@ -1,0 +1,218 @@
+{
+  "generated_at": "2026-08-06T07:38:54+00:00",
+  "overall": "FAIL",
+  "exit_code": 1,
+  "strict": false,
+  "counts": {
+    "PASS": 23,
+    "WARN": 2,
+    "FAIL": 9,
+    "SKIP": 0
+  },
+  "checks": [
+    {
+      "name": "python.version",
+      "status": "PASS",
+      "detail": "Python 3.10.4",
+      "required": true
+    },
+    {
+      "name": "import.torch",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.torchvision",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.transformers",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.accelerate",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.peft",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.llava",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.timm",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.cv2",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.numpy",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.PIL",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.yaml",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.tqdm",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.einops",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.sentencepiece",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.safetensors",
+      "status": "PASS",
+      "detail": "importable",
+      "required": true
+    },
+    {
+      "name": "import.bitsandbytes",
+      "status": "PASS",
+      "detail": "importable",
+      "required": false
+    },
+    {
+      "name": "import.deepspeed",
+      "status": "WARN",
+      "detail": "not installed - needed for: optional, training only",
+      "required": false
+    },
+    {
+      "name": "import.pytest",
+      "status": "PASS",
+      "detail": "importable",
+      "required": false
+    },
+    {
+      "name": "torch.version",
+      "status": "PASS",
+      "detail": "torch 2.1.2+cu121 (built for CUDA 12.1)",
+      "required": true
+    },
+    {
+      "name": "torch.cuda",
+      "status": "PASS",
+      "detail": "CUDA available",
+      "required": true
+    },
+    {
+      "name": "gpu.0",
+      "status": "WARN",
+      "detail": "NVIDIA GeForce RTX 3080 with 10.0 GiB VRAM - below the ~14 GiB needed for fp16 LLaVA-1.5-7B; expect to need 4-bit loading or CPU offload",
+      "required": false
+    },
+    {
+      "name": "config.infer_config.yaml",
+      "status": "PASS",
+      "detail": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.yaml",
+      "required": true
+    },
+    {
+      "name": "config.parse",
+      "status": "PASS",
+      "detail": "parsed C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\configs\\infer_config.yaml",
+      "required": true
+    },
+    {
+      "name": "weights.model.adapter",
+      "status": "FAIL",
+      "detail": "missing directory: C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\checkpoints\\ckpt\\llava-v1.5-7b-lora-[ble-diff]",
+      "required": true
+    },
+    {
+      "name": "weights.model.base",
+      "status": "FAIL",
+      "detail": "missing directory: C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\base\\llava-v1.5-7b",
+      "required": true
+    },
+    {
+      "name": "weights.expert.Blending",
+      "status": "FAIL",
+      "detail": "missing file: C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\blending_models\\best_gf.pth",
+      "required": true
+    },
+    {
+      "name": "weights.expert.Diffusion.dir",
+      "status": "FAIL",
+      "detail": "missing directory: C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\ours-sync",
+      "required": true
+    },
+    {
+      "name": "weights.expert.Diffusion.config",
+      "status": "FAIL",
+      "detail": "missing file: C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\weights\\ours-sync\\config.yaml",
+      "required": true
+    },
+    {
+      "name": "output.results_dir",
+      "status": "PASS",
+      "detail": "writable: C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs",
+      "required": true
+    },
+    {
+      "name": "datasets.DFDCP_real.json",
+      "status": "FAIL",
+      "detail": "image files not found on this machine (checked 1): \\data\\250010183\\Datasets\\Tiny_Test\\DFDCP\\real\\1152039_A_001\\000.png",
+      "required": true
+    },
+    {
+      "name": "datasets.DFDCP_fake.json",
+      "status": "FAIL",
+      "detail": "image files not found on this machine (checked 1): \\data\\250010183\\Datasets\\Tiny_Test\\DFDCP\\fake\\1188957_1501828_A_000\\000.png",
+      "required": true
+    },
+    {
+      "name": "datasets.DFDC_real.json",
+      "status": "FAIL",
+      "detail": "image files not found on this machine (checked 1): \\data\\250010183\\Datasets\\Tiny_Test\\DFDC\\real\\aalscayrfi\\000.png",
+      "required": true
+    },
+    {
+      "name": "datasets.DFDC_fake.json",
+      "status": "FAIL",
+      "detail": "image files not found on this machine (checked 1): \\data\\250010183\\Datasets\\Tiny_Test\\DFDC\\fake\\aamrozxzsq\\000.png",
+      "required": true
+    }
+  ]
+}

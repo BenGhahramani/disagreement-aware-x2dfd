@@ -1,0 +1,24 @@
+[
+  {
+    "id": "1",
+    "image": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\live_analysis\\20260808T081627Z_mae_carol_jemison\\face_crop.jpg",
+    "conversations": [
+      {
+        "from": "human",
+        "value": "<image>\nIs this image real or fake?"
+      },
+      {
+        "from": "gpt",
+        "value": "This image is fake"
+      },
+      {
+        "from": "real score",
+        "value": "0.1082"
+      },
+      {
+        "from": "fake score",
+        "value": "0.8918"
+      }
+    ]
+  }
+]

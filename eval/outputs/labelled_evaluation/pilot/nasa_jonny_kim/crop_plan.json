@@ -1,0 +1,23 @@
+{
+  "already_cropped": false,
+  "source": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\datasets\\raw\\images\\poc\\real_face_01.jpg",
+  "output": "C:\\Users\\Ben\\Desktop\\UNI\\REIT\\root\\disagreement-aware-x2dfd\\eval\\outputs\\labelled_evaluation\\pilot\\nasa_jonny_kim\\face_crop.jpg",
+  "detection": [
+    2343,
+    1054,
+    946,
+    946
+  ],
+  "square": [
+    2201,
+    912,
+    1230,
+    1230
+  ],
+  "size": 256,
+  "margin": 1.3,
+  "detect_width": 1024,
+  "scale_factor": 1.1,
+  "min_neighbours": 5,
+  "quality": 95
+}
