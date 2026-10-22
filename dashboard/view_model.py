@@ -524,28 +524,99 @@ def build_config_card(
     )
 
 
+def _safe_under_repo(candidate: Path) -> Optional[Path]:
+    """Return ``candidate`` resolved only when it stays under ``PROJECT_ROOT``."""
+
+    try:
+        resolved = candidate.resolve()
+        resolved.relative_to(PROJECT_ROOT.resolve())
+    except (OSError, ValueError):
+        return None
+    return resolved
+
+
+def _remap_stale_repo_image(image_str: str) -> Optional[Path]:
+    """Rewrite a stale absolute path that pointed into this repository.
+
+    Uses only known in-repo prefixes (``datasets/``, ``eval/outputs/``). Does
+    not search the tree by filename, so unrelated same-named files cannot win.
+    """
+
+    if not image_str or image_str == "<unknown>":
+        return None
+    normalised = image_str.replace("\\", "/")
+    lower = normalised.lower()
+    for anchor in ("datasets/", "eval/outputs/"):
+        idx = lower.find(anchor)
+        if idx < 0:
+            continue
+        rel = normalised[idx:]
+        mapped = _safe_under_repo(PROJECT_ROOT / rel)
+        if mapped is not None and mapped.is_file():
+            return mapped
+    return None
+
+
 def _resolve_image(
     image_str: str,
     *,
-    fallback: Path = DEFAULT_IMAGE,
+    expected_image: Path | str | None = None,
+    fallback: Path | None = DEFAULT_IMAGE,
 ) -> tuple[Optional[Path], Optional[str]]:
+    """Resolve the analysed image without cross-example silent substitution.
+
+    Priority when the recorded absolute path is missing or machine-local:
+
+    1. Recorded path, if it still exists on disk.
+    2. Explicit ``expected_image`` for the selected saved example (portable).
+    3. Repository-relative remap of the recorded path under ``PROJECT_ROOT``.
+    4. Optional ``fallback`` only when no ``expected_image`` was supplied.
+       Saved examples pass ``fallback=None`` so a missing FF++ crop never
+       becomes the NASA portrait.
+    """
+
+    expected: Optional[Path] = None
+    if expected_image is not None:
+        expected = _safe_under_repo(Path(expected_image))
+        if expected is None:
+            expected = Path(expected_image)
+
     if image_str and image_str != "<unknown>":
         candidate = Path(image_str)
         if candidate.is_file():
-            return candidate, None
+            return candidate.resolve(), None
+
+        if expected is not None and expected.is_file():
+            # Portable recovery succeeded — no user-facing missing-image warning.
+            return expected, None
+
+        remapped = _remap_stale_repo_image(image_str)
+        if remapped is not None:
+            return remapped, None
+
         warning = f"Image referenced by the matrix outputs was not found: {candidate}"
-        if fallback.is_file():
+        if expected is not None:
+            return None, warning + f". Expected saved-example image also missing: {expected}."
+        if fallback is not None and fallback.is_file():
             return fallback, warning + f". Showing fallback {fallback.name}."
         return None, warning
-    if fallback.is_file():
+
+    if expected is not None:
+        if expected.is_file():
+            return expected, None
+        return None, f"Analysed image not found at {expected}"
+
+    if fallback is not None and fallback.is_file():
         return fallback, None
-    return None, f"Analysed image not found at {fallback}"
+    target = fallback if fallback is not None else DEFAULT_IMAGE
+    return None, f"Analysed image not found at {target}"
 
 
 def build_dashboard_view(
     matrix_dir: Path | str = DEFAULT_MATRIX_DIR,
     *,
     summary_path: Path | str | None = DEFAULT_SUMMARY,
+    expected_image: Path | str | None = None,
 ) -> DashboardView:
     """Assemble a dashboard view from a saved expert-matrix directory.
 
@@ -585,7 +656,13 @@ def build_dashboard_view(
         status, rationale = Status.FAILED, "No saved expert-matrix runs could be loaded."
         image_str = "<unknown>"
 
-    image_path, image_warning = _resolve_image(image_str)
+    # Saved examples supply expected_image and disable the shared DEFAULT_IMAGE
+    # fallback so a stale absolute path cannot show another example's photo.
+    image_path, image_warning = _resolve_image(
+        image_str,
+        expected_image=expected_image,
+        fallback=None if expected_image is not None else DEFAULT_IMAGE,
+    )
     if image_warning:
         warnings.append(image_warning)
 

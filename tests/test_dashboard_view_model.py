@@ -12,11 +12,14 @@ from typing import Dict, Optional
 import pytest
 
 from dashboard.view_model import (
+    DEFAULT_IMAGE,
     DEFAULT_MATRIX_DIR,
     DEFAULT_SUMMARY,
     DISCLAIMER,
     ConfigCard,
     EvidenceAgreement,
+    _remap_stale_repo_image,
+    _resolve_image,
     bar_fraction,
     build_config_card,
     build_dashboard_view,
@@ -332,6 +335,75 @@ def test_build_dashboard_view_loads_four_configs(tmp_path: Path) -> None:
     assert view.disclaimer == DISCLAIMER
     assert view.image_path is not None and view.image_path.is_file()
     assert view.ok is True
+
+
+def test_remap_stale_repo_image_rewrites_foreign_windows_path() -> None:
+    if not DEFAULT_IMAGE.is_file():
+        pytest.skip("NASA crop not present")
+    stale = (
+        r"C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd"
+        r"\datasets\raw\images\poc\real_face_01_crop.jpg"
+    )
+    remapped = _remap_stale_repo_image(stale)
+    assert remapped is not None
+    assert remapped.resolve() == DEFAULT_IMAGE.resolve()
+
+
+def test_remap_stale_repo_image_rejects_filename_only_guesses() -> None:
+    # Must not scan the repo for any face_crop.jpg / real_face_01_crop.jpg.
+    assert _remap_stale_repo_image("real_face_01_crop.jpg") is None
+    assert _remap_stale_repo_image(r"C:\elsewhere\real_face_01_crop.jpg") is None
+
+
+def test_resolve_image_with_expected_disables_default_fallback(tmp_path: Path) -> None:
+    missing_expected = tmp_path / "gone.jpg"
+    path, warning = _resolve_image(
+        r"C:\Users\Ben\Desktop\missing\face_crop.jpg",
+        expected_image=missing_expected,
+        fallback=None,
+    )
+    assert path is None
+    assert warning is not None
+    assert "Showing fallback" not in warning
+    assert DEFAULT_IMAGE.name not in warning
+
+
+def test_resolve_image_prefers_expected_over_default_fallback(tmp_path: Path) -> None:
+    expected = tmp_path / "example_crop.jpg"
+    expected.write_bytes(b"\xff\xd8\xff\xe0example")
+    path, warning = _resolve_image(
+        r"C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd"
+        r"\eval\outputs\live_analysis\nonexistent_run\face_crop.jpg",
+        expected_image=expected,
+        fallback=DEFAULT_IMAGE,
+    )
+    assert path is not None
+    assert path.resolve() == expected.resolve()
+    assert path.resolve() != DEFAULT_IMAGE.resolve()
+    assert warning is None
+
+
+def test_build_dashboard_view_with_expected_image_ignores_nasa_fallback(
+    tmp_path: Path,
+) -> None:
+    expected = tmp_path / "ffpp_like_crop.jpg"
+    expected.write_bytes(b"\xff\xd8\xff\xe0ffpp")
+    directory = _write_matrix(
+        tmp_path,
+        image=Path(
+            r"C:\Users\Ben\Desktop\UNI\REIT\root\disagreement-aware-x2dfd"
+            r"\eval\outputs\live_analysis\nonexistent_run\face_crop.jpg"
+        ),
+    )
+    view = build_dashboard_view(
+        directory,
+        summary_path=None,
+        expected_image=expected,
+    )
+    assert view.image_path is not None
+    assert view.image_path.resolve() == expected.resolve()
+    assert view.image_path.resolve() != DEFAULT_IMAGE.resolve()
+    assert not any("not found" in w.lower() for w in view.warnings)
 
 
 def test_missing_matrix_directory_is_a_ui_error_not_an_exception(tmp_path: Path) -> None:

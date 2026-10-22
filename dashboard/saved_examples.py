@@ -27,11 +27,18 @@ class SavedExampleSpec:
     summary_path: Path
     ground_truth_label: str
     provenance_summary: str
+    # Portable image for this example when saved JSON absolute paths are stale.
+    expected_image: Optional[Path] = None
 
 
 FFPP_LIVE_RUN = (
     PROJECT_ROOT / "eval" / "outputs" / "live_analysis" / "20260808T085812Z_ffpp_ex_deepfakes"
 )
+
+NASA_EXPECTED_IMAGE = (
+    PROJECT_ROOT / "datasets" / "raw" / "images" / "poc" / "real_face_01_crop.jpg"
+)
+FFPP_EXPECTED_IMAGE = FFPP_LIVE_RUN / "face_crop.jpg"
 
 SAVED_EXAMPLES: Tuple[SavedExampleSpec, ...] = (
     SavedExampleSpec(
@@ -45,6 +52,7 @@ SAVED_EXAMPLES: Tuple[SavedExampleSpec, ...] = (
             "photo jsc2024e052605_alt). Stage 3 saved outputs: "
             "`eval/outputs/expert_matrix/demo_one_crop/`."
         ),
+        expected_image=NASA_EXPECTED_IMAGE,
     ),
     SavedExampleSpec(
         example_id="ffpp_deepfakes",
@@ -58,6 +66,7 @@ SAVED_EXAMPLES: Tuple[SavedExampleSpec, ...] = (
             "Saved live-analysis outputs: "
             "`eval/outputs/live_analysis/20260808T085812Z_ffpp_ex_deepfakes/`."
         ),
+        expected_image=FFPP_EXPECTED_IMAGE,
     ),
 )
 
@@ -99,7 +108,11 @@ def load_saved_example(
     """Build a :class:`DashboardView` from saved matrix outputs (no inference)."""
 
     spec = resolve_saved_example(example_id, examples=examples)
-    return build_dashboard_view(spec.matrix_dir, summary_path=spec.summary_path)
+    return build_dashboard_view(
+        spec.matrix_dir,
+        summary_path=spec.summary_path,
+        expected_image=spec.expected_image,
+    )
 
 
 def default_saved_example_id() -> str:
